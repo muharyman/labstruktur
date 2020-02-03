@@ -52,4 +52,40 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * DEFINE TABLE RELATION
+     */
+
+    /**
+     * User Many to One jabatan 
+     */
+    public function jabatan()
+    {
+        return $this->belongsTo('App\Models\Jabatan', 'idjabatan');
+    }
+
+    /**
+     * User One to Many Pengujian
+     */
+
+    public function pengujianSebagaiPembuka()
+    {
+        return $this->hasMany('App\Models\Pengujian', 'iduser_pembuka');
+    }
+
+    public function pengujianSebagaiTeknisi()
+    {
+        return $this->hasMany('App\Models\Pengujian', 'idteknisi');
+    }
+
+    public function pengujianSebagaiEngineer()
+    {
+        return $this->hasMany('App\Models\Pengujian', 'idengineer');
+    }
+
+    public function pengujianSebagaiPenutup()
+    {
+        return $this->hasMany('App\Models\Pengujian', 'iduser_penutup');
+    }
 }
