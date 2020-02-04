@@ -1,0 +1,90 @@
+.row{
+    min-height: 100vh;
+  }
+  .logo{
+    padding-top: 25px;
+    margin:auto;
+    display: block;
+    
+  }
+  .col-sm-8 {
+    visibility: visible;
+    background-color : #1C45A4;
+  }
+  @media screen and (max-width: 600px) {    
+    .col-sm-8{
+      visibility: hidden;
+    }
+  }
+  
+  .login{
+    padding-top: 85px;
+    margin: auto;
+    text-align: center;
+    width: fit-content;
+  }
+  .txt_input{
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-size: 17px;
+    width: 100%;
+    margin-top: 0;
+    padding: 12px 20px;
+    background:#f2f2f2;
+    box-sizing: border-box;
+    border: 2px solid #24D39B;
+    border-radius: 6px 0 6px 0;
+    transition: 0.6s;
+  }
+  .text{
+    margin:0;
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-size: 17px;
+    font-weight: 300;
+    text-align: left;
+    color: #5E5E5E;
+  }
+  .txt_input:focus{
+    border-radius: 0 6px 0 6px;
+    border: 2px solid #0066ff;
+    outline: 0;
+  }
+  
+  #username{
+    margin-bottom: 30px;
+  }
+  
+  #lupapassword{
+    display: block;
+    margin-bottom: 40px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    color: #3366ff;
+    text-decoration: none;
+    transition: 0.6s;
+    font-size:12px;
+  }
+  #lupapassword:hover{
+    color:#99b3ff;
+  }
+  
+  .button{
+    width: 300px;
+    height: 50px;
+  }
+  .button a:hover{
+    background: rgb(98, 228, 187);
+    color: white;
+  }
+  .button a{
+    display: block;
+    font-family: 'Montserrat Alternates', sans-serif;
+    padding: 10px 10px;
+    margin:auto;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    border-radius: 6px 0 6px 0;
+    font-weight: 700;
+    background: #24D39B;
+    transition: 0.8s;
+  }

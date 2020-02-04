@@ -7,18 +7,21 @@
 
 <style>
 .line{
-  width: 95px;
-  height: 6px;
+  width: 130px;
+  height: 4px;
   text-align: left;
   background-color: #1592E6;
   line-height: 15px;
   margin: 0 0 0 5px;
 }
 .logo{
+  width: fit-content;
   font-family: "montserrat Alternates", sans-serif;
-  font-size: 45px;
+  font-weight: 700;
+  font-size: 60px;
   color: #292929;
   padding: 0 0 0 5px;
-  margin: 0;
+  margin: auto;
+  display: block; 
 }
 </style>
