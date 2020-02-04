@@ -22,6 +22,8 @@ Route::group([
     Route::post('passwordreset/create', 'ForgotPasswordController@create');
     Route::get('passwordreset/check/{token}', 'ForgotPasswordController@check')->name('passwordreset.check');
     Route::post('passwordreset/reset', 'ForgotPasswordController@reset');
+    Route::post('verifyemail/send', 'VerifyEmailController@send');
+    Route::get('verifyemail/verify/{token}', 'VerifyEmailController@verify')->name('verifyemail.verify');
 });
  
 Route::middleware('auth:api')->get('/user', function (Request $request) {

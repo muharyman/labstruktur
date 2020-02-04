@@ -23,11 +23,14 @@ class ForgotPasswordController extends APIController
             return $this->respondRequestError($validator->errors());
         }
 
-        // Check email exist
+        // Check email exist and verified
         $email = $request['email'];
         $user = User::email($email)->first();
         if (!$user){
             return $this->respondError('Email user not Found');
+        }
+        if (!$user->email_verified_at){
+            return $this->respondError('Please verify your email');
         }
 
         // Generate Token
