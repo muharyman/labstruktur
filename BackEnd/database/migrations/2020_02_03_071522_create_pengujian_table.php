@@ -15,6 +15,7 @@ class CreatePengujianTable extends Migration
     {
         Schema::create('pengujian', function (Blueprint $table) {
             $table->bigIncrements('idpengujian');
+            $table->string('email')->nullable();
             $table->boolean('status_pembayaran')->nullable();
             $table->date('tanggal_buka')->nullable();
             $table->date('tanggal_pengujian')->nullable();
