@@ -41,7 +41,10 @@ class AddForeignKeyPengujian extends Migration
     public function down()
     {
         Schema::table('pengujian', function (Blueprint $table) {
-            $table->dropForeign(['iduser_pembuka', 'idteknisi', 'idengineer', 'iduser_penutup']);
+            $table->dropForeign(['iduser_pembuka']);
+            $table->dropForeign(['idteknisi']);
+            $table->dropForeign(['idengineer']);
+            $table->dropForeign(['iduser_penutup']);
         });
     }
 }

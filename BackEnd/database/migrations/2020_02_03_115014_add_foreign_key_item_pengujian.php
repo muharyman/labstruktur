@@ -32,7 +32,8 @@ class AddForeignKeyItemPengujian extends Migration
     public function down()
     {
         Schema::table('item_pengujian', function (Blueprint $table) {
-            $table->dropForeign(['idpengujian', 'idjenis_pengujian']);
+            $table->dropForeign(['idpengujian']);
+            $table->dropForeign(['idjenis_pengujian']);
         });
     }
 }
