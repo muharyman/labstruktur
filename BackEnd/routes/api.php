@@ -13,10 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('login', 'API\Auth\LoginController');
-Route::post('register', 'API\Auth\RegisterController');
-Route::post('forgotpassword', 'API\Auth\ForgotPasswordController');
-
+Route::group([    
+    'namespace' => 'API\Auth',    
+    'prefix' => 'auth'
+], function () {    
+    Route::post('login', 'LoginController@login');
+    Route::post('register', 'RegisterController@register');
+    Route::post('passwordreset/create', 'ForgotPasswordController@create');
+    Route::get('passwordreset/check/{token}', 'ForgotPasswordController@check')->name('passwordreset.check');
+    Route::post('passwordreset/reset', 'ForgotPasswordController@reset');
+});
+ 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

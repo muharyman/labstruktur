@@ -6,11 +6,14 @@ use App\Http\Controllers\API\APIController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use Validator;
 
-class LoginController extends APIController{
+class LoginController extends APIController
+{
 
-    public function __invoke(Request $request){
+    public function login(Request $request)
+    {
         // Validate Request
         $validator = Validator::make($request->all(), [
     		'nama_login' => ['required', 'string'],
@@ -24,6 +27,9 @@ class LoginController extends APIController{
         $credentials = $request->only('nama_login', 'password');
         if (Auth::attempt($credentials)){
             $user = Auth::user();
+            $user->last_login = Carbon::now();
+            $user->last_ip_login = $request->ip();
+            $user->save();
             $token = $user->createToken(env('APP_NAME', 'labstruktur'))->accessToken;
             return $this->respondSuccess(['token'=>$token]);
         }else{
