@@ -10,7 +10,7 @@
   width: 130px;
   height: 4px;
   text-align: left;
-  background-color: #1592E6;
+  background-color: #24D39B;
   line-height: 15px;
   margin: 0 0 0 5px;
 }

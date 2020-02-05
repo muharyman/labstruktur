@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
-
+import LupaPassword from "../views/LupaPassword.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -24,6 +24,11 @@ const routes = [
     path: "/loginadmin",
     name: "loginadmin",
     component: Login
+  },
+  {
+    path: "/lupapassword",
+    name: "lupapassword",
+    component: LupaPassword
   }
 ];
 

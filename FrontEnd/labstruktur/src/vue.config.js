@@ -9,7 +9,8 @@ module.exports = {
             { family: "Source Sans Pro" },
             { family: "Roboto", variants: [ "400", "700italic" ] },
             { family: "Montserrat+Alternates"},
-            { family: "Montserrat"}
+            { family: "Montserrat"},
+            { family: "Raleway"}
         ]
     })
 ]
