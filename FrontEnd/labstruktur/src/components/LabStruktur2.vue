@@ -1,5 +1,5 @@
 <template>
-  <div class="labstruktur">
+  <div class="labstruktur2">
     <p>LabStruktur</p>
     <div class="line"></div>
   </div>
@@ -14,12 +14,12 @@
   line-height: 15px;
   margin: 0 0 0 5px;
 }
-.labstruktur{
+.labstruktur2{
   width: fit-content;
   font-family: "montserrat Alternates", sans-serif;
   font-weight: 700;
   font-size: 60px;
-  color: #292929;
+  color: white;
   padding: 0 0 0 5px;
   margin: auto;
   display: block; 

@@ -3,13 +3,17 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import LupaPassword from "../views/LupaPassword.vue";
+import ResetPassword from "../views/ResetPassword";
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
+    meta:{
+      header: 1
+    }
   },
   {
     path: "/about",
@@ -17,18 +21,34 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    component: () => import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    meta:{
+      header: 1
+    }
   },
   {
     path: "/loginadmin",
     name: "loginadmin",
-    component: Login
+    component: Login,
+    meta: {
+      header: 0
+    }
   },
   {
     path: "/lupapassword",
     name: "lupapassword",
-    component: LupaPassword
+    component: LupaPassword,
+    meta: {
+      header: 0
+    }
+  },
+  {
+    path: "/resetpassword",
+    name: "resetpassword",
+    component: ResetPassword,
+    meta: {
+      header: 0
+    }
   }
 ];
 
@@ -39,3 +59,4 @@ const router = new VueRouter({
 });
 
 export default router;
+
