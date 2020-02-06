@@ -25,6 +25,17 @@ Route::group([
     Route::post('verifyemail/send', 'VerifyEmailController@send');
     Route::get('verifyemail/verify/{token}', 'VerifyEmailController@verify')->name('verifyemail.verify');
 });
+
+Route::group([
+    'namespace' => 'API\User',
+    'prefix' => 'user'
+], function () {
+    Route::get('index', 'CRUDController@index');
+    Route::get('show/{id}', 'CRUDController@show');
+    Route::post('create', 'CRUDController@store');
+    Route::put('update/{id}', 'CRUDController@update');
+    Route::delete('delete/{id}', 'CRUDController@delete');
+});
  
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

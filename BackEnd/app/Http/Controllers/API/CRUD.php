@@ -1,18 +1,22 @@
 <?php 
- namespace App\http\controllers\API;
-
- trait CRUD
- {
-     /**
-     * return all object as json
-     *
-     * @return Json
-     */
+namespace App\http\controllers\API;
+use Illuminate\Http\Request;
+use Validator;
+trait CRUD
+{
+    /**
+    * return all object as json
+    *
+    * @return Json
+    */
     public function index()
     {
         $modelIndex = $this->modelClassName::all();
-        return $this->resourceCollectionClassName ? new $this->resourceCollectionClassName($modelIndex) : 
-        new $this->resourceClassName::collection($modelIndex);
+        $data = $this->resourceCollectionClassName ?
+            new $this->resourceCollectionClassName($modelIndex):
+            $this->resourceClassName::collection($modelIndex);
+
+        return $this->respondWithData($data); 
     }
 
     /**
@@ -23,7 +27,7 @@
     public function store(Request $request)
     {
         // validate request
-        $validator = $this->validateRequest();
+        $validator = Validator::make($request->all(), $this->rules);
         if ($validator->fails()){
             return $this->respondRequestError($validator->errors());
         }
@@ -34,7 +38,7 @@
         // create
         $createdObject = $this->modelClassName::create($input);
 
-        return $this->respondSuccess($createdObject);
+        return $this->respondWithData($createdObject);
     }
 
     /**
@@ -44,8 +48,15 @@
      * @return Json
      */
     public function show($id)
-    {      
-        return new $this->resourceClassName($this->modelClassName::find($id));
+    {   
+        // check object exist
+        $object = $this->modelClassName::find($id);
+        if (!$object){
+            return $this->respondWithError('object not found');
+        }
+
+        $data = new $this->resourceClassName($object);
+        return $this->respondWithData($data);
     }
 
     /**
@@ -57,7 +68,7 @@
     public function update($id,Request $request)
     {
         // validate request
-        $validator = $this->validateRequest($request);
+        $validator = Validator::make($request->all(), $this->rules);
         if ($validator->fails()){
             return $this->respondRequestError($validator->errors());
         }
@@ -69,12 +80,15 @@
         }
 
         // process request
-        $input = $this->processRequest($request);
+        $input = $this->processProcess($request);
 
         // update
-        $updatedObject = $object->update($input);
+        if($object->update($input)){
+            return $this->respondWithData($object);
+        } else {
+            return $this->respondError('update failed');
+        }
 
-        return $this->respondSuccess($updatedObject);
     }
 
     /**
@@ -92,8 +106,21 @@
         }
 
         // delete
-        $deletedObject = $object->delete();
+        if ($object->delete()){
+            return $this->respondWithData($object);
+        } else {
+            return $this->respondError('delete failed');
+        }
+        
+    }
 
-        return $this->respondSuccess($deletedObject);
+    /**
+     * Default request process
+     * 
+     * @param Request
+     * @return input
+     */
+    public function processRequest($request)
+    {
     }
 }
