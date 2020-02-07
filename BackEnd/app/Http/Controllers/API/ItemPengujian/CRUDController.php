@@ -23,15 +23,20 @@ class CRUDController extends APIController
      * @var define request rules for create
      */
     protected $rules = [
+        'idpengujian' => ['required', 'integer', 'exists:pengujian,idpengujian'],
+        'idjenis_pengujian' => ['required', 'integer', 'exists:jenis_pengujian,idjenis_pengujian'],
+        'jumlah_item' => ['required', 'integer'],
+        'biaya_per_pengujian' => ['required', 'numeric'],
+        'keterangan' => ['required', 'string'],
     ];
 
-    /**
-     * preprocess input attributes for create and update
-     * 
-     * @param Request
-     * @return input
-     */
-    public function processRequest($request)
-    {
-    }
+    // /**
+    //  * preprocess input attributes for create and update
+    //  * 
+    //  * @param Request
+    //  * @return input
+    //  */
+    // public function processRequest($request)
+    // {
+    // }
 }
