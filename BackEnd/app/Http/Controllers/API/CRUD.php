@@ -122,5 +122,6 @@ trait CRUD
      */
     public function processRequest($request)
     {
+        return $request->all();
     }
 }
