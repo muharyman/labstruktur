@@ -14,6 +14,8 @@ class ItemPengujianResource extends JsonResource
      */
     public function toArray($request)
     {
+        $result = parent::toArray($request);
+        $result['foto'] = Storage::get('Laporan/'.$result->nama_foto);
         return parent::toArray($request);
     }
 }

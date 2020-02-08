@@ -19,6 +19,7 @@ class CreateItemPengujianTable extends Migration
             $table->bigInteger('idjenis_pengujian')->unsigned()->nullable();
             $table->bigInteger('jumlah_item')->unsigned()->nullable();
             $table->double('biaya_per_pengujian')->nullable();
+            $table->string('nama_foto')->nullable();
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });

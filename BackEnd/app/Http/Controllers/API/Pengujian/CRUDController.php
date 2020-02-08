@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CRUD;
 use App\Http\Resources\PengujianResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusPengujian;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -59,10 +60,10 @@ class CRUDController extends APIController
         // validate request
         $changedRules = [
             'tanggal_pengujian' => ['nullable', 'date'],
-            'nama_laporan' => ['nullable', 'date'],
             'status_pengujian' => ['nullable', 'boolean'],
             'status_pengambilan' => ['nullable', 'boolean'],
             'status_pembayaran' => ['nullable', 'boolean'],
+            'laporan' => ['nullable', 'file'],
         ];
         $rules = array_replace($this->rules, $changedRules);
         $validator = Validator::make($request->all(), $rules);
@@ -77,7 +78,7 @@ class CRUDController extends APIController
         }
 
         // process request
-        $input = $request->all();
+        $input = $request->except('laporan');
         if ($input['status_pengujian'] != $object->status_pengujian){
             if ($input['status_pengujian'] == true){
                 $input['tanggal_buka'] = Carbon::now();
@@ -86,6 +87,15 @@ class CRUDController extends APIController
                 $input['tanggal _tutup'] = Carbon::now();
                 $input['id_penutup'] = Auth::user()->getKey();
             }
+        }
+
+        // store laporan
+        if ($request->has('laporan') && !is_null($request->input('laporan'))){
+            if ($object->nama_laporan){
+                Storage::delete('Laporan/'.$object->nama_laporan);
+            }
+            $request->file('laporan')->store('Laporan');
+            $input['nama_laporan'] = $request->image->hashName();
         }
 
         // update
@@ -100,4 +110,27 @@ class CRUDController extends APIController
         }
     }
 
+    /**
+     * override standard delte
+     * 
+     * @param id
+     * @return response
+     */
+    public function delete($id)
+    {
+        // validate id
+        $object = $this->modelClassName::find($id);
+        if (!$object){
+            return $this->respondError('Object not found');
+        }
+
+        // delete
+        if ($object->delete()){
+            Storage::delete('Laporan/'.$object->nama_laporan);
+            return $this->respondWithData($object);
+        } else {
+            return $this->respondError('delete failed');
+        }
+        
+    }
 }

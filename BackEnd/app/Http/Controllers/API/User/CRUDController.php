@@ -79,7 +79,7 @@ class CRUDController extends APIController
         
         // process request
         $input = $request->except('password_confirmation');
-        if (array_key_exists('password', $input)){
+        if (array_key_exists('password', $input) && !is_null($input['password'])){
             $input['password'] = bcrypt($request['password']);
             $input['last_change_password'] = Carbon::now();
         }
