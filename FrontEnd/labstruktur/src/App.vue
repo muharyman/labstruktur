@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="animated fadeInUp">
+  <div class="animated fadeInUp"  v-if="this.$route.meta.header === 1">
   <b-navbar toggleable="lg" type="dark" variant="white">
     <b-navbar-brand href="#"><LabStruktur id="logo-labstruktur"/></b-navbar-brand>
 
@@ -40,14 +40,15 @@
           <template v-slot:button-content>
             <div class="navbar-text">User</div>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item href="/profil">Profile</b-dropdown-item>
           <b-dropdown-item href="#">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
 </div>
-  </div>
+<router-view />
+</div>
 </template>
 
 <style>

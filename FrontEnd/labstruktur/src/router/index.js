@@ -3,7 +3,8 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import LupaPassword from "../views/LupaPassword.vue";
-import ResetPassword from "../views/ResetPassword";
+import ResetPassword from "../views/ResetPassword.vue";
+import Profil from "../views/Profil.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -48,6 +49,14 @@ const routes = [
     component: ResetPassword,
     meta: {
       header: 0
+    }
+  },
+  {
+    path: "/profil",
+    name: "profil",
+    component: Profil,
+    meta: {
+      header: 1
     }
   }
 ];
