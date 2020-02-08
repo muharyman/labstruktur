@@ -15,7 +15,7 @@ use App\Models\Pengujian;
 use Carbon\Carbon;
 use Validator;
 
-class CRUDController extends APIController
+class GetController extends APIController
 {
     /**
      * get index with filter
@@ -26,21 +26,13 @@ class CRUDController extends APIController
     public function indexWithFilter(Request $request)
     {
         $modelIndex = Pengujian::query();
+        // search query
         $search = '%'.$request->input('search').'%';
         $search_attributes = ['status_pembayaran', 'idpengujian', 'tanggal_buka', 'tanggal_tutup', 'pemberi_tugas', 'npwp', 'status_pengambilan', 'proyek'];
         foreach ($search_attributes as $attribute){
             $modelIndex = $modelIndex->orWhere($attribute, 'like', $search);
         }
-        /**
-         * and (status_pembayaran like "'.$search.'"
-						or idpengujian like "%'.$search.'%"
-						or tanggal_buka like "%'.$search.'%"
-						or tanggal_tutup like "%'.$search.'%"
-						or pemberi_tugas like "%'.$search.'%"
-						or npwp like "%'.$search.'%"
-						or status_pengambilan like "%'.$search.'%"
-						or proyek like "%'.$search.'%" '
-         */
+        // filter query
         $filter = $request->input('filter');
         switch ($filter) {
             case 1:
@@ -70,7 +62,7 @@ class CRUDController extends APIController
             default:
                 break;
         }
-        $modelIndex->get();
+        $modelIndex = $modelIndex->get();
         $data = PengujianResource::collection($modelIndex);
 
         return $this->respondWithData($data); 
