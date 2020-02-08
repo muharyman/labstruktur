@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ItemPengujianResource extends JsonResource
 {
@@ -16,6 +17,6 @@ class ItemPengujianResource extends JsonResource
     {
         $result = parent::toArray($request);
         $result['foto'] = Storage::get('Laporan/'.$result->nama_foto);
-        return parent::toArray($request);
+        return $result;
     }
 }

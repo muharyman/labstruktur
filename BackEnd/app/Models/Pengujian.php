@@ -109,4 +109,26 @@ class Pengujian extends Model
     {
         return $query->where('status_pengujian', false);
     }
+    public function scopeRutin($query)
+    {
+        return $query;
+    }
+    public function scopeNonRutin($query)
+    {
+        return $query;
+    }
+    public function scopeLaporanAvailable($query)
+    {
+        return $query->whereNotNull('nama_laporan');
+    }
+    public function scopeLaporanUnavailable($query)
+    {
+        return $query->whereNull('nama_laporan');
+    }
+    public function scopeLunas($query){
+        return $query->where('status_pembayaran', true);
+    }
+    public function scopeBelumLunas($query){
+        return $query->where('status_pembayaran', false);
+    }
 }

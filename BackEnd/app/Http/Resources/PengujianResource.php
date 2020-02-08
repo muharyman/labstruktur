@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class PengujianResource extends JsonResource
 {
@@ -14,6 +15,8 @@ class PengujianResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $result = parent::toArray($request);
+        $result['url_laporan'] = Storage::url('Laporan/'.$result['nama_laporan']);
+        return $result;
     }
 }
