@@ -7,23 +7,26 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PasswordResetRequest extends Notification
+class StatusPengujian extends Notification
 {
     use Queueable;
 
     /**
-     * @var token used to reset password
+     * @var data pengujian
      */
-    protected $token;
-
+    protected $proyek;
+    protected $status;
     /**
      * Create a new notification instance.
      *
+     * @param string Proyek
+     * @param boolean Status
      * @return void
      */
-    public function __construct($token)
+    public function __construct($proyek, $status)
     {
-        $this->token = $token;
+        $this->proyek = $proyek;
+        $this->status = $status;
     }
 
     /**
@@ -45,14 +48,11 @@ class PasswordResetRequest extends Notification
      */
     public function toMail($notifiable)
     {
-        // generate reset password url
-        $url = url(route('passwordreset.check',['token' => $this->token]));
-
         return (new MailMessage)
-                    ->subject(env('APP_NAME','labstruktur').' Password Reset')
-                    ->line('Password reset request for your account from '. env('APP_NAME', 'labstruktur'))
-                    ->action('Reset Password', url($url))
-                    ->line('Ignore this email if you did not wish to reset your password');
+                    ->subject(env('APP_NAME','labstruktur').' pembukaan pengujian')
+                    ->line('Pengujian untuk Proyek '.$this->proyek)
+                    ->line($status ? 'DIBUKA': 'DITUTUP')
+                    ->line('Terima kasih');
     }
 
     /**

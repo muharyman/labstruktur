@@ -6,6 +6,8 @@ use App\Http\Controllers\API\APIController;
 use App\Http\Controllers\API\CRUD;
 use App\Http\Resources\PengujianResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\StatusPengujian;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Pengujian;
@@ -81,13 +83,17 @@ class CRUDController extends APIController
                 $input['tanggal_buka'] = Carbon::now();
                 $input['id_pembuka'] = Auth::user()->getKey();
             } else if ($input['status_pengujian'] == false){
-                $input['tanggal_tutup'] = Carbon::now();
+                $input['tanggal _tutup'] = Carbon::now();
                 $input['id_penutup'] = Auth::user()->getKey();
             }
         }
 
         // update
         if($object->update($input)){
+            if ($input['status_pengujian'] != $object->status_pengujian){
+                // email notification
+                Notification::route('mail', $input['email'])->notify(new StatusPengujian($input['proyek'], $input['status']));
+            }
             return $this->respondWithData($object);
         } else {
             return $this->respondError('update failed');
