@@ -76,9 +76,19 @@ class CRUDController extends APIController
         if ($validator->fails()){
             return $this->respondRequestError($validator->errors());
         }
-
+        
         // process request
         $input = $request->except('password_confirmation');
+        if (array_key_exists('password', $input)){
+            $input['password'] = bcrypt($request['password']);
+            $input['last_change_password'] = Carbon::now();
+        }
+        if ($input['email'] != $object->email){
+            do{
+                $input['verification_token'] = str_random(60);
+            }while(User::where('verification_token', $input['verification_token'])->first() instanceof User);
+            $input['email_verified_at'] = null;
+        }
 
         // update
         if ($object->update($input)) {
@@ -86,7 +96,6 @@ class CRUDController extends APIController
         } else {
             return $this->respondError('update failed');
         }
-        
 
     }
 }

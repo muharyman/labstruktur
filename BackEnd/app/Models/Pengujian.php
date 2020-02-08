@@ -97,4 +97,16 @@ class Pengujian extends Model
     {
         return $this->hasMany('App\Models\ItemPengujian', 'idpengujian');
     }
+
+    /**
+     * LOCAL SCOPE
+     */
+    public function scopeOpen($query)
+    {
+        return $query->where('status_pengujian', true);
+    }
+    public function scopeClose($query)
+    {
+        return $query->where('status_pengujian', false);
+    }
 }

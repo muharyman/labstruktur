@@ -24,7 +24,7 @@ class CRUDController extends APIController
      */
     protected $rules = [
         'nama_kategori' => ['required', 'string'],
-        'nama_lain' => ['required', 'string'],
+        'nama_lain' => ['nullable', 'string'],
     ];
 
     // /**

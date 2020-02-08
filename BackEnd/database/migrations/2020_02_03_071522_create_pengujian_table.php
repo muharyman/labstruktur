@@ -23,7 +23,7 @@ class CreatePengujianTable extends Migration
             $table->bigInteger('iduser_pembuka')->nullable()->unsigned();
             $table->bigInteger('idteknisi')->nullable()->unsigned();
             $table->bigInteger('idengineer')->nullable()->unsigned();
-            $table->bigInteger('iduser_penutup')->nullable()->unsigned();
+            $table->bigInteger('iduser_penutup')->nullable()->unsigned()->nullable();
             $table->string('pemberi_tugas', 100)->nullable();
             $table->string('npwp', 20)->nullable();
             $table->string('proyek', 100)->nullable();

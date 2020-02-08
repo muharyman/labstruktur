@@ -89,12 +89,22 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Pengujian', 'iduser_penutup');
     }
-
+    
     /**
      * Local Scope
      */
     public function scopeEmail($query, $email)
     {
         return $query->where('email', $email);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status_user', true);
+    }
+
+    public function scopeNonActive($query)
+    {
+        return $query->where('status_user', false);
     }
 }

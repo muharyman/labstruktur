@@ -27,7 +27,7 @@ class CRUDController extends APIController
         'idjenis_pengujian' => ['required', 'integer', 'exists:jenis_pengujian,idjenis_pengujian'],
         'jumlah_item' => ['required', 'integer'],
         'biaya_per_pengujian' => ['required', 'numeric'],
-        'keterangan' => ['required', 'string'],
+        'keterangan' => ['nullable', 'string'],
     ];
 
     // /**

@@ -24,23 +24,16 @@ class CRUDController extends APIController
      */
     protected $rules = [
         'email' => ['required', 'string', 'email', 'max:255'],
-        'status_pembayaran' => ['required', 'boolean'],
-        'tanggal_buka' => ['required', 'date'],
-        'tanggal_pengujian' => ['required', 'date'],
-        'tanggal_tutup' => ['required', 'date'],
-        'iduser_pembuka' => ['required', 'integer', 'exists:users,iduser'],
         'iduser_teknisi' => ['required', 'integer', 'exists:users,iduser'],
-        'iduser_enginerr' => ['required', 'integer', 'exists:users,iduser'],
-        'iduser_penutup' => ['required', 'integer', 'exists:users,iduser'],
+        'iduser_engineer' => ['required', 'integer', 'exists:users,iduser'],
         'pemberi_tugas' => ['required', 'string'],
         'npwp' => ['required', 'string', 'max:20'],
         'proyek' => ['required', 'string'],
-        'tanggal_terima' => ['required', 'date'],
-        'status_pengujian' => ['required', 'boolean'],
         'nomor_laporan' => ['required', 'string'],
-        'nama_laporan' => ['required', 'string'],
-        'status_pengambilan' => ['required', 'boolean'],
+        'tanggal_terima' => ['required', 'date'],
     ];
+
+
 
     // /**
     //  * preprocess input attributes for create and update
@@ -51,4 +44,54 @@ class CRUDController extends APIController
     // public function processRequest($request)
     // {
     // }
+
+    /**
+     * Override standarad update
+     * 
+     * @param id, request
+     * @return response
+     */
+
+    public function update($id, Request $request)
+    {
+        // validate request
+        $changedRules = [
+            'tanggal_pengujian' => ['nullable', 'date'],
+            'nama_laporan' => ['nullable', 'date'],
+            'status_pengujian' => ['nullable', 'boolean'],
+            'status_pengambilan' => ['nullable', 'boolean'],
+            'status_pembayaran' => ['nullable', 'boolean'],
+        ];
+        $rules = array_replace($this->rules, $changedRules);
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()){
+            return $this->respondRequestError($validator->errors());
+        }
+
+        // validate id
+        $object = $this->modelClassName::find($id);
+        if (!$object){
+            return $this->respondError('Object not found');
+        }
+
+        // process request
+        $input = $request->all();
+        if ($input['status_pengujian'] != $object->status_pengujian){
+            if ($input['status_pengujian'] == true){
+                $input['tanggal_buka'] = Carbon::now();
+                $input['id_pembuka'] = Auth::user()->getKey();
+            } else if ($input['status_pengujian'] == false){
+                $input['tanggal_tutup'] = Carbon::now();
+                $input['id_penutup'] = Auth::user()->getKey();
+            }
+        }
+
+        // update
+        if($object->update($input)){
+            return $this->respondWithData($object);
+        } else {
+            return $this->respondError('update failed');
+        }
+    }
+
 }

@@ -27,6 +27,9 @@ class LoginController extends APIController
         $credentials = $request->only('nama_login', 'password');
         if (Auth::attempt($credentials)){
             $user = Auth::user();
+            if (!$user->status_user){
+                return $this->respondError('this account is not active');
+            }
             $user->last_login = Carbon::now();
             $user->last_ip_login = $request->ip();
             $user->save();
