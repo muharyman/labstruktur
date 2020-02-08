@@ -25,36 +25,52 @@ class CRUDController extends APIController
      */
     public function indexWithFilter(Request $request)
     {
+        $modelIndex = Pengujian::query();
+        $search = '%'.$request->input('search').'%';
+        $search_attributes = ['status_pembayaran', 'idpengujian', 'tanggal_buka', 'tanggal_tutup', 'pemberi_tugas', 'npwp', 'status_pengambilan', 'proyek'];
+        foreach ($search_attributes as $attribute){
+            $modelIndex = $modelIndex->orWhere($attribute, 'like', $search);
+        }
+        /**
+         * and (status_pembayaran like "'.$search.'"
+						or idpengujian like "%'.$search.'%"
+						or tanggal_buka like "%'.$search.'%"
+						or tanggal_tutup like "%'.$search.'%"
+						or pemberi_tugas like "%'.$search.'%"
+						or npwp like "%'.$search.'%"
+						or status_pengambilan like "%'.$search.'%"
+						or proyek like "%'.$search.'%" '
+         */
         $filter = $request->input('filter');
-        $modelIndex = null;
         switch ($filter) {
             case 1:
                 // rutin
-                $modelIndex = Pengujian::rutin();
+                $modelIndex = $modelIndex->rutin();
                 break;
             case 2:
                 // tidak rutin
-                $modelIndex = Pengujian::nonRutin();
+                $modelIndex = $modelIndex->nonRutin();
                 break;
             case 3:
                 // lunas
-                $modelIndex = Pengujian::lunas();
+                $modelIndex = $modelIndex->lunas();
                 break;
             case 4:
                 // belum lunas
-                $modelIndex = Pengujian::belumLunas();
+                $modelIndex = $modelIndex->belumLunas();
                 break;
             case 5:
                 // laporan ada
-                $modelIndex = Pengujian::laporanAvailable();
+                $modelIndex = $modelIndex->laporanAvailable();
                 break;
             case 6:
                 // laporan tidak ada
-                $modelIndex = Pengujian::laporanUnavailable();
+                $modelIndex = $modelIndex->laporanUnavailable();
                 break;
             default:
                 break;
         }
+        $modelIndex->get();
         $data = PengujianResource::collection($modelIndex);
 
         return $this->respondWithData($data); 
