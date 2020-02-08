@@ -15,8 +15,8 @@ trait CRUD
         $data = $this->resourceCollectionClassName ?
             new $this->resourceCollectionClassName($modelIndex):
             $this->resourceClassName::collection($modelIndex);
-
-        return $this->respondWithData($data); 
+        return $data;
+        // return $this->respondWithData($data); 
     }
 
     /**

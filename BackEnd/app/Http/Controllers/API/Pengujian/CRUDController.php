@@ -27,8 +27,8 @@ class CRUDController extends APIController
      */
     protected $rules = [
         'email' => ['required', 'string', 'email', 'max:255'],
-        'iduser_teknisi' => ['required', 'integer', 'exists:users,iduser'],
-        'iduser_engineer' => ['required', 'integer', 'exists:users,iduser'],
+        'idteknisi' => ['required', 'integer', 'exists:users,iduser'],
+        'idengineer' => ['required', 'integer', 'exists:users,iduser'],
         'pemberi_tugas' => ['required', 'string'],
         'npwp' => ['required', 'string', 'max:20'],
         'proyek' => ['required', 'string'],

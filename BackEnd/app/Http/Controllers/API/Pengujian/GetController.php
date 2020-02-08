@@ -62,9 +62,9 @@ class GetController extends APIController
             default:
                 break;
         }
-        $modelIndex = $modelIndex->get();
+        $modelIndex = $modelIndex->paginate(25)->appends($request->all());
         $data = PengujianResource::collection($modelIndex);
-
-        return $this->respondWithData($data); 
+        return $data;
+        // return $this->respondWithData($data); 
     }
 }
