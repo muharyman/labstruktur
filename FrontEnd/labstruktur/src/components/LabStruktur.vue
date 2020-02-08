@@ -18,7 +18,7 @@
   width: fit-content;
   font-family: "montserrat Alternates", sans-serif;
   font-weight: 700;
-  font-size: 60px;
+  font-size: 45px;
   color: #292929;
   padding: 0 0 0 5px;
   margin: auto;
