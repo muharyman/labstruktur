@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\User;
 use App\Http\Controllers\API\APIController;
 use App\Http\Controllers\API\CRUD;
 use App\Http\Resources\UserResource;
+use App\Utils\Logging;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -92,6 +93,7 @@ class CRUDController extends APIController
 
         // update
         if ($object->update($input)) {
+            Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {
             return $this->respondError('update failed');

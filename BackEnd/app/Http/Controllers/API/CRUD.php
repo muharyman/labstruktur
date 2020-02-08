@@ -1,5 +1,6 @@
 <?php 
 namespace App\http\controllers\API;
+use App\Utils\Logging;
 use Illuminate\Http\Request;
 use Validator;
 trait CRUD
@@ -37,6 +38,8 @@ trait CRUD
 
         // create
         $createdObject = $this->modelClassName::create($input);
+
+        Logging::action('Menambahkan '.(new \ReflectionClass($this->modelClassName))->getShortName().' baru, id:'.$createdObject->getKey());
 
         return $this->respondWithData($createdObject);
     }
@@ -84,6 +87,7 @@ trait CRUD
 
         // update
         if($object->update($input)){
+            Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {
             return $this->respondError('update failed');
@@ -107,6 +111,7 @@ trait CRUD
 
         // delete
         if ($object->delete()){
+            Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {
             return $this->respondError('delete failed');

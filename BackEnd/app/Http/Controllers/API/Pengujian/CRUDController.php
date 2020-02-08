@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CRUD;
 use App\Http\Resources\PengujianResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use App\Utils\Logging;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusPengujian;
 use Illuminate\Http\Request;
@@ -104,6 +105,7 @@ class CRUDController extends APIController
                 // email notification
                 Notification::route('mail', $input['email'])->notify(new StatusPengujian($input['proyek'], $input['status']));
             }
+            Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {
             return $this->respondError('update failed');
@@ -127,6 +129,7 @@ class CRUDController extends APIController
         // delete
         if ($object->delete()){
             Storage::delete('Laporan/'.$object->nama_laporan);
+            Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {
             return $this->respondError('delete failed');

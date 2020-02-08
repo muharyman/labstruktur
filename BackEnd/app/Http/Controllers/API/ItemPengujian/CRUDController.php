@@ -6,6 +6,7 @@ use App\Http\Controllers\API\APIController;
 use App\Http\Controllers\API\CRUD;
 use App\Http\Resources\ItemPengujianResource;
 use Illuminate\Support\Facades\Auth;
+use App\Utils\Logging;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -53,7 +54,7 @@ class CRUDController extends APIController
     }
 
     /**
-     * override standard delte
+     * override standard delete
      * 
      * @param id
      * @return response
@@ -69,6 +70,7 @@ class CRUDController extends APIController
         // delete
         if ($object->delete()){
             Storage::delete('FotoInventaris/'.$object->nama_foto);
+            Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {
             return $this->respondError('delete failed');
