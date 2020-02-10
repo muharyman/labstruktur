@@ -5,6 +5,7 @@ import Login from "../views/Login.vue";
 import LupaPassword from "../views/LupaPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import Profil from "../views/Profil.vue";
+import TambahInventaris from "../views/TambahInventaris.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -55,6 +56,14 @@ const routes = [
     path: "/profil",
     name: "profil",
     component: Profil,
+    meta: {
+      header: 1
+    }
+  },
+  {
+    path: "/inventaris/tambahinventaris",
+    name: "tambahinventaris",
+    component: TambahInventaris,
     meta: {
       header: 1
     }

@@ -51,7 +51,7 @@
 .root{
   padding: 0;
   margin: 0;
-  background: #9E9FA1 !important;
+  background: #9E9FA1;
   z-index: -1;
 }
 .col-sm-5{
@@ -60,7 +60,6 @@
 }
 .col-sm-7{
   padding: 65px 75px;
-  background: #9E9FA1 !important;
 }
 
 .profile{
@@ -75,7 +74,7 @@
   float:right;
   margin-right: 45px;
   width: 55vw;
-  height: 50vh;
+  height: 55vh;
   border-radius: 4px;
   background: white;
   padding: 25px 25px;
@@ -104,7 +103,7 @@
   outline: 0;
 }
 .garis-batas-vertical{
-  height: 220px;
+  height: 37vh;
   width: 1px;
   background: #707070;
 }
