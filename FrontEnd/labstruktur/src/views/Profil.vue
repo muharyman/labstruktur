@@ -53,13 +53,17 @@
   margin: 0;
   background: #9E9FA1;
   z-index: -1;
+  height: 83vh;
+  overflow: hidden;
 }
+
 .col-sm-5{
   padding: 65px 45px;
   margin:0 !important;
 }
 .col-sm-7{
-  padding: 65px 75px;
+  padding: 65px 45px;
+  margin: 0 !important;
 }
 
 .profile{
@@ -202,6 +206,29 @@
   font-weight: 400;
   color: black;
   font-size: 25px;
+}
+
+@media screen and (max-width: 600px){
+  .root{
+    height: fit-content;
+  }
+  .profile{
+    margin: auto;
+    width: 80vw;
+    height: 100%;
+  }
+  .ubah-profile{
+    float: none;
+    margin: auto;
+    width: 80vw;
+    height: 100%;
+  }
+  .button-4 a{
+    font-size: 13px; 
+  }
+  #status{
+    font-size: 17px;
+  }
 }
 </style>
 <script>

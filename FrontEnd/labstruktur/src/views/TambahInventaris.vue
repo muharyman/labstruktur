@@ -1,11 +1,160 @@
 <template>
   <div class="root">
-    ini tambah inventaris
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="tambahinventaris-container">
+          <div id="tambahinventaris-header">
+            <p>Tambah Inventaris</p>
+            <div class="row">
+              <div class="col">
+                <p class="text">Nama Barang</p>
+                <input class="text-input" type="text" placeholder="nama barang"/>
+                <p class="text">Jumlah Barang</p>
+                <input class="text-input" type="text" placeholder="Jumlah Barang"/>
+              </div>
+              <div class="col">
+                <p class="text">Deskripsi Barang</p>
+                <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
+              </div>
+            </div>
+              <p class="text">Upload foto</p>
+              <label for="foto-upload" class="upload-foto-container" >
+                <div class="row">
+                  <div class="col-sm-10">
+                    <div class="upload-foto" >
+                      <p>{{ foto_status }}</p>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="button" >
+                      <p>Open File</p>
+                    </div>
+                  </div>
+                </div>
+              </label>
+              <input id="foto-upload" ref="foto_upload" type="file" accept="image/png, image/jpeg" multiple @change="update_status()" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .root{
-  background: black;
-}    
+  overflow-x: hidden;
+  background: #9E9FA1;
+  height: 83vh;
+  z-index: -1;
+}
+.tambahinventaris-container{
+  margin: 10vh 5vw;
+  border-radius: 4px;
+  background: white;
+  padding: 5px 25px;
+}
+#tambahinventaris-header{
+  font-family: "Raleway", sans-serif;
+  font-size: 32px;
+  font-weight: 300;
+}
+.text{
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: 17px;
+  color: #636363;
+  line-height: 12px;
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.text-input{
+  border: 2px solid #24D39B;
+  padding: 5px 8px;
+  font-size: 17px;
+  margin-bottom: 8px;
+  height: 25%;
+  width: inherit;
+  border-radius: 4px;
+}
+
+.text-input:focus{
+  border: 2px solid #1A53FF;
+  border-radius: 4px;
+}
+.text-input-deskripsi{
+  border: 2px solid #24D39B;
+  padding: 5px 8px;
+  height: 78%;
+  font-size: 17px;
+  margin-bottom: 8px;
+  width: inherit;
+  border-radius: 4px;
+  margin-top: 8px;
+  resize: none;
+}
+.text-input-deskripsi:focus{
+  border: 2px solid #1A53FF;
+  border-radius: 4px;
+}
+.upload-foto{
+  border: 2px solid #24D39B;
+  padding: 5px 8px;
+  font-size: 17px;
+  margin-bottom: 8px;
+  height: 55%;
+  width:inherit;
+  border-radius: 4px;
+  display: inline-block;
+}
+.upload-foto:hover{
+  border: 2px solid #1A53FF;
+}
+#foto-upload{
+  display: none;
+}
+.upload-foto-container{
+  display: block;
+  cursor: pointer;
+}
+.button{
+  border: 2px solid #1A53FF;
+  padding: 5px 8px;
+  font-size: 17px;
+  color: #1A53FF;
+  text-align: center;
+  margin-bottom: 8px;
+  height: 55%;
+  width:inherit;
+  border-radius: 4px;
+  display: inline-block;
+}
+.button:hover{
+  background: #1A53FF;
+  color: white;
+}
 </style>
+<script>
+export default {
+  name:'tambahinventaris',
+  data(){
+    return{
+      foto_status: "Tidak ada foto yang dipilih",
+      files: []
+    }
+  },
+  methods:{
+    update_status(){
+      if(this.$refs.foto_upload.files.length > 0){
+        this.foto_status="";
+        for( var i = 0; i< this.$refs.foto_upload.files.length; i++){
+          this.foto_status = this.foto_status + this.$refs.foto_upload.files.item(i).name + "; ";
+        }
+        this.files = this.$refs.foto_upload.files;
+      } else{
+        this.foto_status = "Tidak ada foto yang dipilih";
+      }
+    }
+  }
+
+}
+</script>

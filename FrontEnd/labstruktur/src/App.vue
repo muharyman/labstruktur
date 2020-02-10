@@ -51,7 +51,10 @@
 </div>
 </template>
 
-<style>
+<style scoped>
+.app{
+  z-index: 1;
+}
 .navbar-text{
   font-size: 25px;
   color: black !important;
