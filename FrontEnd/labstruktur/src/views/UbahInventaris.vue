@@ -4,7 +4,7 @@
       <div class="col-sm-12">
         <div class="tambahinventaris-container">
           <div id="tambahinventaris-header">
-            <p>Tambah Inventaris</p>
+            <p>UbahInventaris</p>
           </div>
           <div class="row">
             <div class="col">
