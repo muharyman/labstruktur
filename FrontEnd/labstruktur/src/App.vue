@@ -27,7 +27,7 @@
             <div class="navbar-text">Inventaris</div>
           </template>
           <b-dropdown-item href="#">List Inventaris</b-dropdown-item>
-          <b-dropdown-item href="#">Tambah Inventaris</b-dropdown-item>
+          <b-dropdown-item href="/tambahinventaris">Tambah Inventaris</b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item href="#">
           <div class="navbar-text">

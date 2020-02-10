@@ -56,7 +56,9 @@
   height: 83vh;
   overflow: hidden;
 }
-
+.row{
+  margin-top:3%;
+}
 .col-sm-5{
   padding: 65px 45px;
   margin:0 !important;

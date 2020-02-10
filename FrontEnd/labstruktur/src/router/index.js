@@ -61,7 +61,7 @@ const routes = [
     }
   },
   {
-    path: "/inventaris/tambahinventaris",
+    path: "/tambahinventaris",
     name: "tambahinventaris",
     component: TambahInventaris,
     meta: {

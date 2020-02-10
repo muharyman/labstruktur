@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <div class="row">
+    <div id="content" class="row">
       <div class="col-sm-12">
         <div class="tambahinventaris-container">
           <div id="tambahinventaris-header">
@@ -46,6 +46,9 @@
   background: #9E9FA1;
   height: 83vh;
   z-index: -1;
+}
+#content{
+  margin-top: 3%; 
 }
 .tambahinventaris-container{
   margin: 10vh 5vw;
