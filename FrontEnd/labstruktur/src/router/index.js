@@ -7,6 +7,7 @@ import ResetPassword from "../views/ResetPassword.vue";
 import Profil from "../views/Profil.vue";
 import TambahInventaris from "../views/TambahInventaris.vue";
 import UbahInventaris from "../views/UbahInventaris.vue";
+import TambahPengujian from "../views/TambahPengujian.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -73,6 +74,14 @@ const routes = [
     path: "/ubahinventaris",
     name: "ubahinventaris",
     component: UbahInventaris,
+    meta: {
+      header: 1
+    }
+  },
+  {
+    path: "/tambahpengujian",
+    name: "tambahpengujian",
+    component: TambahPengujian,
     meta: {
       header: 1
     }
