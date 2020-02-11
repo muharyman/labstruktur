@@ -28,6 +28,7 @@ class CreatePengujianTable extends Migration
             $table->string('npwp', 20)->nullable();
             $table->string('proyek', 100)->nullable();
             $table->date('tanggal_terima')->nullable();
+            $table->boolean('status_persetujuan')->nullable();
             $table->boolean('status_pengujian')->nullable();
             $table->string('nomor_laporan', 100)->nullable();
             $table->string('nama_laporan', 100)->nullable();

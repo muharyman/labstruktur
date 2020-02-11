@@ -80,7 +80,7 @@ class CRUDController extends APIController
 
         // process request
         $input = $request->except('laporan');
-        if ($input['status_pengujian'] != $object->status_pengujian){
+        if ($input['status_pengujian'] != $object->status_pengujian && $input['status_pengujian'] == false){
             if ($input['status_pengujian'] == true){
                 $input['tanggal_buka'] = Carbon::now();
                 $input['id_pembuka'] = Auth::user()->getKey();
@@ -91,12 +91,12 @@ class CRUDController extends APIController
         }
 
         // store laporan
-        if ($request->has('laporan') && !is_null($request->input('laporan'))){
+        if ($request->hasFile('laporan') && $request->file('laporan')->isValid()){
             if ($object->nama_laporan){
                 Storage::delete('Laporan/'.$object->nama_laporan);
             }
             $request->file('laporan')->store('Laporan');
-            $input['nama_laporan'] = $request->image->hashName();
+            $input['nama_laporan'] = $request->file('laporan')->hashName();
         }
 
         // update
@@ -113,7 +113,7 @@ class CRUDController extends APIController
     }
 
     /**
-     * override standard delte
+     * override standard delete
      * 
      * @param id
      * @return response
@@ -128,7 +128,7 @@ class CRUDController extends APIController
 
         // delete
         if ($object->delete()){
-            Storage::delete('Laporan/'.$object->nama_laporan);
+            if ($object->nama_laporan) Storage::delete('Laporan/'.$object->nama_laporan);
             Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {

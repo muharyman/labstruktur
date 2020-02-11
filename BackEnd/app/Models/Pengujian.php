@@ -111,11 +111,11 @@ class Pengujian extends Model
     }
     public function scopeRutin($query)
     {
-        return $query;
+        return $query->where('nomor_laporan', 'not like', '%NR%');
     }
     public function scopeNonRutin($query)
     {
-        return $query;
+        return $query->where('nomor_laporan', 'like', '%NR%');
     }
     public function scopeLaporanAvailable($query)
     {

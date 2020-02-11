@@ -21,6 +21,7 @@ class CreateItemPengujianTable extends Migration
             $table->double('biaya_per_pengujian')->nullable();
             $table->string('nama_foto')->nullable();
             $table->text('keterangan')->nullable();
+            $table->string('nama_file')->nullable();
             $table->timestamps();
         });
     }

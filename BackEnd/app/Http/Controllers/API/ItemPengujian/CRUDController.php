@@ -31,6 +31,7 @@ class CRUDController extends APIController
         'biaya_per_pengujian' => ['required', 'numeric'],
         'keterangan' => ['nullable', 'string'],
         'foto' => ['nullable', 'image'],
+        'file' => ['nullable', 'file'],
     ];
 
     /**
@@ -41,16 +42,66 @@ class CRUDController extends APIController
      */
     public function processRequest($request)
     {
-        $input = $request->except('foto');
-
-        // store laporan
-        if ($request->has('foto') && !is_null($request->input('foto'))){
-            if ($object->nama_foto){
-                Storage::delete('FotoInventaris/'.$object->nama_foto);
-            }
+        $input = $request->except('foto', 'file');
+        
+        // store foto inventaris
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()){
             $request->file('foto')->store('FotoInventaris');
-            $input['nama_foto'] = $request->image->hashName();
+            $input['nama_foto'] = $request->file('foto')->hashName();
         }
+
+        // store file
+        if($request->hasFile('file') && $request->file('file')->isValid()){
+            $request->file('file')->store('FileInventaris');
+            $input['nama_file'] = $request->file('file')->hashName();
+        }
+    }
+
+    /**
+     * override standard update
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id,Request $request)
+    {
+        // validate request
+        $validator = Validator::make($request->all(), $this->rules);
+        if ($validator->fails()){
+            return $this->respondRequestError($validator->errors());
+        }
+
+        // validate id
+        $object = $this->modelClassName::find($id);
+        if (!$object){
+            return $this->respondError('Object not found');
+        }
+
+        // process request
+        $input = $request->except('foto', 'file');
+        
+        // store foto inventaris
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()){
+            if ($object->nama_foto) Storage::delete('FotoInventaris/'.$object->nama_foto);
+            $request->file('foto')->store('FotoInventaris');
+            $input['nama_foto'] = $request->file('foto')->hashName();
+        }
+
+        // store file
+        if($request->hasFile('file') && $request->file('file')->isValid()){
+            if ($object->nama_file) Storage::delete('FileInventaris/'.$object->nama_file);
+            $request->file('file')->store('FileInventaris');
+            $input['nama_file'] = $request->file('file')->hashName();
+        }
+
+        // update
+        if($object->update($input)){
+            Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());
+            return $this->respondWithData($object);
+        } else {
+            return $this->respondError('update failed');
+        }
+
     }
 
     /**
@@ -69,7 +120,8 @@ class CRUDController extends APIController
 
         // delete
         if ($object->delete()){
-            Storage::delete('FotoInventaris/'.$object->nama_foto);
+            if ($object->nama_foto) Storage::delete('FotoInventaris/'.$object->nama_foto);
+            if ($object->nama_file) Storage::delete('FileInventaris/'.$object->nama_file);
             Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
         } else {

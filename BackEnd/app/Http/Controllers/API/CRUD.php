@@ -59,7 +59,8 @@ trait CRUD
         }
 
         $data = new $this->resourceClassName($object);
-        return $this->respondWithData($data);
+        return $data;
+        // return $this->respondWithData($data);
     }
 
     /**
