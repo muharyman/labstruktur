@@ -16,7 +16,8 @@ class ItemPengujianResource extends JsonResource
     public function toArray($request)
     {
         $result = parent::toArray($request);
-        $result['foto'] = Storage::get('Laporan/'.$result->nama_foto);
+        if ($result->nama_foto) $result['foto'] = Storage::get('FotoInventaris/'.$result->nama_foto);
+        if ($result->nama_file) $result['file'] = Storage::get('FileInventaris/'.$result->nama_file);
         return $result;
     }
 }

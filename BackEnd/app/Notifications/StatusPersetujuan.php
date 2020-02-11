@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class StatusPengujian extends Notification
+class StatusPersetujuan extends Notification
 {
     use Queueable;
 
@@ -49,9 +49,9 @@ class StatusPengujian extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(env('APP_NAME','labstruktur').' pembukaan pengujian')
+                    ->subject(env('APP_NAME','labstruktur').' persetujuan pengujian')
                     ->line('Pengujian untuk Proyek '.$this->proyek)
-                    ->line($this->status ? 'DIBUKA': 'DITUTUP')
+                    ->line($this->status ? 'Disetujui': 'Tidak Disetujui')
                     ->line('Terima kasih');
     }
 

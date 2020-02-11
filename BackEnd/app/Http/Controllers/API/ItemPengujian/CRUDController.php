@@ -55,6 +55,7 @@ class CRUDController extends APIController
             $request->file('file')->store('FileInventaris');
             $input['nama_file'] = $request->file('file')->hashName();
         }
+        return $input;
     }
 
     /**

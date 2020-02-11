@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,7 +55,7 @@ Route::group([
         ], function () {
             Route::get('index', 'CRUDController@index');
             Route::get('show/{id}', 'CRUDController@show');
-            Route::put('update/{id}', 'CRUDController@update');
+            Route::post('update/{id}', 'CRUDController@update');
             Route::delete('delete/{id}', 'CRUDController@delete');
             Route::get('filter', 'GetController@indexWithFilter');
         });
@@ -136,7 +135,7 @@ Route::group([
         Route::get('index', 'CRUDController@index');
         Route::get('show/{id}', 'CRUDController@show');
         Route::post('create', 'CRUDController@store');
-        Route::put('update/{id}', 'CRUDController@update');
+        Route::post('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
     });
 });

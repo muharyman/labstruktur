@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Utils\Logging;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusPengujian;
+use App\Notifications\StatusPersetujuan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Pengujian;
@@ -39,15 +40,18 @@ class CRUDController extends APIController
 
 
 
-    // /**
-    //  * preprocess input attributes for create and update
-    //  * 
-    //  * @param Request
-    //  * @return input
-    //  */
-    // public function processRequest($request)
-    // {
-    // }
+    /**
+     * preprocess input attributes for create and update
+     * 
+     * @param Request
+     * @return input
+     */
+    public function processRequest($request)
+    {
+        $input = $request->all();
+        $input['status_persetujuan'] = false;
+        return $input;
+    }
 
     /**
      * Override standarad update
@@ -61,6 +65,7 @@ class CRUDController extends APIController
         // validate request
         $changedRules = [
             'tanggal_pengujian' => ['nullable', 'date'],
+            'status_persetujuan' => ['nullable', 'boolean'],
             'status_pengujian' => ['nullable', 'boolean'],
             'status_pengambilan' => ['nullable', 'boolean'],
             'status_pembayaran' => ['nullable', 'boolean'],
@@ -80,13 +85,14 @@ class CRUDController extends APIController
 
         // process request
         $input = $request->except('laporan');
-        if ($input['status_pengujian'] != $object->status_pengujian && $input['status_pengujian'] == false){
+
+        if ($input['status_pengujian'] != $object->status_pengujian){
             if ($input['status_pengujian'] == true){
                 $input['tanggal_buka'] = Carbon::now();
-                $input['id_pembuka'] = Auth::user()->getKey();
+                $input['iduser_pembuka'] = Auth::user()->getKey();
             } else if ($input['status_pengujian'] == false){
-                $input['tanggal _tutup'] = Carbon::now();
-                $input['id_penutup'] = Auth::user()->getKey();
+                $input['tanggal_tutup'] = Carbon::now();
+                $input['iduser_penutup'] = Auth::user()->getKey();
             }
         }
 
@@ -100,10 +106,15 @@ class CRUDController extends APIController
         }
 
         // update
+        $status_pengujian = $object->status_pengujian;
+        $status_persetujuan = $object->status_persetujuan;
         if($object->update($input)){
-            if ($input['status_pengujian'] != $object->status_pengujian){
-                // email notification
-                Notification::route('mail', $input['email'])->notify(new StatusPengujian($input['proyek'], $input['status']));
+            // email notification
+            if ($input['status_persetujuan'] != $status_persetujuan){
+                Notification::route('mail', $input['email'])->notify(new StatusPersetujuan($input['proyek'], $input['status_persetujuan']));
+            }
+            if ($input['status_pengujian'] != $status_pengujian){
+                Notification::route('mail', $input['email'])->notify(new StatusPengujian($input['proyek'], $input['status_pengujian']));
             }
             Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());
             return $this->respondWithData($object);
