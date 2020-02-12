@@ -1,22 +1,31 @@
 <template>
   <div class="root">
-    <div class="photo">
-      <div class="slideshow-container">
-        <a class="prev" v-on:click="go_prev()" >&#10094;</a>
-        <div class="mySlides1">
-          <img v-bind:src="curent_src">
-        </div>
-        <a class="next" v-on:click="go_next()" >&#10095;</a>
-        <div class="delete-container">
-          <div class="button3"> Delete Photo </div>
+    <div class="photo-container">
+      <div class="photo">
+        <div class="slideshow-container">
+          <a class="prev" v-on:click="go_prev()" >&#10094;</a>
+          <div class="mySlides1">
+            <img v-bind:src="curent_src">
+          </div>
+          <a class="next" v-on:click="go_next()" >&#10095;</a>
+          <div class="delete-container">
+            <div class="button3" @click="openDeleteDialog()"> Delete Photo </div>
+          </div>
+          <b-modal ref="hapus-modal" hide-footer title="Peringatan">
+            <div class="d-block text-center">
+              <h3>Apakah anda yakin ingin menghapus foto?</h3>
+              <p>*Note : Foto yang dihapus tidak dapat dikembalikan!</p>
+            </div>
+            <b-button class="mt-3" variant="outline-danger" block @click="hideModal">HAPUS</b-button>
+          </b-modal>
         </div>
       </div>
     </div>
     <div id="content" class="row">
       <div class="col-sm-12">
-        <div class="tambahinventaris-container">
-          <div id="tambahinventaris-header">
-            <p>Tambah Inventaris</p>
+        <div class="editinventaris-container">
+          <div id="editinventaris-header">
+            <p>Edit Inventaris</p>
           </div>
           <div class="row">
             <div class="col">
@@ -29,7 +38,26 @@
               <p class="text">Deskripsi Barang</p>
               <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
             </div>
-          </div>          
+          </div>
+          <p class="text">Upload foto</p>
+          <label for="foto-upload" class="upload-foto-container" >
+            <div id="row" class="row">
+              <div id="kolom1" class="col-sm-10">
+                <div class="upload-foto" >
+                  <p>{{ foto_status }}</p>
+                </div>
+              </div>
+              <div id="kolom2" class="col-sm-2">
+                <div class="button" >
+                  <p>Open File</p>
+                </div>
+              </div>
+            </div>
+          </label>
+          <input id="foto-upload" ref="foto_upload" type="file" accept="image/png, image/jpeg" multiple @change="update_status()" />
+          <div class="button2" >
+            <a href="#none">SIMPAN</a>
+          </div>
         </div>
       </div>
     </div>
@@ -37,6 +65,9 @@
 </template>
 
 <style scoped>
+.photo-container{
+  text-align: center;
+}
 .photo{
   display: inline-block;
   margin-top: 5%; 
@@ -88,13 +119,13 @@ img {
   min-height: 83vh;
   z-index: -1;
 }
-.tambahinventaris-container{
+.editinventaris-container{
   margin: 10vh 5vw;
   border-radius: 4px;
   background: white;
   padding: 5px 25px;
 }
-#tambahinventaris-header{
+#editinventaris-header{
   font-family: "Raleway", sans-serif;
   font-size: 32px;
   font-weight: 300;
@@ -170,7 +201,7 @@ img {
   color: #1A53FF;
   text-align: center;
   margin-bottom: 8px;
-  height: 100%;
+  height: inherit;
   width:inherit;
   border-radius: 4px;
   display: inline-block;
@@ -229,7 +260,33 @@ img {
   border: 2px solid #FF635E;
   background: #FF635E;
 }
-
+#kolom1{
+  height: 5vh;
+  
+}
+#kolom2{
+  height: 5vh;
+}
+.upload-foto{
+  border: 2px solid #24D39B;
+  padding: 3px 8px;
+  font-size: 17px;
+  margin-bottom: 8px;
+  height: inherit;
+  width:inherit;
+  border-radius: 4px;
+  display: inline-block;
+}
+.upload-foto:hover{
+  border: 2px solid #1A53FF;
+}
+#foto-upload{
+  display: none;
+}
+.upload-foto-container{
+  display: block;
+  cursor: pointer;
+}
 </style>
 <script>
 export default {
@@ -268,6 +325,9 @@ export default {
       }else{
         this.curent_src = 'https://lh3.googleusercontent.com/proxy/TMRAAiyt5teC6SWplqVdWBcn46c2eeMgfdd3QLovIA02SqB8vBCwVHFblnhI3VZ0id6iP-VJfiXbnT8MMA3VG8ixp2DtPCQaAoHf6EU';
       }
+    },
+    openDeleteDialog(){
+      this.$refs['hapus-modal'].show()
     }
   },
   mounted(){

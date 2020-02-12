@@ -18,25 +18,25 @@
               <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
             </div>
           </div>
-            <p class="text">Upload foto</p>
-            <label for="foto-upload" class="upload-foto-container" >
-              <div id="row" class="row">
-                <div id="kolom1" class="col-sm-10">
-                  <div class="upload-foto" >
-                    <p>{{ foto_status }}</p>
-                  </div>
-                </div>
-                <div id="kolom2" class="col-sm-2">
-                  <div class="button" >
-                    <p>Open File</p>
-                  </div>
+          <p class="text">Upload foto</p>
+          <label for="foto-upload" class="upload-foto-container" >
+            <div id="row" class="row">
+              <div id="kolom1" class="col-sm-10">
+                <div class="upload-foto" >
+                  <p>{{ foto_status }}</p>
                 </div>
               </div>
-            </label>
-            <input id="foto-upload" ref="foto_upload" type="file" accept="image/png, image/jpeg" multiple @change="update_status()" />
-            <div class="button2" >
-              <a href="#none">SIMPAN</a>
+              <div id="kolom2" class="col-sm-2">
+                <div class="button" >
+                  <p>Open File</p>
+                </div>
+              </div>
             </div>
+          </label>
+          <input id="foto-upload" ref="foto_upload" type="file" accept="image/png, image/jpeg" multiple @change="update_status()" />
+          <div class="button2" >
+            <a href="#none">SIMPAN</a>
+          </div>
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@
   padding: 3px 8px;
   font-size: 17px;
   margin-bottom: 8px;
-  height: 100%;
+  height: inherit;
   width:inherit;
   border-radius: 4px;
   display: inline-block;
@@ -135,7 +135,7 @@
   color: #1A53FF;
   text-align: center;
   margin-bottom: 8px;
-  height: 100%;
+  height: inherit;
   width:inherit;
   border-radius: 4px;
   display: inline-block;
