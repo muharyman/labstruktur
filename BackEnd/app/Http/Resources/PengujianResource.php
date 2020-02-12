@@ -16,8 +16,6 @@ class PengujianResource extends JsonResource
     public function toArray($request)
     {
         $result = parent::toArray($request);
-        // $result['link_laporan'] = Storage::url('Laporan/'.$result['nama_laporan']);
-        // $result['laporan'] = Storage::get('Laporan/'.$result['nama_laporan']);
         return $result;
     }
 }

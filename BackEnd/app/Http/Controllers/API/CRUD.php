@@ -10,9 +10,10 @@ trait CRUD
     *
     * @return Json
     */
-    public function index()
+    public function index(Request $request)
     {
-        $modelIndex = $this->modelClassName::all();
+        $perPage = $request->input('per_page') ? $request->input('per_page') : 25;
+        $modelIndex = $this->modelClassName::paginate($perPage)->appends($request->all());
         $data = $this->resourceCollectionClassName ?
             new $this->resourceCollectionClassName($modelIndex):
             $this->resourceClassName::collection($modelIndex);
