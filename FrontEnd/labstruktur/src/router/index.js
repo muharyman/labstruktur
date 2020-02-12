@@ -11,6 +11,7 @@ import TambahPengujian from "../views/TambahPengujian.vue";
 import Daftar from "../views/Daftar.vue";
 import EditPengujian from "../views/EditPengujian.vue";
 import DetailInventaris from "../views/DetailInventaris.vue";
+import EditInventaris from "../views/EditInventaris.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -104,10 +105,19 @@ const routes = [
     meta: {
       header: 1
     }
-  },{
+  },
+  {
     path: "/detailinventaris",
     name: "detailinventaris",
     component: DetailInventaris,
+    meta: {
+      header: 1
+    }
+  },
+  {
+    path: "/editinventaris",
+    name: "ediinventaris",
+    component: EditInventaris,
     meta: {
       header: 1
     }
