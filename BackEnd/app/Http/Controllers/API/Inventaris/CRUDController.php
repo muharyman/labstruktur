@@ -28,8 +28,9 @@ class CRUDController extends APIController
     protected $rules = [
         'nama' => ['nullable', 'string'],
         'deskripsi' => ['nullable', 'string'],
+        'jumlah' => ['nullable', 'integer'],
         'catatan' => ['nullable', 'string'],
-        'foto' => ['required'],
+        'foto' => ['nullable'],
         'foto.*' => ['image','mimes:jpeg,png,jpg,gif,svg'],
         'file' => ['nullable', 'file'],
     ];

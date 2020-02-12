@@ -17,6 +17,7 @@ class CreateTableInventaris extends Migration
             $table->bigIncrements('idinventaris');
             $table->text('nama')->nullable();
             $table->text('deskripsi')->nullable();
+            $table->bigInteger('jumlah')->unsigned()->nullable();
             $table->text('catatan')->nullable();
             $table->string('nama_file')->nullable();
             $table->timestamps();

@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\FotoInventarisResource;
 
 class InventarisResource extends JsonResource
 {
@@ -14,6 +16,13 @@ class InventarisResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+        
+        // eager load
+        $this->resource->load('fotoInventaris');
+        
+        $data['photos'] = FotoInventarisResource::collection($this->whenLoaded('fotoInventaris'));
+        $data['file_url'] = $data['nama_file'] ? $this->getFileLink() : null;  
+        return $data;
     }
 }

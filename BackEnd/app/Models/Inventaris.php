@@ -89,4 +89,11 @@ class Inventaris extends Model
     {
         return $this->hasMany('App\Models\FotoInventaris', 'idinventaris');
     }
+
+    /**
+     * get link file
+     */
+    public function getFileLink(){
+        return route('getfile', ['filepath' => 'FileInventaris/'.$this->nama_file]);
+    }
 }

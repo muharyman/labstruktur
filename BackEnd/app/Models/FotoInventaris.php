@@ -81,4 +81,11 @@ class FotoInventaris extends Model
         return $this->belongsTo('App\Models\Inventaris', 'idinventaris');
     }
 
+    /**
+     * get link file
+     */
+    public function getFotoLink(){
+        return route('getfile', ['filepath' => 'FotoInventaris/'.$this->nama_foto]);
+    }
+
 }

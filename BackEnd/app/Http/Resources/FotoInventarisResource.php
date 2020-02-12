@@ -14,6 +14,8 @@ class FotoInventarisResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);  
+        $data['foto_url'] = $data['nama_foto'] ? $this->getFotoLink() : null;
+        return $data;
     }
 }

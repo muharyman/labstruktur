@@ -22,7 +22,7 @@ Route::group([
         'prefix' => 'auth'
     ], function () {    
         Route::post('login', 'LoginController@login');
-        Route::get('logout', 'LogoutController@logout')->middleware('auth:api');
+        Route::get('logout', 'LogoutController@logout'); // ->middleware('auth:api');
         Route::post('register', 'RegisterController@register');
         Route::post('passwordreset/create', 'ForgotPasswordController@create');
         Route::get('passwordreset/check/{token}', 'ForgotPasswordController@check')->name('passwordreset.check');
@@ -34,7 +34,7 @@ Route::group([
     // User 
     Route::group([
         'namespace' => 'User',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'user'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -51,7 +51,7 @@ Route::group([
     ], function () {
         Route::post('create', 'CRUDController@store');
         Route::group([
-            'middleware' => 'auth:api',
+            // 'middleware' => 'auth:api',
         ], function () {
             Route::get('index', 'CRUDController@index');
             Route::get('show/{id}', 'CRUDController@show');
@@ -64,7 +64,7 @@ Route::group([
     // Pembayaran 
     Route::group([
         'namespace' => 'Pembayaran',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'pembayaran',
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -77,7 +77,7 @@ Route::group([
     // Log
     Route::group([
         'namespace' => 'Log',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'log'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -90,7 +90,7 @@ Route::group([
     // Kategori Pengujian
     Route::group([
         'namespace' => 'KategoriPengujian',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'kategoripengujian'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -103,7 +103,7 @@ Route::group([
     // Jenis Pengujian
     Route::group([
         'namespace' => 'JenisPengujian',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'jenispengujian'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -116,7 +116,7 @@ Route::group([
     // Jabatan
     Route::group([
         'namespace' => 'Jabatan',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'jabatan'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -129,7 +129,7 @@ Route::group([
     // Item Pengujian
     Route::group([
         'namespace' => 'ItemPengujian',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'itempengujian'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -142,7 +142,7 @@ Route::group([
     // Foto Inventaris
     Route::group([
         'namespace' => 'FotoInventaris',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'fotoinventaris'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -155,7 +155,7 @@ Route::group([
     // Inventaris
     Route::group([
         'namespace' => 'Inventaris',
-        'middleware' => 'auth:api',
+        // 'middleware' => 'auth:api',
         'prefix' => 'inventaris'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -166,6 +166,9 @@ Route::group([
     });
 });
 
+Route::get('getfile', function(Request $request) {
+    return Storage::response($request->input('filepath'));
+})->name('getfile');
  
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
