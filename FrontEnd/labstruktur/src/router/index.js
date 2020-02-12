@@ -8,6 +8,7 @@ import Profil from "../views/Profil.vue";
 import TambahInventaris from "../views/TambahInventaris.vue";
 import UbahInventaris from "../views/UbahInventaris.vue";
 import TambahPengujian from "../views/TambahPengujian.vue";
+import Daftar from "../views/Daftar.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -84,6 +85,14 @@ const routes = [
     component: TambahPengujian,
     meta: {
       header: 1
+    }
+  },
+  {
+    path: "/pendaftaran",
+    name: "pendaftaran",
+    component: Daftar,
+    meta: {
+      header: 0
     }
   }
 ];

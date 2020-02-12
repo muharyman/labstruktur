@@ -54,7 +54,7 @@
   margin: 0;
   background: #9E9FA1;
   z-index: -1;
-  min-height: 83vh;
+  min-height: 100vh;
   overflow-x: hidden;
 }
 .pendaftaran{
@@ -130,7 +130,7 @@
 }
 .button{
   width: inherit;
-  margin-top: 15px;
+  margin-top: 24px;
 }
 .button a:hover{
   background: green;
