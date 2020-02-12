@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class ItemPengujian extends Model
+class FotoInventaris extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'item_pengujian';
+    protected $table = 'foto_inventaris';
 
     /**
      * The attributes that define primary key column name
      * 
      * @var string
      */
-    protected $primaryKey = 'iditem_pengujian';
+    protected $primaryKey = 'idfoto';
     
     /**
      * Indicates if the model should be timestamped.
@@ -64,17 +64,8 @@ class ItemPengujian extends Model
         parent::boot();
 
         // before object deleted
-        static::deleting(function($object){
-            $fotoInventaris = $object->fotoInventaris()->get();
-            foreach($fotoInventaris as $foto){
-               if ($foto->nama_foto) Storage::delete('FotoInventaris/'.$foto->nama_foto);
-            }
-            $object->fotoInventaris()->delete();
-        });
-
-        // after object deleted
         static::deleted(function($object){
-            if ($object->nama_file) Storage::delete('FileInventaris/'.$object->nama_file);
+            if ($object->nama_foto) Storage::delete('FotoInventaris/'.$object->nama_foto);
         });
     }
 
@@ -83,26 +74,11 @@ class ItemPengujian extends Model
      */
 
     /**
-     * ItemPengujian Many to One Pengujian
+     * FotoPengujian Many to One ItemPengujian
      */
-    public function pengujian()
+    public function itemPengujian()
     {
-        return $this->belongsTo('App\Models\Pengujian', 'idpengujian');
+        return $this->belongsTo('App\Models\ItemPengujian', 'iditem_pengujian');
     }
 
-    /**
-     * ItemPengujian Many to One JenisPengujian
-     */
-    public function jenisPengujian()
-    {
-        return $this->belongsTo('App\Models\JenisPengujian', 'idjenispengujian');
-    }
-
-    /**
-     * ItemPengujian One to Many FotoInventaris
-     */
-    public function fotoInventaris()
-    {
-        return $this->hasMany('App\Models\FotoInventaris', 'iditem_pengujian');
-    }
 }

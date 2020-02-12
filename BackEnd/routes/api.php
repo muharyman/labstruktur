@@ -138,6 +138,19 @@ Route::group([
         Route::post('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
     });
+
+    // Item Pengujian
+    Route::group([
+        'namespace' => 'FotoInventaris',
+        // 'middleware' => 'auth:api',
+        'prefix' => 'fotoinventaris'
+    ], function () {
+        Route::get('index', 'CRUDController@index');
+        Route::get('show/{id}', 'CRUDController@show');
+        Route::post('create', 'CRUDController@store');
+        Route::post('update/{id}', 'CRUDController@update');
+        Route::delete('delete/{id}', 'CRUDController@delete');
+    });
 });
 
  

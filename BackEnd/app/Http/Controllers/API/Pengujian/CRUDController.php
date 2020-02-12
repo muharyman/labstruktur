@@ -38,8 +38,6 @@ class CRUDController extends APIController
         'tanggal_terima' => ['required', 'date'],
     ];
 
-
-
     /**
      * preprocess input attributes for create and update
      * 
@@ -123,28 +121,4 @@ class CRUDController extends APIController
         }
     }
 
-    /**
-     * override standard delete
-     * 
-     * @param id
-     * @return response
-     */
-    public function delete($id)
-    {
-        // validate id
-        $object = $this->modelClassName::find($id);
-        if (!$object){
-            return $this->respondError('Object not found');
-        }
-
-        // delete
-        if ($object->delete()){
-            if ($object->nama_laporan) Storage::delete('Laporan/'.$object->nama_laporan);
-            Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
-            return $this->respondWithData($object);
-        } else {
-            return $this->respondError('delete failed');
-        }
-        
-    }
 }

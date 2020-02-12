@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Pengujian extends Model
 {
@@ -96,6 +97,19 @@ class Pengujian extends Model
     public function itemPengujian()
     {
         return $this->hasMany('App\Models\ItemPengujian', 'idpengujian');
+    }
+
+    /**
+     * boot method
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        // after object deleted
+        static::deleted(function($object){
+            if ($object->nama_laporan) Storage::delete('Laporan/'.$object->nama_laporan);
+        });
     }
 
     /**

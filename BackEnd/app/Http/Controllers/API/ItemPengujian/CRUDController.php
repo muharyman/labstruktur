@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\ItemPengujian;
+use App\Models\FotoInventaris;
 use Carbon\Carbon;
 use Validator;
 
@@ -30,32 +31,56 @@ class CRUDController extends APIController
         'jumlah_item' => ['required', 'integer'],
         'biaya_per_pengujian' => ['required', 'numeric'],
         'keterangan' => ['nullable', 'string'],
-        'foto' => ['nullable', 'image'],
+        'foto' => 'required',
+        'foto.*' => 'image','mimes:jpeg,png,jpg,gif,svg',
         'file' => ['nullable', 'file'],
     ];
 
     /**
-     * preprocess input attributes for create and update
+     * override standard create
      * 
      * @param Request
-     * @return input
+     * @return Response
      */
-    public function processRequest($request)
+    public function store(Request $request)
     {
-        $input = $request->except('foto', 'file');
-        
-        // store foto inventaris
-        if ($request->hasFile('foto') && $request->file('foto')->isValid()){
-            $request->file('foto')->store('FotoInventaris');
-            $input['nama_foto'] = $request->file('foto')->hashName();
+        // validate request
+        $validator = Validator::make($request->all(), $this->rules);
+        if ($validator->fails()){
+            return $this->respondRequestError($validator->errors());
         }
 
+        // process request
+        $input = $request->except('foto','file');
         // store file
         if($request->hasFile('file') && $request->file('file')->isValid()){
             $request->file('file')->store('FileInventaris');
             $input['nama_file'] = $request->file('file')->hashName();
         }
-        return $input;
+
+        // create
+        $createdObject = $this->modelClassName::create($input);
+
+        // store foto inventaris
+        if($request->hasFile('foto')){
+            $in['iditem_pengujian'] = $createdObject->getKey();
+            foreach($request->file('foto') as $foto){
+                if ($foto->isValid()){
+                    $foto->store('FotoInventaris');
+                    FotoInventaris::create([
+                        'iditem_pengujian' => $createdObject->getKey(),
+                        'nama_foto' => $foto->hashName(),
+                    ]);
+                }
+            }
+        }
+
+        if ($createdObject){
+            Logging::action('Menambahkan '.(new \ReflectionClass($this->modelClassName))->getShortName().' baru, id:'.$createdObject->getKey());
+            return $this->respondWithData($createdObject);
+        } else {
+            return $this->respondError('create failed');
+        }
     }
 
     /**
@@ -82,10 +107,14 @@ class CRUDController extends APIController
         $input = $request->except('foto', 'file');
         
         // store foto inventaris
-        if ($request->hasFile('foto') && $request->file('foto')->isValid()){
-            if ($object->nama_foto) Storage::delete('FotoInventaris/'.$object->nama_foto);
-            $request->file('foto')->store('FotoInventaris');
-            $input['nama_foto'] = $request->file('foto')->hashName();
+        if($request->hasFile('foto') && $request->file('foto')->isValid()){
+            foreach($request->file('foto') as $foto){
+                $foto->store('FotoInventaris');
+                FotoInventaris::create([
+                    'iditem_pengujian' => $object->getKey(),
+                    'nama_foto' => $foto->hashName(),
+                ]);
+            }
         }
 
         // store file
@@ -103,31 +132,5 @@ class CRUDController extends APIController
             return $this->respondError('update failed');
         }
 
-    }
-
-    /**
-     * override standard delete
-     * 
-     * @param id
-     * @return response
-     */
-    public function delete($id)
-    {
-        // validate id
-        $object = $this->modelClassName::find($id);
-        if (!$object){
-            return $this->respondError('Object not found');
-        }
-
-        // delete
-        if ($object->delete()){
-            if ($object->nama_foto) Storage::delete('FotoInventaris/'.$object->nama_foto);
-            if ($object->nama_file) Storage::delete('FileInventaris/'.$object->nama_file);
-            Logging::action('Menghapus '.$this->modelClassName.', id:'.$object->getKey());
-            return $this->respondWithData($object);
-        } else {
-            return $this->respondError('delete failed');
-        }
-        
     }
 }
