@@ -25,7 +25,7 @@ class CRUDController extends APIController
      * @var define request rules for create
      */
     protected $rules = [
-        'iditem_pengujian' => ['required', 'integer', 'exists:item_pengujian,iditem_pengujian'],
+        'idinventaris' => ['required', 'integer', 'exists:inventaris,idinventaris'],
         'foto' => ['required', 'image'],
         ];
 

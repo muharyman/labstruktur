@@ -57,28 +57,6 @@ class ItemPengujian extends Model
     protected $casts = [];
 
     /**
-     * boot method
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        // before object deleted
-        static::deleting(function($object){
-            $fotoInventaris = $object->fotoInventaris()->get();
-            foreach($fotoInventaris as $foto){
-               if ($foto->nama_foto) Storage::delete('FotoInventaris/'.$foto->nama_foto);
-            }
-            $object->fotoInventaris()->delete();
-        });
-
-        // after object deleted
-        static::deleted(function($object){
-            if ($object->nama_file) Storage::delete('FileInventaris/'.$object->nama_file);
-        });
-    }
-
-    /**
      * DEFINE TABLE RELATION
      */
 
@@ -98,11 +76,4 @@ class ItemPengujian extends Model
         return $this->belongsTo('App\Models\JenisPengujian', 'idjenispengujian');
     }
 
-    /**
-     * ItemPengujian One to Many FotoInventaris
-     */
-    public function fotoInventaris()
-    {
-        return $this->hasMany('App\Models\FotoInventaris', 'iditem_pengujian');
-    }
 }

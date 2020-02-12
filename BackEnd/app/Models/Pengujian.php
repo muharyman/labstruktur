@@ -33,7 +33,11 @@ class Pengujian extends Model
      *
      * @var array
      */
-    protected $attributes = [];
+    protected $attributes = [
+        'status_persetujuan' => false,
+        'status_pembayaran' => false,
+        'status_pengambilan' => false,
+    ];
 
     /**
      * The attributes that aren't mass assignable.

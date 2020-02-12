@@ -15,8 +15,8 @@ class CreateTableFotoInventaris extends Migration
     {
         Schema::create('foto_inventaris', function (Blueprint $table) {
             $table->bigIncrements('idfoto');
-            $table->bigInteger('iditem_pengujian');
-            $table->string('nama_foto');
+            $table->bigInteger('idinventaris')->unsigned()->nullable();
+            $table->string('nama_foto')->nullable();
             $table->timestamps();
         });
     }

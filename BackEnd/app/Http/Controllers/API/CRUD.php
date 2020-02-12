@@ -59,7 +59,7 @@ trait CRUD
         // check object exist
         $object = $this->modelClassName::find($id);
         if (!$object){
-            return $this->respondWithError('object not found');
+            return $this->respondError('object not found');
         }
 
         $data = new $this->resourceClassName($object);

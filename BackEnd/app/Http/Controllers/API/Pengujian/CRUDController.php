@@ -38,18 +38,15 @@ class CRUDController extends APIController
         'tanggal_terima' => ['required', 'date'],
     ];
 
-    /**
-     * preprocess input attributes for create and update
-     * 
-     * @param Request
-     * @return input
-     */
-    public function processRequest($request)
-    {
-        $input = $request->all();
-        $input['status_persetujuan'] = false;
-        return $input;
-    }
+    // /**
+    //  * preprocess input attributes for create and update
+    //  * 
+    //  * @param Request
+    //  * @return input
+    //  */
+    // public function processRequest($request)
+    // {
+    // }
 
     /**
      * Override standarad update
