@@ -134,7 +134,7 @@
   font-size: 17px;
   color: #1A53FF;
   text-align: center;
-  margin-bottom: 8px;
+  margin:auto;
   height: inherit;
   width:inherit;
   border-radius: 4px;

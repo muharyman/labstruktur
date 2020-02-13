@@ -1,12 +1,14 @@
 <template>
   <div class="root">
-    <div class="photo">
-      <div class="slideshow-container">
-        <div class="mySlides1">
-          <img v-bind:src="curent_src" style="width:100%">
+    <div class="photo-container">
+      <div class="photo">
+        <div class="slideshow-container">
+          <div class="mySlides1">
+            <img v-bind:src="curent_src" style="width:100%">
+          </div>
+          <a class="prev" v-on:click="go_prev()" >&#10094;</a>
+          <a class="next" v-on:click="go_next()" >&#10095;</a>
         </div>
-        <a class="prev" v-on:click="go_prev()" >&#10094;</a>
-        <a class="next" v-on:click="go_next()" >&#10095;</a>
       </div>
     </div>
     <div id="content" class="row">
@@ -34,18 +36,27 @@
 </template>
 
 <style scoped>
+.photo-container{
+  text-align: center;
+}
 .photo{
+  display: inline-block;
   margin-top: 5%; 
   margin-right: 4%;
   margin-left: 4%;
+  width: 50vw;
   background: white;
   border-radius: 2px;
   padding: 20px;
 }
 img {
-  vertical-align: middle;
+  vertical-align: center;
+  object-fit: cover;
+  width: 100%;
+  height: 50vh;
 }
 .slideshow-container {
+  text-align: left;
   position: relative;
   margin: auto;
 }
@@ -56,24 +67,19 @@ img {
   width: auto;
   padding: 16px;
   margin-top: -22px;
-  color: white;
   font-weight: bold;
   font-size: 18px;
   transition: 0.6s ease;
   border-radius: 0 3px 3px 0;
   user-select: none;
+  background-color: #f1f1f1;
+  color: black;
 }
 
 /* Position the "next button" to the right */
 .next {
   right: 0;
   border-radius: 3px 0 0 3px;
-}
-
-/* On hover, add a grey background color */
-.prev:hover, .next:hover {
-  background-color: #f1f1f1;
-  color: black;
 }
 
 .root{
@@ -134,7 +140,7 @@ img {
   border: 2px solid #24D39B;
   padding: 3px 8px;
   font-size: 17px;
-  margin-bottom: 8px;
+  margin:auto;
   height: 100%;
   width:inherit;
   border-radius: 4px;

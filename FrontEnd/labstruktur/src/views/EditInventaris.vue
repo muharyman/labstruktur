@@ -65,6 +65,7 @@
 </template>
 
 <style scoped>
+
 .photo-container{
   text-align: center;
 }
@@ -171,7 +172,7 @@ img {
   border: 2px solid #24D39B;
   padding: 3px 8px;
   font-size: 17px;
-  margin-bottom: 8px;
+  margin:auto;
   height: 100%;
   width:inherit;
   border-radius: 4px;
@@ -213,7 +214,7 @@ img {
 
 .button2{
   border: 2px solid #24D39B;
-  margin-top: 12px;
+  margin-top: 18px;
   margin-bottom: 12px;
   height: 100%;
   border-radius: 4px;
