@@ -92,7 +92,7 @@ class Pengujian extends Model
      */
     public function pembayaran()
     {
-        return $this->hasOne('App\Models\Pembayaran', 'idpembayaran');
+        return $this->hasMany('App\Models\Pembayaran', 'idpengujian');
     }
 
     /**

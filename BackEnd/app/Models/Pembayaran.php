@@ -64,6 +64,14 @@ class Pembayaran extends Model
      */
     public function pengujian()
     {
-        return $this->belongsTo('App\Models\Pengujian', 'idpembayaran');
+        return $this->belongsTo('App\Models\Pengujian', 'idpengujian');
+    }
+
+    /**
+     * local scope
+     */
+    public function scopeDateBetween($query, $start_date, $end_date)
+    {
+        return $query->where('tanggal_pembayaran', '<', $end_date)->where('tanggal_pembayaran', '>', $start_date);
     }
 }
