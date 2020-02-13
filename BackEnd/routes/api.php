@@ -163,6 +163,7 @@ Route::group([
         Route::post('create', 'CRUDController@store');
         Route::post('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
+        Route::post('import', 'ImportController@import');
     });
 });
 
