@@ -51,16 +51,21 @@
 .root{
   padding: 0;
   margin: 0;
-  background: #9E9FA1 !important;
+  background: #9E9FA1;
   z-index: -1;
+  height: 83vh;
+  overflow: hidden;
+}
+.row{
+  margin-top:3%;
 }
 .col-sm-5{
   padding: 65px 45px;
   margin:0 !important;
 }
 .col-sm-7{
-  padding: 65px 75px;
-  background: #9E9FA1 !important;
+  padding: 65px 45px;
+  margin: 0 !important;
 }
 
 .profile{
@@ -75,7 +80,7 @@
   float:right;
   margin-right: 45px;
   width: 55vw;
-  height: 50vh;
+  height: 55vh;
   border-radius: 4px;
   background: white;
   padding: 25px 25px;
@@ -104,7 +109,7 @@
   outline: 0;
 }
 .garis-batas-vertical{
-  height: 220px;
+  height: 37vh;
   width: 1px;
   background: #707070;
 }
@@ -203,6 +208,29 @@
   font-weight: 400;
   color: black;
   font-size: 25px;
+}
+
+@media screen and (max-width: 600px){
+  .root{
+    height: fit-content;
+  }
+  .profile{
+    margin: auto;
+    width: 80vw;
+    height: 100%;
+  }
+  .ubah-profile{
+    float: none;
+    margin: auto;
+    width: 80vw;
+    height: 100%;
+  }
+  .button-4 a{
+    font-size: 13px; 
+  }
+  #status{
+    font-size: 17px;
+  }
 }
 </style>
 <script>
