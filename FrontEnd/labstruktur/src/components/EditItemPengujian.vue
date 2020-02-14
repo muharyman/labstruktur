@@ -1,17 +1,17 @@
 <template>
   <div class="root">
-    <b-table striped hover :items="list_item_pengujian" :fields="Koloms" class="table">
+    <b-table striped hover responsive :items="list_item_pengujian" :fields="Koloms" bordered borderless>
       <template v-slot:cell(item)="row">
-        <b-form-select v-model="row.item.id_item" :options="list_item"></b-form-select>
-        <b-form-input v-model="row.item.keterangan" placeholder="keterangan"/>
+        <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select>
+        <b-form-input v-model="row.item.keterangan" placeholder="keterangan" class="input-border"/>
       </template>
       <template v-slot:cell(Jumlah)="row">
-        <b-form-input v-model="row.item.jumlah_item"/>
+        <b-form-input v-model="row.item.jumlah_item" class="input-border"/>
       </template>
       <template v-slot:cell(BiayaPengujian)="row">
-        <b-form-input v-model="row.item.biaya"/>
+        <b-form-input v-model="row.item.biaya" class="input-border"/>
       </template>
-      <template v-slot:cell(Hapus)="row">
+      <template v-slot:cell(Hapus)="row" class="button-del">
         <b-button @click="hapus(row.item.id_row)">HAPUS</b-button>
       </template>
     </b-table>
@@ -38,6 +38,16 @@
   text-align: center;
   margin: 10px 0;
 }
+.input-border{
+  border: 2px solid #24D39B;
+  border-radius: 4px;
+}
+.input-border:focus{
+  border-color: blue;
+}
+.input-border:hover{
+  border-color: blue;
+}
 .button{
   margin: 0 8px;
   height: fit-content;
@@ -61,6 +71,26 @@
 }
 .button:hover{
   background: blue;
+  color: white;
+}.button-del{
+  margin: 0 8px;
+  height: fit-content;
+  min-width: 8vw;
+  width: fit-content;
+  background: white;
+  border: 1px solid red;
+  border-radius: 4px;
+  color: red;
+  font-family: "Raleway", sans-serif;
+  font-size: 17px;
+  display: inline-block;
+  padding: 4px 15px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+.button-del:hover{
+  background: red;
+  border-color: red;
   color: white;
 }
 </style>

@@ -75,6 +75,10 @@
       <p id="edit-item-pengujian">Edit Item Pengujian</p>
       <EditItemPengujian></EditItemPengujian>
     </div>
+    <div class="edit-pembayaran">
+      <p id="edit-pembayaran">Edit Pembayaran</p>
+      <EditPembayaran></EditPembayaran>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -92,7 +96,14 @@
 }
 .edit-item-pengujian{
   margin-top:1%;
-  margin:0 68px;
+  margin:10px 68px;
+  padding: 24px 25px;
+  border-radius:4px;
+  background: white; 
+}
+.edit-pembayaran{
+  margin-top:1%;
+  margin:10px 68px;
   padding: 24px 25px;
   border-radius:4px;
   background: white; 
@@ -115,6 +126,12 @@
   font-weight: 400;
 }
 #edit-item-pengujian{
+  font-size: 32px;
+  margin-left: 10px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+}
+#edit-pembayaran{
   font-size: 32px;
   margin-left: 10px;
   font-family: "Raleway", sans-serif;
@@ -295,10 +312,12 @@
 
 <script>
 import EditItemPengujian from "@/components/EditItemPengujian.vue";
+import EditPembayaran from "@/components/EditPembayaran.vue";
 export default {
   name: "tambapengujian",
   components:{
-    EditItemPengujian
+    EditItemPengujian,
+    EditPembayaran
   },
   data(){
     return{
