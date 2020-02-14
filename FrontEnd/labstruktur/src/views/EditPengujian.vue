@@ -71,20 +71,31 @@
         </div>
       </div>
     </div>
+    <div class="edit-item-pengujian">
+      <p id="edit-item-pengujian">Edit Item Pengujian</p>
+      <EditItemPengujian></EditItemPengujian>
+    </div>
   </div>
 </template>
 <style scoped>
 .root{
   padding: 0;
   margin: 0;
-  background: #9E9FA1;
-  z-index: -1;
+  background: #e9f5ec;
+  z-index: 0;
   min-height: 83vh;
   overflow-x: hidden;
 }
 .edit-pengujian{
   margin-top:3%;
   padding: 24px 25px;
+}
+.edit-item-pengujian{
+  margin-top:1%;
+  margin:0 68px;
+  padding: 24px 25px;
+  border-radius:4px;
+  background: white; 
 }
 #first-row{
   background: white;
@@ -98,6 +109,12 @@
   margin: auto;
 }
 #edit-pengujian{
+  font-size: 32px;
+  margin-left: 10px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+}
+#edit-item-pengujian{
   font-size: 32px;
   margin-left: 10px;
   font-family: "Raleway", sans-serif;
@@ -277,8 +294,12 @@
 </style>
 
 <script>
+import EditItemPengujian from "@/components/EditItemPengujian.vue";
 export default {
   name: "tambapengujian",
+  components:{
+    EditItemPengujian
+  },
   data(){
     return{
       is_pembayaran : 0,
