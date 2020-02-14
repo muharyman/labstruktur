@@ -50,8 +50,6 @@ class LaporanController extends APIController
             return $item;
         });
         $sum = $this->countSum($data, $startDate, $endDate);
-
-        // return view('LaporanBulanan', ['data'=>$data, 'sum'=>$sum, 'start'=>$startDate, 'end'=>$endDate, 'rutin'=>$rutin]);
      
         //generate pdf
         $pdf = PDF::setPaper('a4','landscape')
@@ -75,15 +73,19 @@ class LaporanController extends APIController
         //check pembayaran exist
         $pembayaran = Pembayaran::with([
             'pengujian',
-            'pengujian.engineer'
+            'pengujian.engineer',
+            'pengujian.itemPengujian.jenisPengujian.kategoriPengujian',
         ])->find($id);
         if(!$pembayaran){
             return $this->respondError('pembayaran not found');
         }
-
         $terbilang = ucfirst($this->terbilang($pembayaran->jumlah_pembayaran)).' rupiah';
+        $itemPengujian = '';
+        foreach ($pembayaran['pengujian']['itemPengujian'] as $item) {
+            $itemPengujian .= html_entity_decode($item->jenisPengujian->nama_pengujian).' - '.$item->jenisPengujian->kategoriPengujian->nama_lain.' ('.$item->jumlah_item.' sampel); ';
+        }
 
-        return view('Kuitansi', ['pembayaran'=>$pembayaran, 'terbilang'=>$terbilang]);
+        return view('Kuitansi', ['pembayaran'=>$pembayaran, 'terbilang'=>$terbilang, 'itemPengujian'=>$itemPengujian]);
     }
 
     /**
@@ -122,7 +124,8 @@ class LaporanController extends APIController
 		else if (($puluhan == 1) && ($x == 0)) $string .= $kata[$x]."sepuluh "; // kejadian khusus untuk bilangan 10
 		else if ($puluhan == 0) $string .= $kata[$x];	 // membentuk kata untuk satuan
 		return $string;
-	}
+    }
+    
 	private function terbilang($x)
 	{
 		// membentuk format bilangan XXX.XXX.XXX.XXX.XXX

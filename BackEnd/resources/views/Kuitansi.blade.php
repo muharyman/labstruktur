@@ -9,12 +9,13 @@
     </div>
     <div>
         <table>
-            <tr>No: {{$pembayaran->pengujian->nomor_laporan}} </tr>
-            <tr>Pemberi Tugas: {{$pembayaran->pengujian->pemberi_tugas}}</tr>
-            <tr>{{$terbilang}}</tr>
-            <tr>Tanggal Pembayaran: {{$pembayaran->tanggal}}</tr>
-            <tr>Jumlah Pembayaran: {{$pembayaran->jumlah_pembayaran}}</tr>
-            <tr>Mengetahui: {{$pembayaran->pengujian->engineer->nama_user}}</tr>
+            <div>No: {{$pembayaran->pengujian->nomor_laporan}} </div>
+            <div>Pemberi Tugas: {{$pembayaran->pengujian->pemberi_tugas}}</div>
+            <div>{{$terbilang}}</div>
+            <div>{{$itemPengujian}}</div>
+            <div>Tanggal Pembayaran: {{$pembayaran->tanggal_pembayaran}}</div>
+            <div>Jumlah Pembayaran: {{$pembayaran->jumlah_pembayaran}}</div>
+            <div>Mengetahui: {{$pembayaran->pengujian->engineer->nama_user}}</div>
         </table>
     </div>
 </body>

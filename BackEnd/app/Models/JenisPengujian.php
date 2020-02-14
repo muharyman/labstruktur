@@ -72,6 +72,6 @@ class JenisPengujian extends Model
      */
     public function itemPengujian()
     {
-        return $this->hasMany('App\Models\ItemPengujian', 'idjenispengujian');
+        return $this->hasMany('App\Models\ItemPengujian', 'idjenis_pengujian');
     }
 }

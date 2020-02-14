@@ -73,7 +73,7 @@ class ItemPengujian extends Model
      */
     public function jenisPengujian()
     {
-        return $this->belongsTo('App\Models\JenisPengujian', 'idjenispengujian');
+        return $this->belongsTo('App\Models\JenisPengujian', 'idjenis_pengujian');
     }
 
 }
