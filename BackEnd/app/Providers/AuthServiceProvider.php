@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider
             'edit' => 'can edit',
             'update' => 'can update',
             'delete' => 'can delete',
-            'delete pengujian' => 'can delete pengujian',
+            'delete_pengujian' => 'can delete pengujian',
         ]);
         Passport::routes();
     }
