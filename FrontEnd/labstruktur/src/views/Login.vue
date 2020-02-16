@@ -10,24 +10,23 @@
         <input class="txt_input-1" id="username" placeholder="username" type="text"/> 
         <p class="text-1">password</p>
         <input class="txt_input-1" placeholder="password" type="password"/>
+        <b-alert
+          variant="danger"
+          dismissible fade
+          :show="showAlert"
+          @dismissed="showAlert=false"
+        >
+          Username atau password Anda salah.
+          {{ error }}
+        </b-alert>
         <a href="#none" id="lupapassword">lupa password ?</a>
         <div class="button-1">
-          <a href="#none">Login</a>
+          <a @click="logIn()">Login</a>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<script>
-import LabStruktur from "@/components/LabStruktur.vue";
-export default {
-  name: "logo",
-  components: {
-    LabStruktur
-  }
-};
-</script>
 
 <style scoped>
 .row{
@@ -122,5 +121,48 @@ export default {
   font-weight: 700;
   background: #24D39B;
   transition: 0.8s;
+  cursor: pointer;
 }
 </style>
+<script>
+import LabStruktur from "@/components/LabStruktur.vue";
+import axios from 'axios';
+export default {
+  name: "login",
+  components: {
+    LabStruktur
+  },
+  data(){
+    return{
+      input:{
+        username:"",
+        password:""
+      },
+      showAlert: false,
+      error: {}
+    }
+  },
+  methods: {
+    logIn(){
+      axios
+        .post("/auth/login",{
+          nama_login:'saya',
+          password:'12345678'
+        })
+        .then((respone) => {
+          const token = respone.data.success.token
+          window.localStorage.setItem("loggedIn", token)
+          window.location.href = "/"
+        })
+        .catch((e) => {
+          this.error = e;
+          this.showAlert = true
+        })
+        .finnaly(()=>{
+          this.input.username="",
+          this.input.password=""
+        })
+    }
+  }
+};
+</script>

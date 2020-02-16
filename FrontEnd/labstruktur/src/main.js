@@ -8,20 +8,27 @@ import store from "./store";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import "vuetify/dist/vuetify.min.css";
-
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 
 Vue.config.productionTip = false;
 
-
 new Vue({
+  vuetify,
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
 
+
+axios.defaults.baseURL = "http://192.168.1.12:8000/api"
+// VueAxios.defaults.header.common= {
+//   "Access-Control-Allow-Origin": "*"
+// };
+// Vue.config.productionTip = false;
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+Vue.use(VueAxios, axios)
