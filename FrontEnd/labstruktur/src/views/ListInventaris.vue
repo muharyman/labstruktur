@@ -102,7 +102,7 @@ export default {
 @import url(http://fonts.googleapis.com/css?family=Roboto+Mono);
 .root{
   background: #e9f5ec;
-  min-height: 83vh;
+  min-height: 100vh;
   width: 100%;
   margin: 0;
   padding: 25px;

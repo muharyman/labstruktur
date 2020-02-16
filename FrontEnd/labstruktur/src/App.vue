@@ -13,47 +13,47 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-item href="/dashboard">
               <div class="navbar-text">
-                <p v-bind:style="{color: dashboard_color }">Dashboard</p>
+                <p v-bind:style="{color: dashboard_color }" class="hov">Dashboard</p>
               </div>
             </b-nav-item>
             <b-nav-item-dropdown left>
               <template v-slot:button-content>
                 <div class="navbar-text">
-                  <p v-bind:style="{color: pengujian_color }">Pengujian</p>
+                  <p v-bind:style="{color: pengujian_color }" class="hov">Pengujian</p>
                 </div>
               </template>
               <b-dropdown-item href="/listpengujian">
-                <p v-bind:style="{color: listpengujian_color }">List Pengujian</p>
+                <p v-bind:style="{color: listpengujian_color }" class="hov">List Pengujian</p>
               </b-dropdown-item>
               <b-dropdown-item href="/tambahpengujian">
-                <p v-bind:style="{color: tambahpengujian_color }">Tambah Pengujian</p>
+                <p v-bind:style="{color: tambahpengujian_color }" class="hov">Tambah Pengujian</p>
               </b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item-dropdown left>
               <template v-slot:button-content>
                 <div class="navbar-text">
-                  <p v-bind:style="{color: inventaris_color }">Inventaris</p>
+                  <p v-bind:style="{color: inventaris_color }" class="hov">Inventaris</p>
                 </div>
               </template>
               <b-dropdown-item href="/listinventaris">
-                <p v-bind:style="{color: listinventaris_color }">List Inventaris</p>
+                <p v-bind:style="{color: listinventaris_color }" class="hov">List Inventaris</p>
               </b-dropdown-item>
               <b-dropdown-item href="/tambahinventaris">
-                <p v-bind:style="{color: tambahinventaris_color }">Tambah Inventaris</p>
+                <p v-bind:style="{color: tambahinventaris_color }" class="hov">Tambah Inventaris</p>
               </b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item-dropdown right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
                 <div class="navbar-text">
-                  <p v-bind:style="{color: user_color }">User</p>
+                  <p v-bind:style="{color: user_color }" class="hov">User</p>
                 </div>
               </template>
               <b-dropdown-item href="/profil">
-                <p v-bind:style="{color: profil_color }">Profile</p>
+                <p v-bind:style="{color: profil_color }" class="hov">Profile</p>
               </b-dropdown-item>
               <b-dropdown-item href="#">
-                <p>Sign Out</p>
+                <p class="hover">Sign Out</p>
               </b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -66,6 +66,12 @@
 </template>
 
 <style scoped>
+.hov{
+  color: black; 
+}
+.hov :hover{
+  color:blueviolet;
+}
 .app {
   z-index: 1;
 }

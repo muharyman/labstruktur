@@ -53,7 +53,7 @@
   margin: 0;
   background: #9E9FA1;
   z-index: -1;
-  height: 83vh;
+  height: 100vh;
   overflow: hidden;
 }
 .row{

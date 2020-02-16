@@ -47,7 +47,7 @@
 .root{
   overflow-x: hidden;
   background: #9E9FA1;
-  height: 83vh;
+  height: 100vhs;
   z-index: -1;
 }
 #content{
