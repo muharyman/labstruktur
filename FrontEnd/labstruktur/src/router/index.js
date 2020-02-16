@@ -93,7 +93,7 @@ const routes = [
     }
   },
   {
-    path: "/editpengujian",
+    path: "/editpengujian/:id",
     name: "editpengujian",
     component: EditPengujian,
     meta: {
@@ -101,7 +101,7 @@ const routes = [
     }
   },
   {
-    path: "/detailinventaris",
+    path: "/detailinventaris/:id",
     name: "detailinventaris",
     component: DetailInventaris,
     meta: {
@@ -149,4 +149,3 @@ const router = new VueRouter({
 });
 
 export default router;
-

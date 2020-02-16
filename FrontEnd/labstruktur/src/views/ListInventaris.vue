@@ -48,7 +48,7 @@
           class="table table-striped table-bordered"
         >
           <template v-slot:cell(info)>
-            <a href="/editinventaris" class="btn btn-info" role="button">detil</a>
+            <a class="btn btn-info" role="button" @click="klik">detil</a>
           </template>
         </b-table>
       </div>
@@ -73,6 +73,11 @@ export default {
       items: [],
       fields: [
         {
+          key: "idinventaris",
+          thClass: "d-none",
+          tdClass: "d-none"
+        },
+        {
           key: "nama",
           label: "Nama Barang",
           sortable: true,
@@ -87,12 +92,6 @@ export default {
         {
           key: "jumlah",
           label: "Jumlah",
-          sortable: false,
-          class: "text-center"
-        },
-        {
-          key: "foto",
-          label: "Foto",
           sortable: false,
           class: "text-center"
         },
@@ -137,7 +136,7 @@ export default {
   mounted() {
     // Set the initial number of items
     this.axios
-      .get("/inventaris/filter/")
+      .get("/inventaris/index/")
       .then(respone => {
         this.items = respone.data.data;
       })
@@ -152,6 +151,9 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    klik(event) {
+      window.location.href = `/detailinventaris/${event.target.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML}`;
     }
   }
 };

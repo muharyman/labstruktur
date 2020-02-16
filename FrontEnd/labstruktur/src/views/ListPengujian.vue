@@ -48,7 +48,7 @@
           class="table table-striped table-bordered"
         >
           <template v-slot:cell(info)>
-            <a href="/editpengujian" class="btn btn-info" role="button">detil</a>
+            <a class="btn btn-info" role="button" @click="klik">detil</a>
           </template>
         </b-table>
       </div>
@@ -72,6 +72,11 @@ export default {
     return {
       items: [],
       fields: [
+        {
+          key: "idpengujian",
+          thClass: "d-none",
+          tdClass: "d-none"
+        },
         {
           key: "nomor_laporan",
           label: "Nomor Laporan",
@@ -131,7 +136,6 @@ export default {
           label: "Info"
         }
       ],
-
       totalRows: 1,
       currentPage: 1,
       perPage: 12,
@@ -170,6 +174,9 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    klik(event) {
+      window.location.href = `/editpengujian/${event.target.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML}`;
     }
   }
 };
