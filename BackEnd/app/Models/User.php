@@ -107,4 +107,14 @@ class User extends Authenticatable
     {
         return $query->where('status_user', false);
     }
+
+    public function scopeJabatan($query, $idJabatan)
+    {
+        return $query->where('idjabatan', $idJabatan);
+    }
+
+    public function scopeJabatans($query, $idJabatan)
+    {
+        return $query->whereIn('idjabatan',$idJabatan);
+    }
 }

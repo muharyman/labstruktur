@@ -41,6 +41,7 @@ Route::group([
         Route::post('create', 'CRUDController@store');
         Route::put('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
+        Route::get('index/role', 'GetController@getByRoles');
     });
     
     // Pengujian 
