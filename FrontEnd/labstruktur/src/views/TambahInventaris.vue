@@ -9,15 +9,17 @@
           <div class="row">
             <div class="col">
               <p class="text">Nama Barang</p>
-              <input class="text-input" type="text" placeholder="nama barang"/>
+              <input class="text-input" v-model="nama_barang" type="text" placeholder="nama barang"/>
               <p class="text">Jumlah Barang</p>
-              <input class="text-input" type="text" placeholder="Jumlah Barang"/>
+              <input class="text-input" v-model="jumlah_barang" type="text" placeholder="Jumlah Barang"/>
             </div>
             <div class="col">
               <p class="text">Deskripsi Barang</p>
-              <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
+              <textarea class="text-input-deskripsi" v-model="deskripsi_barang" type="text" placeholder="deskripsi"></textarea>
             </div>
           </div>
+          <p class="text">Catatan</p>
+          <textarea class="text-input-catatan" v-model="catatan_barang" type="text" placeholder="catatan"></textarea>
           <p class="text">Upload foto</p>
           <label for="foto-upload" class="upload-foto-container" >
             <div id="row" class="row">
@@ -33,9 +35,25 @@
               </div>
             </div>
           </label>
+          <p class="text">Upload File Inventaris</p>
+          <label for="file-upload" class="upload-foto-container" >
+            <div id="row" class="row">
+              <div id="kolom1" class="col-sm-10">
+                <div class="upload-foto" >
+                  <p>{{ file_status }}</p>
+                </div>
+              </div>
+              <div id="kolom2" class="col-sm-2">
+                <div class="button" >
+                  <p>Open File</p>
+                </div>
+              </div>
+            </div>
+          </label>
+          <input id="file-upload" ref="file_upload" type="file" @change="fileStatus()" />
           <input id="foto-upload" ref="foto_upload" type="file" accept="image/png, image/jpeg" multiple @change="update_status()" />
           <div class="button2" >
-            <a href="#none">SIMPAN</a>
+            <a @click="kirim()">SIMPAN</a>
           </div>
         </div>
       </div>
@@ -47,11 +65,12 @@
 .root{
   overflow-x: hidden;
   background: #9E9FA1;
-  height: 100vhs;
+  height: 100vh;
   z-index: -1;
 }
+
 #content{
-  margin-top: 3%; 
+  margin-top: 5%; 
 }
 .tambahinventaris-container{
   margin: 10vh 5vw;
@@ -60,6 +79,11 @@
   padding: 5px 25px;
 }
 #tambahinventaris-header{
+  font-family: "Raleway", sans-serif;
+  font-size: 32px;
+  font-weight: 300;
+}
+#text-header{
   font-family: "Raleway", sans-serif;
   font-size: 32px;
   font-weight: 300;
@@ -97,6 +121,16 @@
   border-radius: 4px;
   resize: none;
 }
+.text-input-catatan{
+  border: 2px solid #24D39B;
+  padding: 5px 8px;
+  height: 75%;
+  font-size: 17px;
+  margin-bottom: 8px;
+  width: 100%;
+  border-radius: 4px;
+  resize: none;
+}
 .text-input-deskripsi:focus{
   border: 2px solid #1A53FF;
   border-radius: 4px;
@@ -115,6 +149,9 @@
   border: 2px solid #1A53FF;
 }
 #foto-upload{
+  display: none;
+}
+#file-upload{
   display: none;
 }
 .upload-foto-container{
@@ -139,6 +176,7 @@
   width:inherit;
   border-radius: 4px;
   display: inline-block;
+  
 }
 .button:hover{
   background: #1A53FF;
@@ -151,6 +189,7 @@
   height: 100%;
   border-radius: 4px;
   text-align: center;
+  cursor: pointer;
 }
 
 .button2 a{
@@ -173,8 +212,16 @@ export default {
   name:'tambahinventaris',
   data(){
     return{
+      nama_barang : "",
+      jumlah_barang: 0,
+      deskripsi_barang: "",
+      catatan_barang: "",
       foto_status: "Tidak ada foto yang dipilih",
-      files: []
+      file_status: "Tidak ada file yang dipilih",
+      files: [],
+      dokumen: '',
+      r: {},
+      error: {}
     }
   },
   methods:{
@@ -188,8 +235,51 @@ export default {
       } else{
         this.foto_status = "Tidak ada foto yang dipilih";
       }
+    },
+    fileStatus(){
+      if(this.$refs.file_upload.files.length > 0){
+        this.file_status="";
+        this.file_status = this.$refs.file_upload.files.item(0).name;
+        this.dokumen = this.$refs.file_upload.files.item(0);
+      } else{
+        this.file_status = "Tidak ada file yang dipilih";
+      }
+    },
+    kirim() {
+      let formData = new FormData();
+      formData.append('nama',this.nama_barang);
+      formData.append('jumlah',this.jumlah_barang);
+      formData.append('deskripsi',this.deskripsi_barang);
+      formData.append('catatan',this.catatan_barang);
+      for( var i = 0; i < this.files.length; i++ ){
+          let file = this.files[i];
+          formData.append('foto[' + i + ']', file);
+        }
+      formData.append('file', this.dokumen);
+      this.axios
+        .post("/inventaris/create/",
+          formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(respone => {
+          this.r = respone.data;
+          alert("Inventaris berhasil ditambahkan");
+        })
+        .catch(e => {
+          this.error = e;
+          this.showAlert = true;
+        })
+        .finally(() => {
+          (this.nama_barang = ""),
+          (this.jumlah_barang = ""),
+          (this.deskripsi_barang = ""),
+          (this.catatan_barang= ""),
+          (this.files = []),
+          (this.foto_status ="Tidak ada foto yang dipilih");
+        });
+      }
     }
-  }
-
 }
 </script>
