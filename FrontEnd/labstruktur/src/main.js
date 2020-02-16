@@ -13,11 +13,6 @@ import VueAxios from 'vue-axios'
 
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app");
 
 axios.defaults.baseURL = "http://192.168.1.12:8000/api";
 // VueAxios.defaults.header.common= {
@@ -29,3 +24,9 @@ Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);
 Vue.use(VueAxios, axios);
+
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount("#app");

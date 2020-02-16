@@ -93,7 +93,7 @@ const routes = [
     }
   },
   {
-    path: "/editpengujian",
+    path: "/editpengujian/:id",
     name: "editpengujian",
     component: EditPengujian,
     meta: {

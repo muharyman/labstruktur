@@ -60,7 +60,6 @@
         </b-collapse>
       </b-navbar>
     </div>
-    {{ current }}
     <router-view />
   </div>
 </template>
