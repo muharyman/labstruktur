@@ -73,57 +73,39 @@ export default {
       items: [],
       fields: [
         {
-          key: "nomor_laporan",
-          label: "Nomor Laporan",
+          key: "nama",
+          label: "Nama Barang",
           sortable: true,
           class: "text-center"
         },
         {
-          key: "tanggal_buka",
-          label: "Tanggal Buka",
-          sortable: true,
+          key: "deskripsi",
+          label: "Deskripsi",
+          sortable: false,
           class: "text-center"
         },
         {
-          key: "engineer.nama_user",
-          label: "Engineer",
-          sortable: true,
+          key: "jumlah",
+          label: "Jumlah",
+          sortable: false,
           class: "text-center"
         },
         {
-          key: "pemberi_tugas",
-          label: "Pemberi Tugas",
-          sortable: true,
+          key: "foto",
+          label: "Foto",
+          sortable: false,
           class: "text-center"
         },
         {
-          key: "proyek",
-          label: "Nama Proyek",
-          sortable: true,
+          key: "catatan",
+          label: "Catatan",
+          sortable: false,
           class: "text-center"
         },
         {
-          key: "status_pengujian",
-          label: "Status Pengujian",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "status_pembayaran",
-          label: "Status Pembayaran",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "status_persetujuan",
-          label: "Status Persetujuan",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "nama_laporan",
-          label: "Laporan",
-          sortable: true,
+          key: "file",
+          label: "File",
+          sortable: false,
           class: "text-center"
         },
         {
@@ -155,7 +137,7 @@ export default {
   mounted() {
     // Set the initial number of items
     this.axios
-      .get("/pengujian/filter/")
+      .get("/inventaris/filter/")
       .then(respone => {
         this.items = respone.data.data;
       })
