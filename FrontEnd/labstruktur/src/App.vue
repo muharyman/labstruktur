@@ -19,7 +19,7 @@
           <template v-slot:button-content>
             <div class="navbar-text">Pengujian</div>
           </template>
-          <b-dropdown-item href="#">List Pengujian</b-dropdown-item>
+          <b-dropdown-item href="/listinventaris">List Pengujian</b-dropdown-item>
           <b-dropdown-item href="#">Tambah Pengujian</b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown left>
