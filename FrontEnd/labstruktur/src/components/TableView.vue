@@ -207,11 +207,14 @@ export default {
   .ozn-table {
     border-collapse: collapse;
     width: 100%;
+    padding: 0;
     thead {
       background: #9E9FA1;
+      border: 1px solid #9E9FA1;
+      border-radius: 4px 4px 0 0;
       th {
         font-family: "Raleway", sans-serif;
-        border-bottom: 2px solid #ccc;
+        border-bottom: 2px solid black;
         color: black;
         padding: 0 10px;
         height: 48px;
@@ -245,7 +248,8 @@ export default {
         border-bottom: 1px solid white;
         padding: 0 10px;
         height: 48px;
-        font-size: 1em;
+        font-size: 12px;
+        font-family: "Raleway", sans-serif;
       }
     }
   }
