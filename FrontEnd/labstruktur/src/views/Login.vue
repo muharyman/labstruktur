@@ -29,7 +29,6 @@
           @dismissed="showAlert = false"
         >
           Username atau password Anda salah.
-          {{ error }}
         </b-alert>
         <a href="#none" id="lupapassword">lupa password ?</a>
         <div class="button-1">
