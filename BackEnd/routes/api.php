@@ -169,12 +169,14 @@ Route::group([
         Route::delete('delete/{id}', 'CRUDController@delete');
         Route::post('import', 'ImportController@import');
     });
+
 });
 
+// get file
 Route::get('getfile', function(Request $request) {
     return Storage::response($request->input('filepath'));
-})->name('getfile');
- 
+})->name('getfile')->middleware('cors');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
