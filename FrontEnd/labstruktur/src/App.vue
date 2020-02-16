@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div class="animated fadeInUp" v-if="this.$route.meta.header === 1">
+    <div class="animated fadeInUp shadow" v-if="this.$route.meta.header === 1">
       <b-navbar toggleable="lg" type="dark" variant="white">
-        <b-navbar-brand href="#"
+        <b-navbar-brand href="/"
           ><LabStruktur id="logo-labstruktur"
         /></b-navbar-brand>
 
@@ -75,7 +75,9 @@ b-nav-item .navbar-text {
 nav a.router-link-active {
   font-weight: 700;
 }
-
+.shadow{
+  box-shadow: 2px 2px 5px #878788;
+}
 @keyframes FadeIn {
   0% {
     opacity: 0;
