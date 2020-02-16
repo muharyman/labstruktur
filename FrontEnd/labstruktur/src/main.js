@@ -14,8 +14,8 @@ import VueAxios from 'vue-axios'
 
 Vue.config.productionTip = false;
 
-
 new Vue({
+  vuetify,
   router,
   store,
   render: h => h(App)
@@ -28,7 +28,7 @@ axios.defaults.baseURL = "http://192.168.1.12:8000/api"
 // };
 // Vue.config.productionTip = false;
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 Vue.use(VueAxios, axios)
