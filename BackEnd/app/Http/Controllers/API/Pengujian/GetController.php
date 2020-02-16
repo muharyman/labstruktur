@@ -62,7 +62,9 @@ class GetController extends APIController
             default:
                 break;
         }
-        $modelIndex = $modelIndex->paginate(25)->appends($request->all());
+        // $per_page = $request->input('per_page') ?? 25;
+        // $modelIndex = $modelIndex->paginate(25)->appends($request->all());
+        $modelIndex = $modelIndex->get();
         $data = PengujianResource::collection($modelIndex);
         return $data;
         // return $this->respondWithData($data); 

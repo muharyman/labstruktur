@@ -12,8 +12,9 @@ trait CRUD
     */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page') ? $request->input('per_page') : 25;
-        $modelIndex = $this->modelClassName::paginate($perPage)->appends($request->all());
+        // $perPage = $request->input('per_page') ? $request->input('per_page') : 25;
+        // $modelIndex = $this->modelClassName::paginate($perPage)->appends($request->all());
+        $modelIndex = $this->modelClassName::all();
         $data = $this->resourceCollectionClassName ?
             new $this->resourceCollectionClassName($modelIndex):
             $this->resourceClassName::collection($modelIndex);
