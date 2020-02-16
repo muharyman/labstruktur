@@ -64,7 +64,7 @@ class GetController extends APIController
         }
         // $per_page = $request->input('per_page') ?? 25;
         // $modelIndex = $modelIndex->paginate(25)->appends($request->all());
-        $modelIndex = $modelIndex->get();
+        $modelIndex = $modelIndex->with('engineer')->get();
         $data = PengujianResource::collection($modelIndex);
         return $data;
         // return $this->respondWithData($data); 
