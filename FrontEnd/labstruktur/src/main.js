@@ -5,24 +5,21 @@ import "./plugins/bootstrap-vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import axios from "axios";
+import VueAxios from "vue-axios";
 
 Vue.config.productionTip = false;
 
 new Vue({
-  vuetify,
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
 
-
-axios.defaults.baseURL = "http://192.168.1.12:8000/api"
+axios.defaults.baseURL = "http://192.168.1.12:8000/api";
 // VueAxios.defaults.header.common= {
 //   "Access-Control-Allow-Origin": "*"
 // };
@@ -30,5 +27,5 @@ axios.defaults.baseURL = "http://192.168.1.12:8000/api"
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
-Vue.use(VueAxios, axios)
+Vue.use(IconsPlugin);
+Vue.use(VueAxios, axios);
