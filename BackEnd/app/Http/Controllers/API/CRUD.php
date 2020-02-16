@@ -81,7 +81,7 @@ trait CRUD
         if ($validator->fails()){
             return $this->respondRequestError($validator->errors());
         }
-
+        
         // validate id
         $object = $this->modelClassName::find($id);
         if (!$object){
@@ -89,8 +89,8 @@ trait CRUD
         }
 
         // process request
-        $input = $this->processProcess($request);
-
+        $input = $this->processRequest($request);
+        
         // update
         if($object->update($input)){
             Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());
@@ -131,7 +131,7 @@ trait CRUD
      * @param Request
      * @return input
      */
-    public function processRequest($request)
+    public function processRequest(Request $request)
     {
         return $request->all();
     }

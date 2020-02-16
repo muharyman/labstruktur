@@ -74,6 +74,7 @@ Route::group([
         Route::delete('delete/{id}', 'CRUDController@delete');
         Route::get('laporanbulanan', 'LaporanController@laporanBulanan');
         Route::get('kuitansi/{id}', 'LaporanController@kuitansi');
+        Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
     });
 
     // Log
@@ -139,6 +140,7 @@ Route::group([
         Route::post('create', 'CRUDController@store');
         Route::put('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
+        Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
     });
 
     // Foto Inventaris
