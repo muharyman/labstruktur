@@ -10,12 +10,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
+// import "vuetify/dist/vuetify.min.css";
+// import vuetify from "@/plugins/vuetify";
+// import VueCharts from 'vue-chartjs';
 
 Vue.config.productionTip = false;
 
 new Vue({
-  vuetify,
   router,
   store,
   render: h => h(App)
