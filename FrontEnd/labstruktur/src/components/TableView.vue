@@ -135,7 +135,7 @@ export default {
     }
   },
   mounted() {
-    this.tableRows = this.rows.slice(0); // Para que haga una copia del array
+    this.tableRows = this.rows.slice(0);
     if (this.sortEnabled) this.initSort();
     this.selectVisibleRows();
   },
@@ -208,17 +208,20 @@ export default {
     border-collapse: collapse;
     width: 100%;
     thead {
+      background: #9E9FA1;
       th {
+        font-family: "Raleway", sans-serif;
         border-bottom: 2px solid #ccc;
+        color: black;
         padding: 0 10px;
         height: 48px;
         text-align: left;
-        font-size: 1em;
+        font-size: 1.2em;
         cursor: pointer;
         &:hover {
           span {
-            text-decoration: underline;
-            text-decoration-style: dotted;
+            text-decoration: none;
+            color: white;
           }
         }
         i {
@@ -239,7 +242,7 @@ export default {
         }
       }
       td {
-        border-bottom: 1px dotted #ccc;
+        border-bottom: 1px solid white;
         padding: 0 10px;
         height: 48px;
         font-size: 1em;
