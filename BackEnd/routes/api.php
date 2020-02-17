@@ -55,9 +55,11 @@ Route::group([
         ], function () {
             Route::get('index', 'CRUDController@index');
             Route::get('show/{id}', 'CRUDController@show');
-            Route::post('update/{id}', 'CRUDController@update');
+            Route::post('update/{id}', 'CRUDController@update')->middleware('auth:api');
             Route::delete('delete/{id}', 'CRUDController@delete');
             Route::get('filter', 'GetController@indexWithFilter');
+            Route::get('show/relation/{id}', 'GetController@getWithRelation');
+            Route::delete('deletelaporan/{id}', "DeleteController@deleteLaporan");
         });
     });
 
@@ -75,6 +77,7 @@ Route::group([
         Route::get('laporanbulanan', 'LaporanController@laporanBulanan');
         Route::get('kuitansi/{id}', 'LaporanController@kuitansi');
         Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
+        Route::get('getbypengujian', 'GetController@getByPengujian');
     });
 
     // Log
@@ -141,6 +144,7 @@ Route::group([
         Route::put('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
         Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
+        Route::get('getbypengujian', 'GetController@getByPengujian');
     });
 
     // Foto Inventaris
@@ -175,7 +179,7 @@ Route::group([
 // get file
 Route::get('getfile', function(Request $request) {
     return Storage::response($request->input('filepath'));
-})->name('getfile')->middleware('cors');
+})->name('getfile');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

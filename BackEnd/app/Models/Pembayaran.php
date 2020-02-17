@@ -74,4 +74,8 @@ class Pembayaran extends Model
     {
         return $query->where('tanggal_pembayaran', '<', $end_date)->where('tanggal_pembayaran', '>', $start_date);
     }
+    public function scopePengujian($query, $idPengujian)
+    {
+        return $query->where('idpengujian', $idPengujian);
+    }
 }

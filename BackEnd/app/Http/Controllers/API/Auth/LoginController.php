@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\API\APIController;
 use App\Utils\Logging;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -36,7 +37,10 @@ class LoginController extends APIController
             $user->save();
             $token = $user->createToken(env('APP_NAME', 'labstruktur'))->accessToken;
             Logging::action('Berhasil Login');
-            return $this->respondSuccess(['token'=>$token]);
+            return $this->respondSuccess([
+                'user' =>new UserResource($user),
+                'token'=>$token
+            ]);
         }else{
             return $this->respondUnauthorized();
         }

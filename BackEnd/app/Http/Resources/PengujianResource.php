@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ItemPengujianResource;
+use App\Http\Resources\PembayaranResource;
 
 class PengujianResource extends JsonResource
 {

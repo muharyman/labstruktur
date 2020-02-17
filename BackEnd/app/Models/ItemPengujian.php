@@ -76,4 +76,9 @@ class ItemPengujian extends Model
         return $this->belongsTo('App\Models\JenisPengujian', 'idjenis_pengujian');
     }
 
+    public function scopePengujian($query, $idPengujian)
+    {
+        return $query->where('idpengujian', $idPengujian);
+    }
+
 }

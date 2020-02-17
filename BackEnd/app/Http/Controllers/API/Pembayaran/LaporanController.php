@@ -82,10 +82,14 @@ class LaporanController extends APIController
         $terbilang = ucfirst($this->terbilang($pembayaran->jumlah_pembayaran)).' rupiah';
         $itemPengujian = '';
         foreach ($pembayaran['pengujian']['itemPengujian'] as $item) {
-            $itemPengujian .= html_entity_decode($item->jenisPengujian->nama_pengujian).' - '.$item->jenisPengujian->kategoriPengujian->nama_lain.' ('.$item->jumlah_item.' sampel); ';
+            $itemPengujian .= html_entity_decode($item->jenisPengujian->nama_pengujian).' - '.$item->jenisPengujian->kategoriPengujian->nama_lain.' ('.$item->jumlah_item.' sampel);\n';
         }
 
-        return view('Kuitansi', ['pembayaran'=>$pembayaran, 'terbilang'=>$terbilang, 'itemPengujian'=>$itemPengujian]);
+        
+        
+        $pdf = PDF::setPaper('a4','landscape')
+        ->loadView('Kuitansi', ['pembayaran'=>$pembayaran, 'terbilang'=>$terbilang, 'itemPengujian'=>$itemPengujian]);
+        return $pdf->stream();
     }
 
     /**

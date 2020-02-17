@@ -69,4 +69,24 @@ class GetController extends APIController
         return $data;
         // return $this->respondWithData($data); 
     }
+
+    
+    /**
+     * get index with item pengujian and pembayaran
+     * 
+     * @param Request
+     * @return response
+     */
+    public function getWithRelation($id, Request $request)
+    {
+        // check object exist
+        $object = Pengujian::with('itemPengujian')->with('pembayaran')->find($id);
+        if (!$object){
+            return $this->respondError('object not found');
+        }
+
+        $data = new PengujianResource($object);
+        return $data;
+        
+    }
 }

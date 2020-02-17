@@ -52,16 +52,17 @@ class UpdateController extends APIController
             foreach($data as $key=>$object){
                 $request = new Request();
                 $request->replace(Arr::except($object, 'iditem_pengujian'));
-                if (array_key_exists('iditem_pengujian',$object) && $object['iditem_pengujian']){
+                if (array_key_exists('iditem_pengujian',$object) && !is_null($object['iditem_pengujian'])){
                     $request->setMethod('PUT');
                     $response = $this->crudController->update($object['iditem_pengujian'], $request);
                 } else {
                     $request->setMethod('POST');
                     $response = $this->crudController->store($request);
                 }
+                
                 // error
                 if ($response->status() >= 400){
-                    throw new Exception(json_encode($response->getOriginalContent()['error']));
+                    throw new Exception(json_encode($response->getOriginalContent()['error'])." id: ".$object['iditem_pengujian']);
                 } else {
                     array_push($updatedOrCreatedObjects, $response->getOriginalContent());
                 }
@@ -70,7 +71,7 @@ class UpdateController extends APIController
             return $this->respondWithData($updatedOrCreatedObjects);
         } catch (\Exception $e){
             DB::rollback();
-            return $this->respondError(json_decode($e->getMessage()));
+            return $this->respondError($e->getMessage());
         }
     }
 }

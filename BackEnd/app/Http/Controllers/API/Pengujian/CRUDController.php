@@ -99,7 +99,7 @@ class CRUDController extends APIController
             $request->file('laporan')->store('Laporan');
             $input['nama_laporan'] = $request->file('laporan')->hashName();
         }
-
+        
         // update
         $status_pengujian = $object->status_pengujian;
         $status_persetujuan = $object->status_persetujuan;

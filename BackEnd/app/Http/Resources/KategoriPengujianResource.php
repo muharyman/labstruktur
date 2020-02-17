@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JenisPengujianResource;
 
 class KategoriPengujianResource extends JsonResource
 {
@@ -14,6 +15,12 @@ class KategoriPengujianResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+        // eager load
+        $this->resource->load('jenisPengujian');
+
+        $data['jenis_pengujian'] = JenisPengujianResource::collection($this->whenLoaded('jenisPengujian'));
+        
+        return $data;
     }
 }
