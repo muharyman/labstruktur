@@ -6,7 +6,7 @@
           <LabStruktur id="logo-labstruktur"/>
         </b-navbar-brand>
 
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-toggle target="nav-collapse" style="background:#24D39B"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" is-nav>
           <!-- Right aligned nav items -->
