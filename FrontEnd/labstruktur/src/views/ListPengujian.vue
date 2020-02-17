@@ -1,216 +1,183 @@
 <template>
-  <div class="root">
-    <div id="pengujian"> 
-      <h1 class="title">Daftar Pengujian</h1>
-      <TableView :headers="columns" :rows="items" :sort="sort1">
-        <template v-slot:items="{ row }">
-          <td>{{ row.first_name }}</td>
-          <td>{{ row.last_name }}</td>
-          <td>{{ row.email }}</td>
-          <td>{{ row.age }}</td>
-          <td>{{ row.country }}</td>
-          <td>{{ row.category }}</td>
-          <td>{{ row.last_update }}</td>
-        </template>
-        <template v-slot:no-data>
-          <span>No data</span>
-        </template>
-      </TableView>
-      <Footer></Footer>
-    </div>
-  </div>   
+  <div>
+    <b-container fluid>
+      <!-- User Interface controls -->
+      <b-row>
+        <b-col lg="6" class="my-1">
+          <b-form-group
+            label="Filter"
+            label-cols-sm="1"
+            label-align-sm="right"
+            label-size="sm"
+            label-for="filterInput"
+            class="mb-0"
+          >
+            <b-input-group size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-button :disabled="!filter" @click="filter = ''"
+                  >Clear</b-button
+                >
+              </b-input-group-append>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+      </b-row>
+
+      <!-- Main table element -->
+      <div class="container md-12">
+        <b-table
+          show-empty
+          small
+          stacked="md"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter"
+          :filterIncludedFields="filterOn"
+          hover
+          :items="items"
+          :fields="fields"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          @filtered="onFiltered"
+          class="table table-striped table-bordered"
+        >
+          <template v-slot:cell(info)>
+            <a class="btn btn-info" role="button" @click="klik">detil</a>
+          </template>
+        </b-table>
+      </div>
+      <b-col sm="7" md="6" class="my-1">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-container>
+  </div>
 </template>
+
 <script>
-import TableView from "@/components/TableView";
 export default {
-  name: "listpengujian",
-  components: {
-    TableView
-  },
   data() {
     return {
-      columns: [
+      items: [],
+      fields: [
         {
-          label: "No",
-          field: "no",
-          sortable: true,
-          type: "Number"
+          key: "idpengujian",
+          thClass: "d-none",
+          tdClass: "d-none"
         },
         {
+          key: "nomor_laporan",
           label: "Nomor Laporan",
-          field: "nomor_laporan",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
+          key: "tanggal_buka",
           label: "Tanggal Buka",
-          field: "tanggal_buka",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
+          key: "engineer.nama_user",
           label: "Engineer",
-          field: "engineer",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
+          key: "pemberi_tugas",
           label: "Pemberi Tugas",
-          field: "pemberi_tugas",
           sortable: true,
-          type: "Number"
+          class: "text-center"
         },
         {
+          key: "proyek",
           label: "Nama Proyek",
-          field: "nama_proyek",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
-          label: "Status Persetujuan",
-          field: "status_persetujuan",
+          key: "status_pengujian",
+          label: "Status Pengujian",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
+          key: "status_pembayaran",
           label: "Status Pembayaran",
-          field: "status_pembayaran",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
-          label: "Status Pengeditan",
-          field: "status_pengeditan",
+          key: "status_persetujuan",
+          label: "Status Persetujuan",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
+          key: "nama_laporan",
           label: "Laporan",
-          field: "laporan",
           sortable: true,
-          type: "String"
+          class: "text-center"
         },
         {
-          label: "Info",
-          field: "info",
-          sortable: false,
-          type: "String"
+          key: "info",
+          label: "Info"
         }
       ],
-      items: [],
-      sort1: {
-        field: "nomor_laporan",
-        order: "asc"
-      },
-      sort2: {
-        field: "engineer",
-        order: "asc"
-      },
-      pagination: {
-        itemsPerPage: 10,
-        align: "center",
-        visualStyle: "select"
-      }
+      totalRows: 1,
+      currentPage: 1,
+      perPage: 12,
+      sortBy: "",
+      sortDesc: false,
+      sortDirection: "asc",
+      filter: null,
+      filterOn: []
     };
+  },
+  computed: {
+    sortOptions() {
+      // Create an options list from our fields
+      return this.fields
+        .filter(f => f.sortable)
+        .map(f => {
+          return { text: f.label, value: f.key };
+        });
+    }
+  },
+  mounted() {
+    // Set the initial number of items
+    this.axios
+      .get("/pengujian/filter/")
+      .then(respone => {
+        this.items = respone.data.data;
+      })
+      .catch(e => {
+        this.error = e;
+        this.showAlert = true;
+      });
+    this.totalRows = this.items.length;
+  },
+  methods: {
+    onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
+    klik(event) {
+      window.location.href = `/editpengujian/${event.target.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML}`;
+    }
   }
 };
 </script>
-<style lang="scss" scoped>
-@import url(http://fonts.googleapis.com/css?family=Roboto+Mono);
-.root{
-  background: #e9f5ec;
-  min-height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 25px;
-}
-#pengujian {
-  font-family: "Raleway", Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  width: 100%;
-  margin: 3% auto;
-  background: white;
-  border-radius:6px;
-  box-shadow: 2px 2px 5px #9E9FA1;
-}
-h1 {
-  margin:25px;
-  color: black;
-}
-.separator {
-  margin: 2em 0;
-  text-align: center;
-}
-.custom-style {
-  // Table styles
-  .ozn-table {
-    border-collapse: collapse;
-    width: 100%;
-    thead {
-      th {
-        border-bottom: 1px solid #ffffff;
-        padding: 0 10px;
-        height: 48px;
-        text-align: left;
-        font-size: 1em;
-        color: #fff;
-        background-color: #7cc3fd;
-        cursor: pointer;
-        &:hover {
-          span {
-            text-decoration: none;
-            // text-decoration-style: dotted;
-            color:#24D39B;
-          }
-        }
-        i {
-          color: #ffffff;
-          &.active {
-            color: #ff00aa;
-            + span {
-              color: #a9237c;
-            }
-          }
-        }
-      }
-    }
-    tbody {
-      tr {
-        &:nth-child(odd) {
-          background-color: #e9f5ff;
-        }
-        &:nth-child(even) {
-          background-color: #fafaeb;
-        }
-      }
-      td {
-        border-bottom: 1px solid #ffffff;
-        padding: 0 10px;
-        height: 48px;
-        font-size: 1em;
-      }
-    }
-  }
-  // Paginator styles
-  .ozn-paginator {
-    margin-top: 0.5em;
-    select {
-      border: 1px solid #7cc3fd;
-      border-radius: 8px;
-      color: #ffffff;
-      background-color: #7cc3fd;
-      outline: none;
-    }
-    button {
-      border: 1px solid #7cc3fd;
-      border-radius: 8px;
-      color: #ffffff;
-      background-color: #7cc3fd;
-      outline: none;
-    }
-  }
-}
-</style>
