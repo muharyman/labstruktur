@@ -65,23 +65,20 @@
 </template>
 
 <style scoped>
-.hov{
-  color: black; 
-}
-.hov :hover{
-  color:blueviolet;
-}
 .app {
   z-index: 1;
 }
 .navbar-text {
-  font-size: 25px;
+  font-size: 24px;
   color: black !important;
+  line-height: 0;
+  padding: 0;
 }
 
 b-nav-item .navbar-text {
-  font-size: 25px;
+  font-size: 15px;
   color: black !important;
+  
 }
 
 nav a.router-link-active {
