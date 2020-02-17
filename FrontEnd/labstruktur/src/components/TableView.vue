@@ -135,7 +135,7 @@ export default {
     }
   },
   mounted() {
-    this.tableRows = this.rows.slice(0); // Para que haga una copia del array
+    this.tableRows = this.rows.slice(0);
     if (this.sortEnabled) this.initSort();
     this.selectVisibleRows();
   },
@@ -207,18 +207,24 @@ export default {
   .ozn-table {
     border-collapse: collapse;
     width: 100%;
+    padding: 0;
     thead {
+      background: #9E9FA1;
+      border: 1px solid #9E9FA1;
+      border-radius: 4px 4px 0 0;
       th {
-        border-bottom: 2px solid #ccc;
+        font-family: "Raleway", sans-serif;
+        border-bottom: 2px solid black;
+        color: black;
         padding: 0 10px;
         height: 48px;
         text-align: left;
-        font-size: 1em;
+        font-size: 1.2em;
         cursor: pointer;
         &:hover {
           span {
-            text-decoration: underline;
-            text-decoration-style: dotted;
+            text-decoration: none;
+            color: white;
           }
         }
         i {
@@ -239,10 +245,11 @@ export default {
         }
       }
       td {
-        border-bottom: 1px dotted #ccc;
+        border-bottom: 1px solid white;
         padding: 0 10px;
         height: 48px;
-        font-size: 1em;
+        font-size: 12px;
+        font-family: "Raleway", sans-serif;
       }
     }
   }

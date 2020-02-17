@@ -1,22 +1,24 @@
 <template>
-  <div id="pengujian"> 
-    <h1>Daftar Inventaris</h1>
-    <TableView :headers="columns" :rows="items" :sort="sort1">
-      <template v-slot:items="{ row }">
-        <td>{{ row.first_name }}</td>
-        <td>{{ row.last_name }}</td>
-        <td>{{ row.email }}</td>
-        <td>{{ row.age }}</td>
-        <td>{{ row.country }}</td>
-        <td>{{ row.category }}</td>
-        <td>{{ row.last_update }}</td>
-      </template>
+  <div class="root">
+    <div id="inventaris"> 
+      <h1>Daftar Inventaris</h1>
+      <TableView :headers="columns" :rows="items" :sort="sort1">
+        <template v-slot:items="{ row }">
+          <td>{{ row.first_name }}</td>
+          <td>{{ row.last_name }}</td>
+          <td>{{ row.email }}</td>
+          <td>{{ row.age }}</td>
+          <td>{{ row.country }}</td>
+          <td>{{ row.category }}</td>
+          <td>{{ row.last_update }}</td>
+        </template>
 
-      <template v-slot:no-data>
-        <span>No data</span>
-      </template>
-    </TableView>
-    <Footer></Footer>
+        <template v-slot:no-data>
+          <span>No data</span>
+        </template>
+      </TableView>
+      <Footer></Footer>
+    </div>
   </div>
 </template>
 <script>
@@ -36,8 +38,8 @@ export default {
           type: "Number"
         },
         {
-          label: "nama_barang",
-          field: "Nama Barang",
+          label: "Nama Barang",
+          field: "nama_barang",
           sortable: true,
           type: "String"
         },
@@ -98,22 +100,28 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import url(http://fonts.googleapis.com/css?family=Roboto+Mono);
-body,
-html {
-  height: 100%;
+.root{
+  background: #e9f5ec;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 25px;
 }
-#pengujian {
-  font-family: "Roboto Mono", Helvetica, Arial, sans-serif;
+#inventaris {
+  font-family: "Raleway", Helvetica, Arial, sans-serif;
   font-size: 12px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 3% auto;
+  background: white;
+  border-radius:6px;
+  box-shadow: 2px 2px 5px #9E9FA1;
 }
 h1 {
-  margin-bottom: 2em;
-  color: #f90;
+  margin: 25px;
+  color: black;
 }
 .separator {
   margin: 2em 0;
@@ -136,8 +144,9 @@ h1 {
         cursor: pointer;
         &:hover {
           span {
-            text-decoration: underline;
-            text-decoration-style: dotted;
+            text-decoration: none;
+            // text-decoration-style: dotted;
+            color:#24D39B;
           }
         }
         i {

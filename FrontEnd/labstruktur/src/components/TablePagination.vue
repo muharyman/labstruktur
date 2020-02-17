@@ -1,9 +1,10 @@
 <template>
   <div class="ozn-paginator" :class="alignClass">
     <template v-if="paginationOptions.visualStyle === 'select'">
-      <span>Page </span>
+      <span class="text">Page </span>
       <select @change="onChange">
         <option
+          class="page"
           v-for="index in totalPages"
           :value="index"
           :key="index"
@@ -12,7 +13,7 @@
           {{ index }}
         </option>
       </select>
-      <span> of {{ totalPages }}</span>
+      <span class="text"> of {{ totalPages }}</span>
     </template>
     <template v-else>
       <button class="ozn-prev" v-if="prevPage > 0" @click="goToPage(prevPage)">
@@ -108,5 +109,20 @@ button {
       background-color: #fff;
     }
   }
+}
+.text{
+  font-family: "Raleway", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
+}
+.page{
+  border:1px solid #24D39B;
+  border:2px;
+  background: white;
+  font-family: "Raleway", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
 }
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div class="root">
     <b-table striped hover responsive :items="list_item_pengujian" :fields="Koloms" bordered borderless>
-      <template v-slot:cell(item)="row">
+      <template v-slot:cell(item_pengujian)="row">
         <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select>
         <b-form-input v-model="row.item.keterangan" placeholder="keterangan" class="input-border"/>
       </template>
       <template v-slot:cell(Jumlah)="row">
         <b-form-input v-model="row.item.jumlah_item" class="input-border"/>
       </template>
-      <template v-slot:cell(BiayaPengujian)="row">
+      <template v-slot:cell(biaya_per_pengujian)="row">
         <b-form-input v-model="row.item.biaya" class="input-border"/>
       </template>
       <template v-slot:cell(Hapus)="row" class="button-del">
@@ -21,7 +21,7 @@
       <div class="button" @click="addRow()">
         <p>Tambah</p>
       </div>
-      <div class="button" >
+      <div class="button" @click="save()" >
         <p>Save</p>
       </div>
     </div>
@@ -99,32 +99,41 @@ export default {
   data(){
     return{
       index:0,
-      Koloms: ["Item","Jumlah","BiayaPengujian","Hapus" ],
+      Koloms: ["Item_Pengujian","Jumlah","Biaya_Per_Pengujian","Hapus" ],
       list_item_pengujian: [
-        { id_row:0, id_item: "1", keterangan:null, jumlah_item:10, biaya:100000, isHapus:false},
-        { id_row:1, id_item: "1", keterangan:"hiyahiyahiya", jumlah_item:1, biaya:100000, isHapus:true}
       ],
       list_item:[
         { value: '1', text: 'This is First option'},
         { value: '2', text: 'This is sakondo option'}
-      ]
+      ],
+      error:''
     }
   },
   methods: {
     hapus(id){
-      // console.log("hiyahiyahiya");
       for( var i = 0; i < this.list_item_pengujian.length; i++){ 
         if ( this.list_item_pengujian[i].id_row === id) {
           if(this.list_item_pengujian[i].isHapus === true){
             this.list_item_pengujian.splice(i,1);
-            break;
+          } else {
+            this.axios
+              .delete("/itempengujian/delete/"+this.list_item_pengujian[i].id_pengujian)
+              .then(() => {
+                alert('delete success');
+                this.list_item_pengujian.splice(i,1);
+              }).catch(e =>{
+                this.error = e,
+                alert(e.message);
+              });
           }
+          break;
         }
       }
     },
     addRow(){
       var id = this.index;
       const obj = {
+        id_pengujian: null,
         id_row: id,
         id_item: "1",
         keterangan: null,
@@ -137,10 +146,103 @@ export default {
     },
     initIndex(){
       this.index = this.list_item_pengujian.length;
+    },
+    getItem(){
+      this.axios
+        .get("/kategoripengujian/index")
+        .then(respone => {
+          this.list_item = []
+          respone.data.data.forEach(element_1 => {
+            let item = {
+              value: 0,
+              text: ''
+            };
+            element_1.jenis_pengujian.forEach(element_2 => {
+              item.value = element_2.idjenis_pengujian;
+              item.text = element_2.nama_pengujian
+              if (element_1.nama_lain) item.text += "("+ element_1.nama_lain ?? ""+")";
+              this.list_item.push(item);
+            });
+          });
+        })
+        .catch(e =>{
+          this.error = e,
+          alert(e.message);
+        });
+    },
+    getTable(){
+      this.axios
+        .get("itempengujian/getbypengujian",{
+          params:{
+            id : this.$route.params.id
+          }
+        })
+        .then(respone => {
+          let i = 0;
+          this.list_item_pengujian = []
+          respone.data.data.forEach(element => {
+            let row ={
+              id_row:i,
+              id_item: '',
+              id_pengujian: '',
+              keterangan:null, 
+              jumlah_item:0, 
+              biaya:0, 
+              isHapus:false
+            }
+            row.id_item = element.idjenis_pengujian;
+            row.id_pengujian = element.iditem_pengujian;
+            row.keterangan = element.keterangan;
+            row.jumlah_item = element.jumlah_item;
+            row.biaya = element.biaya_per_pengujian;
+            i++;
+            this.list_item_pengujian.push(row);
+            this.index = i+1;
+          })
+        })
+        .catch(e => {
+            alert(e.message);
+        });
+    },
+    save(){
+      let formData = new FormData();
+      let i = 0;
+      this.list_item_pengujian.forEach(element => {
+        if (element.id_pengujian) formData.append('data['+i+"][iditem_pengujian]",element.id_pengujian);
+        formData.append('data['+i+"][idpengujian]", this.$route.params.id);
+        formData.append('data['+i+"][idjenis_pengujian]", element.id_item);
+        formData.append('data['+i+"][jumlah_item]", element.jumlah_item);
+        formData.append('data['+i+"][biaya_per_pengujian]", element.biaya);
+        formData.append('data['+i+"][keterangan]", element.keterangan);
+        i++;
+      })
+      this.axios
+        .post("itempengujian/update/multiple",
+          formData,
+          {
+            Headers:{
+              'content-type': 'multipart/form-data'
+            }
+        })
+        .then(respone => {
+          if (respone.data.length === i){
+            this.list_pembayaran.forEach(element => {
+              element.isHapus = false;
+            })
+            alert("Item Pengujian Berhasil Diperbaharui");
+          }
+        })
+        .catch(e=>{
+          this.error = e;
+          alert(e);
+          alert("gagal memperbaharui item pengujian");
+        });
     }
   },
   mounted(){
-    this.initIndex();
+    this.getTable();
+    this.getItem();    
+    // this.initIndex();
   }
 }
 </script>

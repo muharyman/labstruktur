@@ -85,7 +85,7 @@ img {
 .root{
   overflow-x: hidden;
   background: #9E9FA1;
-  min-height: 83vh;
+  min-height: 100vh;
   z-index: -1;
 }
 .tambahinventaris-container{
