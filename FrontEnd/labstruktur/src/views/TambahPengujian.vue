@@ -25,19 +25,19 @@
                 </select>
               </div>
               <p class="text">Pemberi Tugas</p>
-              <input class="input-text" type="text" placeholder="e.g PT.Bumi Perkasa"/>
-              <p class="text">NPWP</p>
-              <input class="input-text" type="number" placeholder="677503456445001"/>
+              <input class="input-text" type="text" placeholder="e.g PT.Bumi Perkasa" v-model="pemberi_tugas"/>
+              <p class="text" >NPWP</p>
+              <input class="input-text" type="number" placeholder="677503456445001" v-model="npwp"/>
             </div>
             <div class="col-sm-5">
               <p class="text">Proyek</p>
-              <input class="input-text" type="text" placeholder="e.g. Toko Buku Jaya"/>
+              <input class="input-text" type="text" placeholder="e.g. Toko Buku Jaya" v-model="proyek"/>
               <p class="text">Nomor Laporan</p>
-              <input class="input-text" type="text" placeholder="108/L.BT/Test/2020"/>
+              <input class="input-text" type="text" placeholder="108/L.BT/Test/2020" v-model="nomor_laporan"/>
               <p class="text">Tanggal Terima</p>
-              <input class="input-text" type="text" placeholder="31-January-2020"/>
+              <input class="input-text" type="text" placeholder="31-January-2020" v-model="tanggal_terima"/>
               <div class="button">
-                <a href="#none">TAMBAH</a>
+                <a @click="tambahPengujian()">TAMBAH</a>
               </div>
             </div>
           </div>
@@ -46,13 +46,121 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  name: "tambapengujian",
+  data(){
+    return{
+      teknisi_selected: null,
+      pembuka_selected: null,
+      engineer_selected: null,
+      teknisis: [
+      ],
+      pembukas:[
+      ],
+      engineers:[
+      ],
+      data:{},
+      pemberi_tugas:'',
+      npwp:'',
+      proyek:'',
+      nomor_laporan:'',
+      tanggal_terima:'',
+      error: ''
+    }
+  },
+  methods:{
+    getPembuka(){
+      let pembuka = {
+        text: "hallo",
+        value: 0
+      }
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      pembuka.text = user.nama_user;
+      pembuka.value = user.iduser;
+      this.pembukas = [];
+      this.pembukas.push(pembuka);
+    },
+    getTeknisi(){
+      this.axios
+        .get("/user/index/role", {
+          params:{
+            roles: 4,
+          }
+        })
+        .then(respone => {
+          if( respone.data.data.length > 0){
+            for(let i = 0; i< respone.data.data.length; i++){
+              let teknisi={
+                text: "",
+                value:i
+              }
+              teknisi.text = respone.data.data[i].nama_user;
+              teknisi.value = respone.data.data[i].iduser;
+              this.teknisis.push(teknisi);
+            }
+          }
+        });
+    },
+    getEngineers(){
+      this.axios
+        .get("/user/index/role",{
+          params:{
+            roles: 3,
+          }
+        })
+        .then(respone => {
+          if( respone.data.data.length > 0){
+            for(let i = 0; i< respone.data.data.length; i++){
+              let engineer={
+                text: "",
+                value:i
+              }
+              engineer.text = respone.data.data[i].nama_user;
+              engineer.value = respone.data.data[i].iduser;
+              this.engineers.push(engineer);
+            }
+          }
+        });
+    },
+    tambahPengujian(){
+      this.axios
+        .post("/pengujian/create",{
+          email: JSON.parse(window.localStorage.getItem('user')).email,
+          idteknisi: this.teknisi_selected,
+          idengineer: this.engineer_selected,
+          pemberi_tugas: this.pemberi_tugas,
+          npwp: this.npwp,
+          proyek: this.proyek,
+          nomor_laporan: this.nomor_laporan,
+          tanggal_terima: this.tanggal_terima
+        })
+        .then(respone => {
+          alert('Pengujian berhasil ditambahkan');
+          let id = respone.data.idpengujian;
+          // alert(id);
+          window.location.href = "/editpengujian/" + id;
+        })
+        .catch(e =>{
+          this.error = e;
+          alert('gagal menambah pengujian');
+        });
+    }
+  },
+  created(){
+    this.getPembuka();
+    this.getTeknisi();
+    this.getEngineers();
+  }
+}
+</script>
 <style scoped>
 .root{
   padding: 0;
   margin: 0;
-  background: #9E9FA1;
+  background: #e9f5ec;
   z-index: -1;
-  min-height: 83vh;
+  min-height: 100vh;
   overflow-x: hidden;
 }
 .tambah-pengujian{
@@ -64,6 +172,8 @@
   border-radius: 4px;
   margin: 0 45px;
   padding: 25px;
+  
+  box-shadow: 2px 2px 5px #9E9FA1;
 }
 #second-row{
   background: white;
@@ -128,7 +238,8 @@
 }
 .button{
   width: inherit;
-  margin-top: 15px;
+  margin-top: 25px;
+  cursor: pointer;
 }
 .button a:hover{
   background: green;
@@ -166,30 +277,3 @@
 }
 </style>
 
-<script>
-export default {
-  name: "tambapengujian",
-  data(){
-    return{
-      teknisi_selected: 0,
-      pembuka_selected: 0,
-      engineer_selected: 0,
-      teknisis: [
-        {text: "saya", value:0},
-        {text: "sayang", value:1},
-        {text: "kamu", value:2}
-      ],
-      pembukas:[
-        {text: "saya", value:0},
-        {text: "sayang", value:1},
-        {text: "kamu", value:2}
-      ],
-      engineers:[
-        {text: "saya", value:0},
-        {text: "sayang", value:1},
-        {text: "kamu", value:2}
-      ]
-    }
-  }
-}
-</script>

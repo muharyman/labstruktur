@@ -29,7 +29,6 @@
           @dismissed="showAlert = false"
         >
           Username atau password Anda salah.
-          {{ error }}
         </b-alert>
         <a href="#none" id="lupapassword">lupa password ?</a>
         <div class="button-1">
@@ -161,8 +160,10 @@ export default {
         })
         .then(respone => {
           const token = respone.data.success.token;
-          window.localStorage.setItem("loggedIn", token);
-          window.location.href = "/";
+          const user = respone.data.success.user;
+          window.localStorage.setItem("token", token);
+          window.localStorage.setItem("user", JSON.stringify(user));
+          window.location.href = "/dashboard";
         })
         .catch(e => {
           this.error = e;
