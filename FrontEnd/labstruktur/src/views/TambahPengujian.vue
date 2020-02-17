@@ -138,7 +138,7 @@ export default {
         .then(respone => {
           alert('Pengujian berhasil ditambahkan');
           let id = respone.data.idpengujian;
-          alert(id);
+          // alert(id);
           window.location.href = "/editpengujian/" + id;
         })
         .catch(e =>{

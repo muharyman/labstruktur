@@ -14,14 +14,14 @@
         <b-button @click="hapus(row.item.id_row)" class="button-del">HAPUS</b-button>
       </template>
       <template v-slot:cell(kuitansi)="row">
-        <b-button @click="hapus(row.item.id_row)" class="button-kui">Kuitansi</b-button>
+        <b-button @click="kuitansi(row.item.id_pembayaran)" class="button-kui">Kuitansi</b-button>
       </template>
     </b-table>
     <div class="button-container">
       <div class="button" @click="addRow()">
         <p>Tambah</p>
       </div>
-      <div class="button" >
+      <div class="button" @click="save()">
         <p>Save</p>
       </div>
     </div>
@@ -121,15 +121,11 @@ export default {
     return{
       index:0,
       Koloms: ["Tanggal_Pembayaran","Jumlah_Pembayaran","Metode_Pembayaran","Hapus", "Kuitansi"],
-      list_pembayaran: [
-        { id_row:0, tanggal:null , jumlah_pembayaran:null, metode_pembayaran:1, isHapus:false},
-        { id_row:1, tanggal:null , jumlah_pembayaran:null, metode_pembayaran:1, isHapus:true}
-      ],
+      list_pembayaran: [],
       list_metode_pembayaran:[
         { value: null, text: 'pilih metode pembayaran'},
-        { value: '1', text: 'cash'},
-        { value: '2', text: 'transfer'},
-        { value: '3', text: 'ngutang'}
+        { value: 'CASH', text: 'cash'},
+        { value: 'TRANSFER', text: 'transfer'}
       ]
     }
   },
@@ -139,8 +135,18 @@ export default {
         if ( this.list_pembayaran[i].id_row === id) {
           if(this.list_pembayaran[i].isHapus === true){
             this.list_pembayaran.splice(i,1);
-            break;
+          } else {
+            this.axios
+              .delete("/pembayaran/delete/"+this.list_pembayaran[i].id_pembayaran)
+              .then(() => {
+                alert('delete success');
+                this.list_pembayaran.splice(i,1);
+              }).catch(e =>{
+                this.error = e,
+                alert(e.message);
+              });
           }
+          break;
         }
       }
     },
@@ -148,7 +154,7 @@ export default {
       var id = this.index;
       const obj = {
         id_row: id,
-        tanggal: null,
+        tanggal_pembayaran: null,
         jumlah_pembayaran: null,
         metode_pembayaran: null,
         isHapus:true
@@ -158,10 +164,79 @@ export default {
     },
     initIndex(){
       this.index = this.list_pembayaran.length;
+    },
+    getTable(){
+      this.axios
+        .get("pembayaran/getbypengujian",{
+          params:{
+            id : this.$route.params.id
+          }
+        })
+        .then(respone => {
+          let i = 0;
+          this.list_pembayaran = []
+          respone.data.data.forEach(element => {
+            let row ={
+              id_row: i,
+              id_pembayaran: null,
+              tanggal_pembayaran: null,
+              jumlah_pembayaran: null,
+              metode_pembayaran: null,
+              isHapus:false,
+            }
+            row.id_pembayaran = element.idpembayaran;
+            row.tanggal_pembayaran = element.tanggal_pembayaran;
+            row.jumlah_pembayaran = element.jumlah_pembayaran;
+            row.metode_pembayaran = element.metode_pembayaran;
+            i++;
+            this.list_pembayaran.push(row);
+            this.index = i+1;
+          })
+        })
+        .catch(e => {
+            alert(e.message);
+        });
+    },
+    save(){
+      let formData = new FormData();
+      let i = 0;
+      this.list_pembayaran.forEach(element => {
+        if (element.id_pembayaran) formData.append('data['+i+"][idpembayaran]",element.id_pembayaran);
+        formData.append('data['+i+"][idpengujian]", this.$route.params.id);
+        formData.append('data['+i+"][tanggal_pembayaran]", element.tanggal_pembayaran);
+        formData.append('data['+i+"][metode_pembayaran]", element.metode_pembayaran);
+        formData.append('data['+i+"][jumlah_pembayaran]", element.jumlah_pembayaran);
+        i++;
+      })
+      this.axios
+        .post("pembayaran/update/multiple",
+          formData,
+          {
+            Headers:{
+              'content-type': 'multipart/form-data'
+            }
+        })
+        .then(respone => {
+          if (respone.data.length === i){
+            this.list_pembayaran.forEach(element => {
+              element.isHapus = false;
+            })
+            alert("pembayaran Berhasil Diperbaharui");
+          }
+        })
+        .catch(e=>{
+          this.error = e;
+          alert(e);
+          alert("gagal memperbaharui pembayaran");
+        });
+    },
+    kuitansi(id_pembayaran){
+      window.location.href = this.axios.defaults.baseURL + '/pembayaran/kuitansi/' + id_pembayaran;
     }
   },
   mounted(){
-    this.initIndex();
+    this.getTable();
+    // this.initIndex();
   }
 }
 </script>
