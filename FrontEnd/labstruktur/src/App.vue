@@ -66,7 +66,7 @@
 
 <style scoped>
 .app {
-  z-index: 1;
+  position: fixed;
 }
 .navbar-text {
   font-size: 24px;

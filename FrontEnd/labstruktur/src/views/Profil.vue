@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <div class="row">
+    <div class="row" id="container">
       <div class="col-sm-5">
         <div class="profile">
           <p id="profile-1">Profil</p>
@@ -21,12 +21,12 @@
               <p class="text-4">jabatan</p>              
               <div class="select-style">
                 <select name="jabatan">
-                <option  value="0">kepala lab</option>
-                <option value="1">naon</option>
-                <option value="2">naon</option>
-                <option value="3">deui</option>
-                <option value="4">sedang</option>
-              </select>
+                  <option  value="0">kepala lab</option>
+                  <option value="1">naon</option>
+                  <option value="2">naon</option>
+                  <option value="3">deui</option>
+                  <option value="4">sedang</option>
+                </select>
               </div>
             </div>
             <div class="garis-batas-vertical"></div>
@@ -51,20 +51,21 @@
 .root{
   padding: 0;
   margin: 0;
-  background: #9E9FA1;
+  background: #e9f5ec;
   z-index: -1;
   height: 100vh;
   overflow: hidden;
 }
-.row{
-  margin-top:3%;
+#container{
+  margin-top:8%;
+  padding: 0;
 }
 .col-sm-5{
-  padding: 65px 45px;
+  padding: 0 45px;
   margin:0 !important;
 }
 .col-sm-7{
-  padding: 65px 45px;
+  padding: 0 45px;
   margin: 0 !important;
 }
 
@@ -75,6 +76,7 @@
   border-radius: 4px;
   background: white;
   padding : 25px 25px;
+  box-shadow: 2px 2px 5px #878788;
 }
 .ubah-profile{
   float:right;
@@ -84,6 +86,7 @@
   border-radius: 4px;
   background: white;
   padding: 25px 25px;
+  box-shadow: 2px 2px 5px #878788;
 }
 .text-4{
   font-family: "Montserrat Alternates", sans-serif;

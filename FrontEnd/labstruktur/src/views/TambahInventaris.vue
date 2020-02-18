@@ -63,20 +63,25 @@
 
 <style scoped>
 .root{
-  overflow-x: hidden;
-  background: #9E9FA1;
-  height: 100vh;
+  padding: 0;
+  margin: 0;
+  background: #e9f5ec;
   z-index: -1;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #content{
-  margin-top: 5%; 
+  padding: 0;
+  margin-top: 8%;
+  overflow-y: hidden;
 }
 .tambahinventaris-container{
-  margin: 10vh 5vw;
+  margin: 10px 5vw;
   border-radius: 4px;
   background: white;
   padding: 5px 25px;
+  box-shadow: 2px 2px 5px #878788;
 }
 #tambahinventaris-header{
   font-family: "Raleway", sans-serif;
@@ -102,7 +107,7 @@
   padding: 5px 8px;
   font-size: 17px;
   margin-bottom: 12px;
-  height: 25%;
+  height: 28%;
   width: inherit;
   border-radius: 4px;
 }
@@ -114,7 +119,7 @@
 .text-input-deskripsi{
   border: 2px solid #24D39B;
   padding: 5px 8px;
-  height: 75%;
+  height: 80%;
   font-size: 17px;
   margin-bottom: 8px;
   width: inherit;

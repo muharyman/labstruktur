@@ -1,34 +1,30 @@
 <template>
-  <div class="root">
-    <div class="photo-container">
-      <div class="photo">
-        <div class="slideshow-container">
-          <div class="mySlides1">
-            <img v-bind:src="curent_src" style="width:100%">
+  <div class="root">  
+    <div id="content" class="row">
+      <div class="col-sm-6">
+        <div class="photo-container">
+          <div class="photo">
+            <div class="slideshow-container">
+              <div class="mySlides1">
+                <img v-bind:src="curent_src" style="width:100%">
+              </div>
+              <a class="prev" v-on:click="go_prev()" >&#10094;</a>
+              <a class="next" v-on:click="go_next()" >&#10095;</a>
+            </div>
           </div>
-          <a class="prev" v-on:click="go_prev()" >&#10094;</a>
-          <a class="next" v-on:click="go_next()" >&#10095;</a>
         </div>
       </div>
-    </div>
-    <div id="content" class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-6">
         <div class="tambahinventaris-container">
           <div id="tambahinventaris-header">
             <p>Tambah Inventaris</p>
-          </div>
-          <div class="row">
-            <div class="col">
-              <p class="text">Nama Barang</p>
-              <input class="text-input" type="text" placeholder="nama barang"/>
-              <p class="text">Jumlah Barang</p>
-              <input class="text-input" type="text" placeholder="Jumlah Barang"/>
-            </div>
-            <div class="col">
-              <p class="text">Deskripsi Barang</p>
-              <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
-            </div>
-          </div>          
+          </div>  
+          <p class="text">Nama Barang</p>
+          <input class="text-input" type="text" placeholder="nama barang"/>
+          <p class="text">Jumlah Barang</p>
+          <input class="text-input" type="text" placeholder="Jumlah Barang"/>
+          <p class="text">Deskripsi Barang</p>
+          <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
         </div>
       </div>
     </div>
@@ -36,18 +32,23 @@
 </template>
 
 <style scoped>
+#content{
+  margin-top: 15vh;
+}
+
 .photo-container{
   text-align: center;
 }
 .photo{
-  display: inline-block;
-  margin-top: 5%; 
-  margin-right: 4%;
-  margin-left: 4%;
-  width: 50vw;
+  display: inline-block; 
+  margin-right: 12.5px;
+  margin-left: 25px;
+  width: inherit;
+  height: 100%;
   background: white;
   border-radius: 2px;
   padding: 20px;
+  box-shadow: 2px 2px 5px #878788;
 }
 img {
   vertical-align: center;
@@ -83,16 +84,21 @@ img {
 }
 
 .root{
-  overflow-x: hidden;
-  background: #9E9FA1;
-  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  background: #e9f5ec;
   z-index: -1;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 .tambahinventaris-container{
-  margin: 10vh 5vw;
+  margin-left: 12.5px;
+  margin-right: 25px;
   border-radius: 4px;
   background: white;
-  padding: 5px 25px;
+  padding: 15px 25px;
+  height: 100%;
+  box-shadow: 2px 2px 5px #878788;
 }
 #tambahinventaris-header{
   font-family: "Raleway", sans-serif;
@@ -113,8 +119,8 @@ img {
   padding: 5px 8px;
   font-size: 17px;
   margin-bottom: 12px;
-  height: 25%;
-  width: inherit;
+  height: 12%;
+  width: 100%;
   border-radius: 4px;
 }
 
@@ -125,12 +131,11 @@ img {
 .text-input-deskripsi{
   border: 2px solid #24D39B;
   padding: 5px 8px;
-  height: 75%;
+  height: 30%;
   font-size: 17px;
   margin-bottom: 8px;
-  width: inherit;
+  width: 100%;
   border-radius: 4px;
-  resize: none;
 }
 .text-input-deskripsi:focus{
   border: 2px solid #1A53FF;
@@ -201,7 +206,48 @@ img {
   background: #24D39B;
   transition: 0.6s;
 }
-
+@media screen and (max-width: 600px){
+  img {
+    vertical-align: center;
+    object-fit: cover;
+    width: 100%;
+    height: inherit;
+  }
+  .photo{
+    display: inline-block; 
+    margin-right: 25px;
+    margin-left: 25px;
+    width: inherit;
+    height: 200px;
+    background: white;
+    border-radius: 2px;
+    padding: 20px;
+  }
+  #content{
+    margin-top: 5vh;
+  }
+  .tambahinventaris-container{
+    margin: 20px 25px;
+    border-radius: 4px;
+    background: white;
+    padding: 15px 25px;
+    height: 100%;
+  }
+  #tambahinventaris-header{
+    font-family: "Raleway", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+  }
+  .text-input-deskripsi{
+    border: 2px solid #24D39B;
+    padding: 5px 8px;
+    height: 30%;
+    font-size: 12px;
+    margin-bottom: 8px;
+    width: 100%;
+    border-radius: 4px;
+  }
+}
 </style>
 <script>
 export default {
