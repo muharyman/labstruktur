@@ -69,7 +69,7 @@ class CRUDController extends APIController
         // validate request
         $changedRules = [
             'nama_login' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($object->getKey(),$object->getKeyName())],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($object->getKey(),$object->getKeyName())],
+            'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users')->ignore($object->getKey(),$object->getKeyName())],
             'password' => ['sometimes', 'string', 'min:8', 'confirmed'],
         ];
         $rules = array_replace($this->rules, $changedRules);
@@ -77,20 +77,19 @@ class CRUDController extends APIController
         if ($validator->fails()){
             return $this->respondRequestError($validator->errors());
         }
-        
         // process request
         $input = $request->except('password_confirmation');
         if (array_key_exists('password', $input) && !is_null($input['password'])){
             $input['password'] = bcrypt($request['password']);
             $input['last_change_password'] = Carbon::now();
         }
-        if ($input['email'] != $object->email){
+        if (array_key_exists('email', $input) && $input['email'] != $object->email){
             do{
                 $input['verification_token'] = str_random(60);
             }while(User::where('verification_token', $input['verification_token'])->first() instanceof User);
             $input['email_verified_at'] = null;
         }
-
+        
         // update
         if ($object->update($input)) {
             Logging::action('Mengedit '.$this->modelClassName.', id:'.$object->getKey());

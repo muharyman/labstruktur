@@ -13,7 +13,7 @@ use Validator;
 class LogoutController extends APIController
 {
 
-    public function logout()
+    public function logout(Request $request)
     {
         if (Auth::check()){
             Auth::user()->token()->revoke();

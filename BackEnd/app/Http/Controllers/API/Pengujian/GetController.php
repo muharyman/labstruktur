@@ -25,6 +25,15 @@ class GetController extends APIController
      */
     public function indexWithFilter(Request $request)
     {
+        // validate request
+        $validator = Validator::make($request->all(), [
+            'search' => ['nullable', 'string'],
+            'filter' => ['nullable', 'integer']
+        ]);
+        if ($validator->fails()){
+            return $this->respondRequestError($validator->errors());
+        }
+
         $modelIndex = Pengujian::query();
         // search query
         $search = '%'.$request->input('search').'%';

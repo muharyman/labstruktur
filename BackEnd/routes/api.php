@@ -21,7 +21,7 @@ Route::group([
         'prefix' => 'auth'
     ], function () {    
         Route::post('login', 'LoginController@login');
-        Route::get('logout', 'LogoutController@logout'); // ->middleware('auth:api');
+        Route::get('logout', 'LogoutController@logout')->middleware('auth:api');
         Route::post('register', 'RegisterController@register');
         Route::post('passwordreset/create', 'ForgotPasswordController@create');
         Route::get('passwordreset/check/{token}', 'ForgotPasswordController@check')->name('passwordreset.check');
@@ -172,6 +172,7 @@ Route::group([
         Route::post('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
         Route::post('import', 'ImportController@import');
+        Route::delete('deletefile/{id}', 'DeleteController@deleteFile');
     });
 
 });
