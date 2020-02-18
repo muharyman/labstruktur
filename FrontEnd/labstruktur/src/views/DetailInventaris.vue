@@ -17,14 +17,14 @@
       <div class="col-sm-6">
         <div class="tambahinventaris-container">
           <div id="tambahinventaris-header">
-            <p>Tambah Inventaris</p>
+            <p>Detail Inventaris</p>
           </div>  
           <p class="text">Nama Barang</p>
-          <input class="text-input" type="text" placeholder="nama barang"/>
+          <input class="text-input" type="text" placeholder="nama barang" readonly/>
           <p class="text">Jumlah Barang</p>
-          <input class="text-input" type="text" placeholder="Jumlah Barang"/>
+          <input class="text-input" type="text" placeholder="Jumlah Barang" readonly/>
           <p class="text">Deskripsi Barang</p>
-          <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
+          <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi" readonly></textarea>
         </div>
       </div>
     </div>
