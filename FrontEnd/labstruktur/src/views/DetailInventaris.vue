@@ -16,9 +16,18 @@
       </div>
       <div class="col-sm-6">
         <div class="tambahinventaris-container">
-          <div id="tambahinventaris-header">
-            <p>Detail Inventaris</p>
-          </div>  
+          <div class="row">
+            <div class="col-sm-8">
+              <div id="tambahinventaris-header">
+                <p>Detail Inventaris</p>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="button-4" >
+                <a @click="edit()">Edit</a>
+              </div>
+            </div>
+          </div>
           <p class="text">Nama Barang</p>
           <input class="text-input" type="text" placeholder="nama barang" readonly/>
           <p class="text">Jumlah Barang</p>
@@ -136,6 +145,7 @@ img {
   margin-bottom: 8px;
   width: 100%;
   border-radius: 4px;
+  resize: none;
 }
 .text-input-deskripsi:focus{
   border: 2px solid #1A53FF;
@@ -184,6 +194,31 @@ img {
   background: #1A53FF;
   color: white;
 }
+.button-4{
+  width: inherit;
+  margin-top: 10px;
+}
+.button-4 a:hover{
+  background: green;
+  color: white;
+  border-color: green;
+  text-decoration: none;
+}
+.button-4 a{
+  display: block;
+  font-family: 'Raleway', sans-serif;
+  padding: 5px 10px;
+  margin:auto;
+  text-align: center;
+  text-decoration: none;
+  font-size: 17px;
+  color: #24D39B;
+  font-weight: 400;
+  background: white;
+  transition: 0.5s;
+  border:1px solid#24D39B;
+  border-radius: 4px;
+}
 .button2{
   border: 2px solid #24D39B;
   margin-top: 12px;
@@ -205,6 +240,13 @@ img {
   color: white;
   background: #24D39B;
   transition: 0.6s;
+}
+@media screen and (max-width: 1000px){
+  #tambahinventaris-header{
+    font-family: "Raleway", sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+  }
 }
 @media screen and (max-width: 600px){
   img {
