@@ -33,7 +33,7 @@
 
 <style scoped>
 #content{
-  margin-top: 15vh;
+  margin-top: 18vh;
 }
 
 .photo-container{
