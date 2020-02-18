@@ -351,7 +351,7 @@ img {
 </style>
 <script>
 export default {
-  name:'tambahinventaris',
+  name:'editinventaris',
   data(){
     return{
       curent_index: 0,
