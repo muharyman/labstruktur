@@ -1,53 +1,49 @@
 <template>
   <div class="root">
-    <div class="photo-container">
-      <div class="photo">
-        <div class="slideshow-container">
-          <a class="prev" v-on:click="go_prev()" >&#10094;</a>
-          <div class="mySlides1">
-            <img v-bind:src="curent_src">
-          </div>
-          <a class="next" v-on:click="go_next()" >&#10095;</a>
-          <div class="delete-container">
-            <div class="button3" @click="openDeleteDialog()"> Delete Photo </div>
-          </div>
-          <b-modal ref="hapus-modal" hide-footer title="Peringatan">
-            <div class="d-block text-center">
-              <h3>Apakah anda yakin ingin menghapus foto?</h3>
-              <p>*Note : Foto yang dihapus tidak dapat dikembalikan!</p>
+    <div id="content" class="row">
+      <div class="col-sm-6">
+        <div class="photo-container">
+          <div class="photo">
+            <div class="slideshow-container">
+              <a class="prev" v-on:click="go_prev()" >&#10094;</a>
+              <div class="mySlides1">
+                <img v-bind:src="curent_src">
+              </div>
+              <a class="next" v-on:click="go_next()" >&#10095;</a>
+              <div class="delete-container">
+                <div class="button3" @click="openDeleteDialog()"> Delete Photo </div>
+              </div>
+              <b-modal ref="hapus-modal" hide-footer title="Peringatan">
+                <div class="d-block text-center">
+                  <h3>Apakah anda yakin ingin menghapus foto?</h3>
+                  <p>*Note : Foto yang dihapus tidak dapat dikembalikan!</p>
+                </div>
+                <b-button class="mt-3" variant="outline-danger" block @click="hideModal">HAPUS</b-button>
+              </b-modal>
             </div>
-            <b-button class="mt-3" variant="outline-danger" block @click="hideModal">HAPUS</b-button>
-          </b-modal>
+          </div>
         </div>
       </div>
-    </div>
-    <div id="content" class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-6">
         <div class="editinventaris-container">
           <div id="editinventaris-header">
             <p>Edit Inventaris</p>
           </div>
-          <div class="row">
-            <div class="col">
-              <p class="text">Nama Barang</p>
-              <input class="text-input" type="text" placeholder="nama barang"/>
-              <p class="text">Jumlah Barang</p>
-              <input class="text-input" type="text" placeholder="Jumlah Barang"/>
-            </div>
-            <div class="col">
-              <p class="text">Deskripsi Barang</p>
-              <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>
-            </div>
-          </div>
+          <p class="text">Nama Barang</p>
+          <input class="text-input" type="text" placeholder="nama barang"/>
+          <p class="text">Jumlah Barang</p>
+          <input class="text-input" type="text" placeholder="Jumlah Barang"/>
+          <p class="text">Deskripsi Barang</p>
+          <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>  
           <p class="text">Upload foto</p>
           <label for="foto-upload" class="upload-foto-container" >
             <div id="row" class="row">
-              <div id="kolom1" class="col-sm-10">
+              <div id="kolom1" class="col-sm-8">
                 <div class="upload-foto" >
                   <p>{{ foto_status }}</p>
                 </div>
               </div>
-              <div id="kolom2" class="col-sm-2">
+              <div id="kolom2" class="col-sm-4">
                 <div class="button" >
                   <p>Open File</p>
                 </div>
@@ -65,25 +61,29 @@
 </template>
 
 <style scoped>
+#content{
+  margin-top: 8%;
+}
 
 .photo-container{
   text-align: center;
+  height: 100%;
 }
 .photo{
   display: inline-block;
-  margin-top: 5%; 
-  margin-right: 4%;
-  margin-left: 4%;
-  width: 50vw;
+  margin-right: 12.5px;
+  margin-left: 25px;
+  width: inherit;
+  height: 100%;
   background: white;
   border-radius: 2px;
-  padding: 20px;
+  padding: 10px 20px;
 }
 img {
   vertical-align: center;
   object-fit: cover;
   width: 100%;
-  height: 50vh;
+  height: 55vh;
 }
 .slideshow-container {
   text-align: left;
@@ -115,16 +115,20 @@ img {
 /* On hover, add a grey background color */
 
 .root{
-  overflow-x: hidden;
-  background: #9E9FA1;
-  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  background: #e9f5ec;
   z-index: -1;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 .editinventaris-container{
-  margin: 10vh 5vw;
+  margin-left: 12.5px;
+  margin-right: 25px;
   border-radius: 4px;
   background: white;
-  padding: 5px 25px;
+  padding: 10px 25px;
+  height: 100%;
 }
 #editinventaris-header{
   font-family: "Raleway", sans-serif;
@@ -145,8 +149,8 @@ img {
   padding: 5px 8px;
   font-size: 17px;
   margin-bottom: 12px;
-  height: 25%;
-  width: inherit;
+  height: 8%;
+  width: 100%;
   border-radius: 4px;
 }
 
@@ -157,10 +161,10 @@ img {
 .text-input-deskripsi{
   border: 2px solid #24D39B;
   padding: 5px 8px;
-  height: 75%;
+  height: 20%;
   font-size: 17px;
   margin-bottom: 8px;
-  width: inherit;
+  width: 100%;
   border-radius: 4px;
   resize: none;
 }
@@ -216,7 +220,7 @@ img {
   border: 2px solid #24D39B;
   margin-top: 18px;
   margin-bottom: 12px;
-  height: 100%;
+  height: fit-content;
   border-radius: 4px;
   text-align: center;
 }
@@ -287,6 +291,62 @@ img {
 .upload-foto-container{
   display: block;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1000px){
+  #editinventaris-header{
+    font-family: "Raleway", sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+  }
+  .button{
+    font-size: 10px;
+  }
+}
+@media screen and (max-width: 600px){
+  img {
+    vertical-align: center;
+    object-fit: cover;
+    width: 100%;
+    height: inherit;
+  }
+  .button{
+    font-size: 17px;
+  }
+  .photo{
+    display: inline-block; 
+    margin-right: 25px;
+    margin-left: 25px;
+    width: inherit;
+    height: 250px;
+    background: white;
+    border-radius: 2px;
+    padding: 20px;
+  }
+  #content{
+    margin-top: 5vh;
+  }
+  .editinventaris-container{
+    margin: 20px 25px;
+    border-radius: 4px;
+    background: white;
+    padding: 15px 25px;
+    height: 100%;
+  }
+  #editinventaris-header{
+    font-family: "Raleway", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+  }
+  .text-input-deskripsi{
+    border: 2px solid #24D39B;
+    padding: 5px 8px;
+    height: 24%;
+    font-size: 12px;
+    margin-bottom: 8px;
+    width: 100%;
+    border-radius: 4px;
+  }
 }
 </style>
 <script>
