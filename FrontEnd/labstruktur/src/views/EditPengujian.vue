@@ -352,6 +352,7 @@ export default {
         }
         )
         .then(respone =>{
+          alert(JSON.stringify(respone.data.success));
           let obj = respone.data;
           alert("Pengujian berhasil di update dengan id " + obj.idpengujian);
         })

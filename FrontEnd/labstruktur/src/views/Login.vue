@@ -3,7 +3,7 @@
     <div class="col-sm-8"></div>
     <div class="col-sm-4">
       <div id="logo-1">
-        <LabStruktur />
+        <LabStruktur id="edit" />
       </div>
       <div class="login">
         <p class="text-1">username</p>
@@ -45,12 +45,17 @@
   overflow: hidden;
 }
 #logo-1 {
+  width: 100%;
   padding-top: 25px;
-  margin: auto;
   display: block;
+}
+#edit{
+  margin-left: 9vw;
+  
 }
 .col-sm-4 {
   margin: auto;
+  display: block;
 }
 
 .col-sm-8 {
@@ -60,6 +65,9 @@
 @media screen and (max-width: 1200px) {
   .col-sm-8 {
     display: none;
+  }
+  #edit{
+    margin-left: 28vw;
   }
 }
 
@@ -113,8 +121,8 @@
 }
 
 .button-1 {
-  width: 300px;
-  height: 50px;
+  width: 100%;
+  height: fit-content;
 }
 .button-1 a:hover {
   background: rgb(98, 228, 187);
