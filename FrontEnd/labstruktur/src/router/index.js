@@ -22,7 +22,7 @@ const routes = [
     name: "home",
     component: Home,
     meta:{
-      header: 1
+      header: 0
     }
   },
   {
