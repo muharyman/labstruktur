@@ -110,7 +110,7 @@ const routes = [
     }
   },
   {
-    path: "/editinventaris",
+    path: "/editinventaris/:id",
     name: "ediinventaris",
     component: EditInventaris,
     meta: {
