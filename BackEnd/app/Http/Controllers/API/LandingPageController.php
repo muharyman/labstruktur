@@ -19,8 +19,7 @@ use Exception;
 
 class LandingPageController extends APIController
 {
-    protected $visi_misi_path = 'public/visi_misi.txt';
-    protected $fungsi_path = 'public/fungsi.txt';
+    protected $dataTextPath = 'public/LandingDataText.txt';
 
     /**
      * @var CRUDController
@@ -43,12 +42,19 @@ class LandingPageController extends APIController
      */
     public function get()
     {
+        $dataText = json_decode(Storage::get($this->dataTextPath), true);
+
         // get photo url
         $data['photos'] = FotoLandingPageResource::collection(FotoLandingPage::all());
-        // get visi misi
-        $data['visi_misi'] = Storage::get($this->visi_misi_path); 
-        // get fungsi
-        $data['fungsi'] = Storage::get($this->fungsi_path);
+        $data['foto_profil'] = route('getfile', ['filepath' => 'public/'.$dataText['nama_foto_profil']]);
+
+        $data['visi_misi'] = $dataText['visi_misi'];
+        $data['fungsi'] = $dataText['fungsi'];
+        $data['kontak'] = $dataText['kontak'];
+        $data['nama_kontak'] = $dataText['nama_kontak'];
+        $data['alamat'] = $dataText['alamat'];
+        $data['email'] = $dataText['email'];
+        $data['profil'] = $dataText['profil'];
 
         return $this->respondWithData($data);
     }
@@ -62,8 +68,14 @@ class LandingPageController extends APIController
         // validate request
         $validation = Validator::make($request->all(), [
             'photos' => ['nullable', 'array'],
+            'foto_profil' => ['nullable', 'image'],
             'visi_misi' => ['nullable', 'string'],
             'fungsi' => ['nullable', 'string'],
+            'kontak' => ['nullable', 'string'],
+            'nama_kontak' => ['nullable', 'string'],
+            'alamat' => ['nullable', 'string'],
+            'profil' => ['nullable', 'string'],
+            'email' => ['nullable', 'email'],
         ]);
         if ($validation->fails()){
             return $this->respondRequestError($validation->errors());
@@ -98,12 +110,26 @@ class LandingPageController extends APIController
                 return $this->respondError($e->getMessage());
             }
         }
-
-        // update visi_misi
-        Storage::put($this->visi_misi_path, $request->input('visi_misi'));
-        // update fungsi
-        Storage::put($this->fungsi_path, $request->input('fungsi'));
-
+        
+        $dataText = json_decode(Storage::get($this->dataTextPath), true);
+                
+        $data = [];
+        $data['nama_foto_profil'] = $dataText['nama_foto_profil'];
+        if ($request->hasFile('foto_profil') && $request->file('foto_profil')->isValid()){
+            if (Storage::exists('public/'. $data['nama_foto_profil'])) Storage::delete('public/'.$data['nama_foto_profil']);
+            $request->file('foto_profil')->store('public');
+            $data['nama_foto_profil'] = $request->file('foto_profil')->hashName();
+        }
+        
+        $data['visi_misi'] = $request->input('visi_misi');
+        $data['fungsi'] = $request->input('fungsi');
+        $data['kontak'] = $request->input('kontak');
+        $data['nama_kontak'] = $request->input('nama_kontak');
+        $data['alamat'] = $request->input('alamat');
+        $data['email'] = $request->input('email');
+        $data['profil'] = $request->input('profil');
+        Storage::put($this->dataTextPath, json_encode($data));
         return $this->get();
     }
+
 }

@@ -35,7 +35,7 @@ class LoginController extends APIController
             $user->last_login = Carbon::now();
             $user->last_ip_login = $request->ip();
             $user->save();
-            $token = $user->createToken(env('APP_NAME', 'labstruktur'))->accessToken;
+            $token = $user->createToken(env('APP_NAME', 'labstruktur'), [$user->idjabatan])->accessToken;
             Logging::action('Berhasil Login');
             return $this->respondSuccess([
                 'user' =>new UserResource($user),
