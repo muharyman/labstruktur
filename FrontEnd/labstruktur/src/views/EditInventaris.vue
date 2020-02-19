@@ -13,12 +13,12 @@
               <div class="delete-container">
                 <div class="button3" @click="openDeleteDialog()"> Delete Photo </div>
               </div>
-              <b-modal ref="hapus-modal" hide-footer title="Peringatan">
+              <b-modal id="hapus-modal" ref="hapus-modal" hide-footer title="Peringatan">
                 <div class="d-block text-center">
                   <h3>Apakah anda yakin ingin menghapus foto?</h3>
                   <p>*Note : Foto yang dihapus tidak dapat dikembalikan!</p>
                 </div>
-                <b-button class="mt-3" variant="outline-danger" block @click="hideModal">HAPUS</b-button>
+                <b-button class="mt-3" variant="outline-danger" block @click="benerHapus()">HAPUS</b-button>
               </b-modal>
             </div>
           </div>
@@ -30,11 +30,32 @@
             <p>Edit Inventaris</p>
           </div>
           <p class="text">Nama Barang</p>
-          <input class="text-input" type="text" placeholder="nama barang"/>
+          <input class="text-input" type="text" v-model="nama_barang" placeholder="nama barang"/>
           <p class="text">Jumlah Barang</p>
-          <input class="text-input" type="text" placeholder="Jumlah Barang"/>
+          <input class="text-input" type="text" v-model="jumlah_barang" placeholder="Jumlah Barang"/>
           <p class="text">Deskripsi Barang</p>
-          <textarea class="text-input-deskripsi" type="text" placeholder="deskripsi"></textarea>  
+          <textarea class="text-input-deskripsi" type="text" v-model="deskripsi_barang" placeholder="deskripsi"></textarea>
+          <p class="text">Upload File Inventaris</p>
+          <label for="file-upload" class="upload-foto-container" >
+            <div id="row" class="row">
+              <div id="kolom1" class="col-sm-4">
+                <div class="upload-file" >
+                  <p>{{ file_status }}</p>
+                </div>
+              </div>
+              <div id="kolom2" class="col-sm-4">
+                <div class="button" >
+                  <p>Open File</p>
+                </div>
+              </div>
+              <div id="kolom3" class="col-sm-4">
+                <div class="button3" >
+                  <p>Delete File</p>
+                </div>
+              </div>
+            </div>
+          </label>
+          <input id="file-upload" ref="file_upload" type="file" @change="fileStatus()" />
           <p class="text">Upload foto</p>
           <label for="foto-upload" class="upload-foto-container" >
             <div id="row" class="row">
@@ -52,7 +73,7 @@
           </label>
           <input id="foto-upload" ref="foto_upload" type="file" accept="image/png, image/jpeg" multiple @change="update_status()" />
           <div class="button2" >
-            <a href="#none">SIMPAN</a>
+            <a @click="kirim()">SIMPAN</a>
           </div>
         </div>
       </div>
@@ -60,7 +81,149 @@
   </div>
 </template>
 
+<script>
+export default {
+  name:'editinventaris',
+  data(){
+    return{
+      nama_barang : "",
+      jumlah_barang: 0,
+      deskripsi_barang: "",
+      catatan_barang: "",
+      foto_status: "Tidak ada foto yang dipilih",
+      file_status: "Tidak ada file yang dipilih",
+      file_url: "ga ada",
+      curent_index: 0,
+      curent_src: this.axios.defaults.baseURL + "/getfile?filepath=public%2Fnotfound.png",
+      photos: [],
+      id_photos:[],
+      files: [],
+      dokumen: '',
+      r: {},
+      error: {}
+    }
+  },
+  methods:{
+    go_prev(){
+      if(this.photos.length > 0){
+        if(this.curent_index !== 0){
+          this.curent_index--;
+          this.curent_src = this.photos[this.curent_index];        
+        }
+      }      
+    },
+    go_next(){
+      if(this.photos.length > 0){
+        if(this.curent_index < this.photos.length-1){
+          this.curent_index++;
+          this.curent_src = this.photos[this.curent_index];        
+        }
+      }
+    },
+    check_photos(){
+      if(this.photos.length > 0){
+        this.curent_src = this.photos[this.curent_index]; 
+      }else{
+        this.curent_src = this.axios.defaults.baseURL + "/getfile?filepath=public%2Fnotfound.png";
+      }
+    },
+    openDeleteDialog(){
+      this.$refs['hapus-modal'].show()
+    },
+    fileStatus(){
+      if(this.$refs.file_upload.files.length > 0){
+        this.file_status="";
+        this.file_status = this.$refs.file_upload.files.item(0).name;
+        this.dokumen = this.$refs.file_upload.files.item(0);
+      } else{
+        this.file_status = "Tidak ada file yang dipilih";
+      }
+    },
+    update_status(){
+      if(this.$refs.foto_upload.files.length > 0){
+        this.foto_status="";
+        for( var i = 0; i< this.$refs.foto_upload.files.length; i++){
+          this.foto_status = this.foto_status + this.$refs.foto_upload.files.item(i).name + "; ";
+        }
+        this.files = this.$refs.foto_upload.files;
+      } else{
+        this.foto_status = "Tidak ada foto yang dipilih";
+      }
+    },
+    kirim() {
+      let formData = new FormData();
+      formData.append('nama',this.nama_barang);
+      formData.append('jumlah',this.jumlah_barang);
+      formData.append('deskripsi',this.deskripsi_barang);
+      formData.append('catatan',this.catatan_barang);
+      for( var i = 0; i < this.files.length; i++ ){
+          let file = this.files[i];
+          formData.append('foto[' + i + ']', file);
+        }
+      formData.append('file', this.dokumen);
+      this.axios
+        .post("/inventaris/update/"+ this.$route.params.id,
+          formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(respone => {
+          this.r = respone.data;
+          alert("Inventaris berhasil diperbaharui");
+        })
+        .catch(e => {
+          this.error = e;
+          this.showAlert = true;
+        })
+    },
+    getDetailInventaris(){
+      this.axios
+        .get("/inventaris/show/"+ this.$route.params.id)
+        .then(respone =>{
+          this.nama_barang = respone.data.data.nama;
+          this.jumlah_barang = respone.data.data.jumlah;
+          this.deskripsi_barang = respone.data.data.deskripsi;
+          this.photos = [];
+          respone.data.data.photos.forEach(element => {
+            this.photos.push(element.foto_url);
+          });
+          this.id_photos = [];
+          respone.data.data.photos.forEach(element => {
+            this.id_photos.push(element.idfoto);
+          });
+          this.file_url = respone.data.data.file_url;
+          if( this.file_url !== "ga ada"){
+            this.file_status = "sudah ada file di server";
+          }
+          this.check_photos();
+        })
+    },
+    benerHapus(){
+      this.axios
+        .delete("/fotoinventaris/delete/"+this.id_photos[this.curent_index])
+        .then(respone =>{
+          this.r = respone.data;
+          this.getDetailInventaris();
+          alert("berhasil menghapus foto")
+        })
+        .catch(e =>{
+          alert(e.response.data);
+        })
+      this.$bvModal.hide('hapus-modal');
+    }
+  },
+  mounted(){
+    this.check_photos();
+    this.getDetailInventaris();
+  }
+}
+</script>
+
 <style scoped>
+#file-upload{
+  display: none;
+}
 #content{
   margin-top: 8%;
 }
@@ -73,22 +236,29 @@
   display: inline-block;
   margin-right: 12.5px;
   margin-left: 25px;
-  width: inherit;
-  height: 100%;
+  width: 100%;
+  height: 73vh;
   background: white;
   border-radius: 2px;
   padding: 10px 20px;
+  box-shadow: 2px 2px 5px #878788;
+}
+.mySlides1{
+  width: 100%;
+  height: 88%;
 }
 img {
   vertical-align: center;
-  object-fit: cover;
+  object-fit: containx;
   width: 100%;
-  height: 55vh;
+  height: 100%;
 }
 .slideshow-container {
   text-align: left;
   position: relative;
   margin: auto;
+  width: 100%;
+  height: 100%;
 }
 .prev, .next {
   cursor: pointer;
@@ -129,6 +299,7 @@ img {
   background: white;
   padding: 10px 25px;
   height: 100%;
+  box-shadow: 2px 2px 5px #878788;
 }
 #editinventaris-header{
   font-family: "Raleway", sans-serif;
@@ -149,7 +320,7 @@ img {
   padding: 5px 8px;
   font-size: 17px;
   margin-bottom: 12px;
-  height: 8%;
+  height: 5vh;
   width: 100%;
   border-radius: 4px;
 }
@@ -161,8 +332,8 @@ img {
 .text-input-deskripsi{
   border: 2px solid #24D39B;
   padding: 5px 8px;
-  height: 20%;
-  font-size: 17px;
+  height: 15%;
+  font-size: 12px;
   margin-bottom: 8px;
   width: 100%;
   border-radius: 4px;
@@ -185,6 +356,19 @@ img {
 .upload-foto:hover{
   border: 2px solid #1A53FF;
 }
+.upload-file{
+  border: 2px solid #24D39B;
+  padding: 3px 8px;
+  font-size: 12px;
+  margin:auto;
+  height: 100%;
+  width:inherit;
+  border-radius: 4px;
+  display: inline-block;
+}
+.upload-foto:hover{
+  border: 2px solid #1A53FF;
+}
 #foto-upload{
   display: none;
 }
@@ -194,9 +378,12 @@ img {
 }
 #kolom1{
   height: 5vh;
-  
+  font-size: 12px;
 }
 #kolom2{
+  height: 5vh;
+}
+#kolom3{
   height: 5vh;
 }
 .button{
@@ -218,8 +405,8 @@ img {
 
 .button2{
   border: 2px solid #24D39B;
-  margin-top: 18px;
-  margin-bottom: 12px;
+  margin-top: 10px;
+  margin-bottom: 25px;
   height: fit-content;
   border-radius: 4px;
   text-align: center;
@@ -349,50 +536,3 @@ img {
   }
 }
 </style>
-<script>
-export default {
-  name:'editinventaris',
-  data(){
-    return{
-      curent_index: 0,
-      curent_src: 'https://lh3.googleusercontent.com/proxy/TMRAAiyt5teC6SWplqVdWBcn46c2eeMgfdd3QLovIA02SqB8vBCwVHFblnhI3VZ0id6iP-VJfiXbnT8MMA3VG8ixp2DtPCQaAoHf6EU',
-      photos: [
-        'https://wallpaperaccess.com/full/30100.jpg',
-        'https://wallpaperplay.com/walls/full/0/9/2/78869.jpg',
-        'https://1.bp.blogspot.com/-BJbw1zlvYvk/VVG1bVS_2sI/AAAAAAAAMHA/XucxZWn_uR8/s1600/cv00.png'
-      ]
-    }
-  },
-  methods:{
-    go_prev(){
-      if(this.photos.length > 0){
-        if(this.curent_index !== 0){
-          this.curent_index--;
-          this.curent_src = this.photos[this.curent_index];        
-        }
-      }      
-    },
-    go_next(){
-      if(this.photos.length > 0){
-        if(this.curent_index < this.photos.length-1){
-          this.curent_index++;
-          this.curent_src = this.photos[this.curent_index];        
-        }
-      }
-    },
-    check_photos(){
-      if(this.photos.length > 0){
-        this.curent_src = this.photos[this.curent_index]; 
-      }else{
-        this.curent_src = 'https://lh3.googleusercontent.com/proxy/TMRAAiyt5teC6SWplqVdWBcn46c2eeMgfdd3QLovIA02SqB8vBCwVHFblnhI3VZ0id6iP-VJfiXbnT8MMA3VG8ixp2DtPCQaAoHf6EU';
-      }
-    },
-    openDeleteDialog(){
-      this.$refs['hapus-modal'].show()
-    }
-  },
-  mounted(){
-    this.check_photos();
-  }
-}
-</script>

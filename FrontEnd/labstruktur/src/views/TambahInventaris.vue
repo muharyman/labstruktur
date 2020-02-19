@@ -60,7 +60,82 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  name:'tambahinventaris',
+  data(){
+    return{
+      nama_barang : "",
+      jumlah_barang: 0,
+      deskripsi_barang: "",
+      catatan_barang: "",
+      foto_status: "Tidak ada foto yang dipilih",
+      file_status: "Tidak ada file yang dipilih",
+      files: [],
+      dokumen: '',
+      r: {},
+      error: {}
+    }
+  },
+  methods:{
+    update_status(){
+      if(this.$refs.foto_upload.files.length > 0){
+        this.foto_status="";
+        for( var i = 0; i< this.$refs.foto_upload.files.length; i++){
+          this.foto_status = this.foto_status + this.$refs.foto_upload.files.item(i).name + "; ";
+        }
+        this.files = this.$refs.foto_upload.files;
+      } else{
+        this.foto_status = "Tidak ada foto yang dipilih";
+      }
+    },
+    fileStatus(){
+      if(this.$refs.file_upload.files.length > 0){
+        this.file_status="";
+        this.file_status = this.$refs.file_upload.files.item(0).name;
+        this.dokumen = this.$refs.file_upload.files.item(0);
+      } else{
+        this.file_status = "Tidak ada file yang dipilih";
+      }
+    },
+    kirim() {
+      let formData = new FormData();
+      formData.append('nama',this.nama_barang);
+      formData.append('jumlah',this.jumlah_barang);
+      formData.append('deskripsi',this.deskripsi_barang);
+      formData.append('catatan',this.catatan_barang);
+      for( var i = 0; i < this.files.length; i++ ){
+          let file = this.files[i];
+          formData.append('foto[' + i + ']', file);
+        }
+      formData.append('file', this.dokumen);
+      this.axios
+        .post("/inventaris/create/",
+          formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(respone => {
+          this.r = respone.data;
+          alert("Inventaris berhasil ditambahkan");
+        })
+        .catch(e => {
+          this.error = e;
+          this.showAlert = true;
+        })
+        .finally(() => {
+          (this.nama_barang = ""),
+          (this.jumlah_barang = ""),
+          (this.deskripsi_barang = ""),
+          (this.catatan_barang= ""),
+          (this.files = []),
+          (this.foto_status ="Tidak ada foto yang dipilih");
+        });
+      }
+    }
+}
+</script>
 <style scoped>
 .root{
   padding: 0;

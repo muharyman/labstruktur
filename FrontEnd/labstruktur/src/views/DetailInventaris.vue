@@ -26,6 +26,9 @@
               <div class="button-4" >
                 <a @click="edit()">Edit</a>
               </div>
+              <div class="button-4" >
+                <a @click="downloadCatatan()">Download Catatan</a>
+              </div>
             </div>
           </div>
           <p class="text">Nama Barang</p>
@@ -48,8 +51,9 @@ export default {
       nama_barang:'',
       jumlah:'',
       deskripsi:'',
+      file_url: "ga ada",
       curent_index: 0,
-      curent_src: 'https://lh3.googleusercontent.com/proxy/TMRAAiyt5teC6SWplqVdWBcn46c2eeMgfdd3QLovIA02SqB8vBCwVHFblnhI3VZ0id6iP-VJfiXbnT8MMA3VG8ixp2DtPCQaAoHf6EU',
+      curent_src: this.axios.defaults.baseURL + "/getfile?filepath=public%2Fnotfound.png",
       photos: [
       ]
     }
@@ -89,11 +93,19 @@ export default {
           respone.data.data.photos.forEach(element => {
             this.photos.push(element.foto_url);
           });
+          this.file_url = respone.data.data.file_url;
           this.check_photos();
         })
     },
     edit(){
       window.location.href = "/editinventaris/" + this.$route.params.id;
+    },
+    downloadCatatan(){
+      if (this.file_url !== "ga ada"){
+        window.location.href = this.file_url;
+      }else{
+        alert("maaf inventaris ini tidak memiliki file catatan");
+      }
     }
   },
   mounted(){
@@ -110,16 +122,17 @@ export default {
 
 .photo-container{
   text-align: center;
+  height: 100%;
 }
 .photo{
   display: inline-block; 
   margin-right: 12.5px;
   margin-left: 25px;
   width: 100%;
-  height: 100%;
+  height: 60vh;
   background: white;
   border-radius: 2px;
-  padding: 20px;
+  padding: 10px 20px;
   box-shadow: 2px 2px 5px #878788;
 }
 .mySlides1{
@@ -209,8 +222,8 @@ img {
 .text-input-deskripsi{
   border: 2px solid #24D39B;
   padding: 5px 8px;
-  height: 30%;
-  font-size: 17px;
+  height: 25%;
+  font-size: 12px;
   margin-bottom: 8px;
   width: 100%;
   border-radius: 4px;
@@ -266,6 +279,7 @@ img {
 .button-4{
   width: inherit;
   margin-top: 10px;
+  cursor: pointer;
 }
 .button-4 a:hover{
   background: green;
@@ -318,6 +332,9 @@ img {
   }
 }
 @media screen and (max-width: 600px){
+  .button-4{
+    margin-bottom: 10px;
+  }
   img {
     vertical-align: center;
     max-height: 100%;
@@ -342,17 +359,26 @@ img {
     border-radius: 4px;
     background: white;
     padding: 15px 25px;
-    height: 100%;
+    height: 130%;
   }
   #tambahinventaris-header{
     font-family: "Raleway", sans-serif;
     font-size: 20px;
     font-weight: 300;
   }
+  .text-input{
+    border: 2px solid #24D39B;
+    padding: 5px 8px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    height: 8%;
+    width: 100%;
+    border-radius: 4px;
+  }
   .text-input-deskripsi{
     border: 2px solid #24D39B;
     padding: 5px 8px;
-    height: 30%;
+    height: 38%;
     font-size: 12px;
     margin-bottom: 8px;
     width: 100%;

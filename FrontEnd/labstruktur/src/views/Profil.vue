@@ -270,7 +270,7 @@ export default {
       jabatan_selected: null,
       jabatan_text : "",
       showAlert : false,
-      showSuccess: true,
+      showSuccess: false,
       error : '',
       jabatans: [
       ],

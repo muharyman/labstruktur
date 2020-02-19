@@ -52,7 +52,7 @@
               <b-dropdown-item href="/profil">
                 <p v-bind:style="{color: profil_color }" class="hov">Profile</p>
               </b-dropdown-item>
-              <b-dropdown-item href="#">
+              <b-dropdown-item @click="logOut()">
                 <p class="hover">Sign Out</p>
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -172,6 +172,26 @@ export default {
   computed:{
     currentPage(){
       return this.$route.path
+    }
+  },
+  methods:{
+    logOut(){
+      const token = window.localStorage.getItem('token');
+      this.axios
+        .get("auth/logout",{
+          headers:{
+            "Authorization": `Bearer ${token}`
+          }
+        }
+        )
+        .then(() =>{
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          window.location.href = "/loginadmin";
+        })
+        .catch(e => {
+          alert(JSON.stringify(e.config));
+        })
     }
   },
   created(){
