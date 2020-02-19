@@ -52,6 +52,9 @@
               <b-dropdown-item href="/profil">
                 <p v-bind:style="{color: profil_color }" class="hov">Profile</p>
               </b-dropdown-item>
+              <b-dropdown-item href="/manajemenuser">
+                <p v-bind:style="{color: managemen_color }" class="hov">Management User</p>
+              </b-dropdown-item>
               <b-dropdown-item @click="logOut()">
                 <p class="hover">Sign Out</p>
               </b-dropdown-item>
@@ -166,7 +169,8 @@ export default {
       listinventaris_color: '#000000',
       tambahinventaris_color: '#000000',
       user_color: '#000000',
-      profil_color: '#000000'
+      profil_color: '#000000',
+      managemen_color: '#000000'
     } 
   },
   computed:{
@@ -204,7 +208,8 @@ export default {
       this.listinventaris_color = '#000000';
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
-      this.profil_color = '#000000';
+      this.profil_color = '#000000'
+      this.managemen_color = '#000000';
     }else if (this.$route.path == "/listpengujian"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#24D39B';
@@ -215,6 +220,7 @@ export default {
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
     }else if (this.$route.path == "/tambahpengujian"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#24D39B';
@@ -225,6 +231,7 @@ export default {
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
     }else if (this.$route.path == "/listinventaris"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#000000';
@@ -235,6 +242,7 @@ export default {
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
     }else if (this.$route.path == "/tambahinventaris"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#000000';
@@ -245,6 +253,7 @@ export default {
       this.tambahinventaris_color = '#24D39B';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
     }else if (this.$route.path == "/profil"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#000000';
@@ -255,6 +264,18 @@ export default {
       this.tambahinventaris_color = '#00000';
       this.user_color = '#24D39B';
       this.profil_color = '#24D39B';
+      this.managemen_color = '#000000';
+    }else if (this.$route.path == "/manajemenuser"){
+      this.dashboard_color = '#000000';
+      this.pengujian_color = '#000000';
+      this.listpengujian_color = '#000000';
+      this.tambahpengujian_color = '#000000';
+      this.inventaris_color = '#000000';
+      this.listinventaris_color = '#000000';
+      this.tambahinventaris_color = '#00000';
+      this.user_color = '#24D39B';
+      this.profil_color = '#00000';
+      this.managemen_color = '#24D39B';
     }
   }
 };

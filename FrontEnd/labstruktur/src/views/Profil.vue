@@ -196,7 +196,6 @@
 
 #status:focus{
   border: 1px solid #0066ff;
-
 }
 #ubah-profile-1{
   font-family: "Raleway", sans-serif;

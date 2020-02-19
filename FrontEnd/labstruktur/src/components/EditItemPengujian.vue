@@ -63,16 +63,18 @@
   padding: 4px 15px;
   cursor: pointer;
 }
-.table{
-  height: fit-content;
-}
 .button p{
   margin: auto;
 }
 .button:hover{
   background: blue;
   color: white;
-}.button-del{
+}
+.table{
+  height: fit-content;
+}
+
+.button-del{
   margin: 0 8px;
   height: fit-content;
   min-width: 8vw;
