@@ -1,3 +1,1 @@
 # labstruktur
-
-## Use Case
