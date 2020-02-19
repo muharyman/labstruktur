@@ -1,28 +1,41 @@
 <template>
   <div class="root">
-    <b-table striped hover responsive :items="list_item_pengujian" :fields="Koloms" bordered borderless>
-      <template v-slot:cell(item_pengujian)="row">
-        <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select>
-        <b-form-input v-model="row.item.keterangan" placeholder="keterangan" class="input-border"/>
-      </template>
-      <template v-slot:cell(Jumlah)="row">
-        <b-form-input v-model="row.item.jumlah_item" class="input-border"/>
-      </template>
-      <template v-slot:cell(biaya_per_pengujian)="row">
-        <b-form-input v-model="row.item.biaya" class="input-border"/>
-      </template>
-      <template v-slot:cell(Hapus)="row" class="button-del">
-        <b-button @click="hapus(row.item.id_row)">HAPUS</b-button>
-      </template>
-    </b-table>
-    <!-- {{ list_item_pengujian }} -->
-    <!-- {{ length }} -->
-    <div class="button-container">
-      <div class="button" @click="addRow()">
-        <p>Tambah</p>
-      </div>
-      <div class="button" @click="save()" >
-        <p>Save</p>
+    <div class="content">
+      <b-table striped hover responsive :items="list_user" :fields="Koloms" bordered borderless>
+        <template v-slot:cell(nama_asli)="row">
+          <!-- <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select> -->
+          <b-form-input v-model="row.item.nama_asli" placeholder="nama asli" class="input-border"/>
+        </template>
+        <template v-slot:cell(username)="row">
+          <!-- <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select> -->
+          <b-form-input v-model="row.item.username" placeholder="username" class="input-border"/>
+        </template>
+        <template v-slot:cell(jabatan)="row">
+          <b-form-select v-model="row.item.jabatan" :options="jabatans" class="input-border"></b-form-select>
+          <!-- <b-form-input v-model="row.nama_asli" placeholder="nama asli" class="input-border"/> -->
+        </template>
+        <template v-slot:cell(status)="row">
+          <button id="status" v-bind:style="{background : row.item.background }" v-on:click="change_status(row.item.no)" > {{ row.item.status_text }} </button>
+          <div class="button-1" @click="hapus(row.item.no)"> HAPUS </div>
+          <!-- <b-form-select v-model="row.item.jabatan" :options="list_jabatan" class="input-border"></b-form-select> -->
+          <!-- <b-form-input v-model="row.nama_asli" placeholder="nama asli" class="input-border"/> -->
+        </template>
+        <!-- <template v-slot:cell(Jumlah)="row">
+          <b-form-input v-model="row.item.jumlah_item" class="input-border"/>
+        </template>
+        <template v-slot:cell(biaya_per_pengujian)="row">
+          <b-form-input v-model="row.item.biaya" class="input-border"/>
+        </template>
+        <template v-slot:cell(Hapus)="row" class="button-del">
+          <b-button @click="hapus(row.item.id_row)">HAPUS</b-button>
+        </template> -->
+      </b-table>
+      <!-- {{ list_item_pengujian }} -->
+      <!-- {{ length }} -->
+      <div class="button-container">
+        <div class="button" @click="save()" >
+          <p>Save</p>
+        </div>
       </div>
     </div>
   </div>
@@ -31,105 +44,87 @@
 export default {
   data(){
     return{
-      index:0,
-      Koloms: ["Item_Pengujian","Jumlah","Biaya_Per_Pengujian","Hapus" ],
-      list_item_pengujian: [
+      index:4,
+      Koloms: ["Nama_Asli","Username","Jabatan","Status"],
+      list_user: [
       ],
-      list_item:[
-        { value: '1', text: 'This is First option'},
-        { value: '2', text: 'This is sakondo option'}
+      jabatans:[
       ],
       error:''
     }
   },
   methods: {
-    hapus(id){
-      for( var i = 0; i < this.list_item_pengujian.length; i++){ 
-        if ( this.list_item_pengujian[i].id_row === id) {
-          if(this.list_item_pengujian[i].isHapus === true){
-            this.list_item_pengujian.splice(i,1);
+    hapus(no){
+      for( var i = 0; i < this.list_user.length; i++){ 
+        if ( this.list_user[i].no === no) {
+          if(this.list_user[i].isHapus === true){
+            this.list_user.splice(i,1);
           } else {
             this.axios
-              .delete("/itempengujian/delete/"+this.list_item_pengujian[i].id_pengujian)
+              .delete("/user/delete/"+this.list_user[i].id_user)
               .then(() => {
                 alert('delete success');
-                this.list_item_pengujian.splice(i,1);
+                this.list_user.splice(i,1);
               }).catch(e =>{
                 this.error = e,
-                alert(e.message);
+                alert('gagal menghapus/ user terkait tidak boleh di hapus');
               });
           }
           break;
         }
       }
     },
-    addRow(){
-      var id = this.index;
-      const obj = {
-        id_pengujian: null,
-        id_row: id,
-        id_item: "1",
-        keterangan: null,
-        jumlah_item:0,
-        biaya: 0,
-        isHapus:true
-      };
-      this.list_item_pengujian.push(obj);
-      this.index++;
-    },
-    initIndex(){
-      this.index = this.list_item_pengujian.length;
-    },
-    getItem(){
+    getJabatan(){
       this.axios
-        .get("/kategoripengujian/index")
+        .get("/jabatan/index")
         .then(respone => {
-          this.list_item = []
-          respone.data.data.forEach(element_1 => {
-            let item = {
-              value: 0,
-              text: ''
-            };
-            element_1.jenis_pengujian.forEach(element_2 => {
-              item.value = element_2.idjenis_pengujian;
-              item.text = element_2.nama_pengujian
-              if (element_1.nama_lain) item.text += "("+ element_1.nama_lain ?? ""+")";
-              this.list_item.push(item);
-            });
-          });
-        })
-        .catch(e =>{
-          this.error = e,
-          alert(e.message);
+          this.jabatans = [];
+          if( respone.data.data.length > 0){
+            for(let i = 0; i< respone.data.data.length; i++){
+              let jabatan={
+                text: "",
+                value:i
+              }
+              jabatan.text = respone.data.data[i].jabatan;
+              jabatan.value = respone.data.data[i].idjabatan;
+              this.jabatans.push(jabatan);
+            }
+          }
+          this.getTable();
         });
     },
     getTable(){
       this.axios
-        .get("itempengujian/getbypengujian",{
-          params:{
-            id : this.$route.params.id
-          }
-        })
+        .get("user/index")
         .then(respone => {
           let i = 0;
-          this.list_item_pengujian = []
+          this.list_user = [];
           respone.data.data.forEach(element => {
             let row ={
-              id_row:i,
-              id_item: '',
-              id_pengujian: '',
-              keterangan:null, 
-              jumlah_item:0, 
-              biaya:0, 
+              no: i,
+              id_user:'',
+              nama_asli:'',
+              username:'',
+              jabatan:'',
+              status: null,
+              background: null,
+              status_text:"",
               isHapus:false
             }
-            row.id_item = element.idjenis_pengujian;
-            row.id_pengujian = element.iditem_pengujian;
-            row.keterangan = element.keterangan;
-            row.jumlah_item = element.jumlah_item;
-            row.biaya = element.biaya_per_pengujian;
+            row.id_user = element.iduser;
+            row.nama_asli = element.nama_user;
+            row.username = element.nama_login;
+            row.jabatan = element.idjabatan;
+            row.status = element.status_user;
+            if( row.status){
+              row.status_text= "AKTIF";
+              row.background = "#24D39B";
+            }else{
+              row.status_text= "TIDAK AKTIF";
+              row.background = "#C80000";
+            }
             i++;
-            this.list_item_pengujian.push(row);
+            this.list_user.push(row);
             this.index = i+1;
           })
         })
@@ -140,17 +135,16 @@ export default {
     save(){
       let formData = new FormData();
       let i = 0;
-      this.list_item_pengujian.forEach(element => {
-        if (element.id_pengujian) formData.append('data['+i+"][iditem_pengujian]",element.id_pengujian);
-        formData.append('data['+i+"][idpengujian]", this.$route.params.id);
-        formData.append('data['+i+"][idjenis_pengujian]", element.id_item);
-        formData.append('data['+i+"][jumlah_item]", element.jumlah_item);
-        formData.append('data['+i+"][biaya_per_pengujian]", element.biaya);
-        formData.append('data['+i+"][keterangan]", element.keterangan);
+      this.list_user.forEach(element => {
+        formData.append('data['+i+"][iduser]",element.id_user);
+        formData.append('data['+i+"][nama_user]", element.nama_asli);
+        formData.append('data['+i+"][nama_login]", element.username);
+        formData.append('data['+i+"][idjabatan]", element.jabatan);
+        formData.append('data['+i+"][status_user]", element.status);
         i++;
       })
       this.axios
-        .post("itempengujian/update/multiple",
+        .post("user/update/multiple",
           formData,
           {
             Headers:{
@@ -159,30 +153,55 @@ export default {
         })
         .then(respone => {
           if (respone.data.length === i){
-            this.list_pembayaran.forEach(element => {
+            this.list_user.forEach(element => {
               element.isHapus = false;
             })
-            alert("Item Pengujian Berhasil Diperbaharui");
+            alert("Daftar User Berhasil Diperbaharui");
           }
         })
         .catch(e=>{
           this.error = e;
-          alert(e);
-          alert("gagal memperbaharui item pengujian");
+          alert(JSON.stringify(e.response));
+          alert("gagal memperbaharui list user");
         });
+    },
+    change_status(no){
+      for( var i = 0; i < this.list_user.length; i++){ 
+        if ( this.list_user[i].no === no) {
+          if (this.list_user[i].status === 1){
+            this.list_user[i].status = 0;
+            this.list_user[i].background = "#C80000";
+            this.list_user[i].status_text = "TIDAK AKTIF";
+          } else{
+            this.list_user[i].status = 1;
+            this.list_user[i].background = "#24D39B";
+            this.list_user[i].status_text = "AKTIF";
+          }
+        }
+      }
     }
   },
   mounted(){
-    this.getTable();
-    this.getItem();    
-    // this.initIndex();
+    this.getJabatan();
   }
 }
 </script>
 <style>
 .root{
+  padding: 0;
+  margin: 0;
+  background: #e9f5ec;
+  z-index: -1;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.content{
   height: fit-content;
-  overflow: hidden;
+  background: white;
+  border-radius: 4px;
+  margin: 3vh 25px;
+  padding: 20px;
+
 }
 .button-container{
   width: inherit;
@@ -245,4 +264,67 @@ export default {
   border-color: red;
   color: white;
 }
+.button-1{
+  margin: 5px 0;
+  width: 100%;
+  text-align: center;
+  background: #C80000;
+  border: 1px solid #C80000;
+  color: white;
+  font-family: "Raleway", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  display: inline-block;
+  cursor: pointer;
+  transition: 0.4s;
+  padding: 5px 12px;
+}
+.button-1:hover{
+  background: #ff8080;
+  border-color: #ff8080;
+}
+#status{
+  width: 100%;
+  background: #24D39B;
+  padding: 5px 12px;
+  font-family: "Raleway", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  margin:auto;
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+}
+.aktif{
+  width: 100%;
+  background: #24D39B;
+  padding: 5px 12px;
+  font-family: "Raleway", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  margin:auto;
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+}
+
+.notaktif{
+  width: 100%;
+  background: red;
+  padding: 5px 12px;
+  font-family: "Raleway", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  margin:auto;
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+}
+
 </style>
