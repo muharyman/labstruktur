@@ -1,12 +1,30 @@
 <template>
   <div class="root">
-    <div class="row">
+    <b-alert
+      variant="danger"
+      dismissible
+      fade
+      :show="showAlert"
+      @dismissed="showAlert = false"
+    >
+      {{error}}
+    </b-alert>
+    <b-alert
+      variant="success"
+      dismissible
+      fade
+      :show="showSuccess"
+      @dismissed="showSuccess = false"
+    >
+      profil berhasil di update
+    </b-alert>
+    <div class="row" id="container">
       <div class="col-sm-5">
         <div class="profile">
           <p id="profile-1">Profil</p>
-          <p id="namaasli">Nama Asli</p>
-          <p id="pangkat">Kepala Lab</p>
-          <p id="username">username</p>
+          <p id="namaasli">{{nama_user_fix}}</p>
+          <p id="pangkat">{{jabatan_text_fix}}</p>
+          <p id="username">{{nama_login_fix}}</p>
         </div>
       </div>
       <div class="col-sm-7">
@@ -15,30 +33,26 @@
           <div class="row">
             <div class="col">
               <p class="text-4">nama asli</p>
-              <input class="input-text" type="text" placeholder="nama asli"/>
+              <input v-model="nama_user" class="input-text" type="text" placeholder="nama asli"/>
               <p class="text-4">username</p>
-              <input class="input-text" type="text" placeholder="user name"/>
+              <input v-model="nama_login" class="input-text" type="text" placeholder="user name"/>
               <p class="text-4">jabatan</p>              
               <div class="select-style">
-                <select name="jabatan">
-                <option  value="0">kepala lab</option>
-                <option value="1">naon</option>
-                <option value="2">naon</option>
-                <option value="3">deui</option>
-                <option value="4">sedang</option>
-              </select>
+                <select v-model="jabatan_selected" name="teknisi">
+                  <option v-for="jabatan in jabatans" v-bind:value="jabatan.value" :key="jabatan">{{ jabatan.text }}</option>
+                </select>
               </div>
             </div>
             <div class="garis-batas-vertical"></div>
             <div class="col">
               <p class="text-4">password</p>
-              <input class="input-text" type="password" placeholder="nama asli"/>
+              <input v-model="password" class="input-text" type="password" placeholder=""/>
               <p class="text-4">re-password</p>
-              <input class="input-text" type="password" placeholder="user name"/>
+              <input v-model="password_confirmation" class="input-text" type="password" placeholder=""/>
               <p class="text-4">status</p>
               <button id="status" v-bind:style="{background: status_color }" v-on:click="change_status()" > {{ status }} </button>
               <div class="button-4">
-                <a href="#none">UPDATE PROFILE</a>
+                <a @click="save()">UPDATE PROFILE</a>
               </div>
             </div>
           </div>
@@ -51,20 +65,21 @@
 .root{
   padding: 0;
   margin: 0;
-  background: #9E9FA1;
+  background: #e9f5ec;
   z-index: -1;
   height: 100vh;
   overflow: hidden;
 }
-.row{
-  margin-top:3%;
+#container{
+  margin-top:8%;
+  padding: 0;
 }
 .col-sm-5{
-  padding: 65px 45px;
+  padding: 0 45px;
   margin:0 !important;
 }
 .col-sm-7{
-  padding: 65px 45px;
+  padding: 0 45px;
   margin: 0 !important;
 }
 
@@ -75,6 +90,7 @@
   border-radius: 4px;
   background: white;
   padding : 25px 25px;
+  box-shadow: 2px 2px 5px #878788;
 }
 .ubah-profile{
   float:right;
@@ -84,6 +100,7 @@
   border-radius: 4px;
   background: white;
   padding: 25px 25px;
+  box-shadow: 2px 2px 5px #878788;
 }
 .text-4{
   font-family: "Montserrat Alternates", sans-serif;
@@ -139,6 +156,7 @@
 .button-4{
   width: inherit;
   margin-top: 15px;
+  cursor: pointer;
 }
 .button-4 a:hover{
   background: green;
@@ -178,7 +196,6 @@
 
 #status:focus{
   border: 1px solid #0066ff;
-
 }
 #ubah-profile-1{
   font-family: "Raleway", sans-serif;
@@ -238,28 +255,120 @@ export default {
   name:'profile',
   data(){
     return{
-      status_akun : 1,
+      id_user : 0,
+      nama_user_fix : "",
+      nama_login_fix : "",
+      jabatan_text_fix : "",
+      nama_user : "",
+      nama_login : "",
+      password : "",
+      password_confirmation : "",
+      status_user : 1,
       status_color : '#24D39B',
-      status : "AKTIF"
+      status : "AKTIF",
+      jabatan_selected: null,
+      jabatan_text : "",
+      showAlert : false,
+      showSuccess: false,
+      error : '',
+      jabatans: [
+      ],
     }
   },
   computed:{
     status_changed: function(){
       return this.status_color;
-    }
+    },
   },
   methods: {
     change_status(){
-      if (this.status_akun === 1){
-        this.status_akun = 0;
+      if (this.status_user === 1){
+        this.status_user = 0;
         this.status_color = '#C80000';
         this.status = 'TIDAK AKTIF';
       } else{
-        this.status_akun = 1;
+        this.status_user = 1;
         this.status_color = '#24D39B';
         this.status = 'AKTIF';
       }
-    }
+    },
+    set_status(new_status){
+      if (new_status === 1){
+        this.status_user = 1;
+        this.status_color = '#24D39B';
+        this.status = 'AKTIF';
+      } else{
+        this.status_user = 0;
+        this.status_color = '#C80000';
+        this.status = 'TIDAK AKTIF';
+      }
+    },
+    getJabatan(){
+      this.axios
+        .get("/jabatan/index")
+        .then(respone => {
+          if( respone.data.data.length > 0){
+            for(let i = 0; i< respone.data.data.length; i++){
+              let jabatan={
+                text: "",
+                value:i
+              }
+              jabatan.text = respone.data.data[i].jabatan;
+              jabatan.value = respone.data.data[i].idjabatan;
+              this.jabatans.push(jabatan);
+            }
+          }
+          this.getProfil();
+        });
+    },
+    getProfil(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      this.id_user = user.iduser;
+      this.nama_user = user.nama_user;
+      this.nama_login = user.nama_login;
+      this.jabatan_selected = user.idjabatan;
+      this.setJabatanText();
+      this.nama_user_fix = this.nama_user,
+      this.nama_login_fix = this.nama_login,
+      this.jabatan_text_fix = this.jabatan_text,
+      this.set_status(user.status_user);
+    },
+    setJabatanText(){
+      for(let i=0; i < this.jabatans.length; i++){
+        if(this.jabatans[i].value === 1){
+          this.jabatan_text = this.jabatans[i].text;
+          break;
+        }
+      }
+    },
+    save(){
+      var body = {
+          'nama_user' : this.nama_user,
+          'nama_login' : this.nama_login,
+          'idjabatan' : this.jabatan_selected,
+          'status_user': this.status_user,
+        };
+      if (this.password){
+        body['password'] = this.password;
+        body['password_confirmation'] = this.password_confirmation;
+      }
+      this.axios
+        .put("/user/update/" + this.id_user,body)
+        .then(respone => {
+          this.showSuccess = true;
+          window.localStorage.setItem('user', JSON.stringify(respone.data));
+          this.getProfil();
+          this.password = "";
+          this.password_confirmation = "";
+        })
+        .catch(e => {
+          this.error = e.response.data;
+          this.showAlert = true;
+        });
+      }
+  },
+  mounted(){
+    this.getJabatan();
   }
 }
 

@@ -14,6 +14,7 @@ import EditInventaris from "../views/EditInventaris.vue";
 import ListPengujian from "../views/ListPengujian.vue";
 import ListInventaris from "../views/ListInventaris.vue";
 import Dashboard from "../views/Dashboard.vue";
+import ManajemenUser from "../views/ManajemenUser.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -109,7 +110,7 @@ const routes = [
     }
   },
   {
-    path: "/editinventaris",
+    path: "/editinventaris/:id",
     name: "ediinventaris",
     component: EditInventaris,
     meta: {
@@ -136,6 +137,14 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: Dashboard,
+    meta: {
+      header: 1
+    }
+  },
+  {
+    path: "/manajemenuser",
+    name: "manajemenuser",
+    component: ManajemenUser,
     meta: {
       header: 1
     }
