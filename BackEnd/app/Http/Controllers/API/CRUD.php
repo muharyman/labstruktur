@@ -40,7 +40,6 @@ trait CRUD
 
         // create
         $createdObject = $this->modelClassName::create($input);
-
         if ($createdObject){
             Logging::action('Menambahkan '.(new \ReflectionClass($this->modelClassName))->getShortName().' baru, id:'.$createdObject->getKey());
             return $this->respondWithData($createdObject);

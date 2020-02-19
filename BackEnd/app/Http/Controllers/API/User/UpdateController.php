@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API\ItemPengujian;
+namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\API\APIController;
-use App\Http\Controllers\API\ItemPengujian\CRUDController;
-use App\Http\Resources\ItemPengujianResource;
+use App\Http\Controllers\API\User\CRUDController;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Models\ItemPengujian;
+use App\Models\User;
 use Carbon\Carbon;
 use Validator;
 use Exception;
@@ -51,10 +51,10 @@ class UpdateController extends APIController
             $updatedOrCreatedObjects=[];
             foreach($data as $key=>$object){
                 $request = new Request();
-                $request->replace(Arr::except($object, 'iditem_pengujian'));
-                if (array_key_exists('iditem_pengujian',$object) && !is_null($object['iditem_pengujian'])){
+                $request->replace(Arr::except($object, 'iduser'));
+                if (array_key_exists('iduser',$object) && !is_null($object['iduser'])){
                     $request->setMethod('PUT');
-                    $response = $this->crudController->update($object['iditem_pengujian'], $request);
+                    $response = $this->crudController->update($object['iduser'], $request);
                 } else {
                     $request->setMethod('POST');
                     $response = $this->crudController->store($request);

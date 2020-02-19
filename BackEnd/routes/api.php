@@ -42,6 +42,7 @@ Route::group([
         Route::put('update/{id}', 'CRUDController@update');
         Route::delete('delete/{id}', 'CRUDController@delete');
         Route::get('index/role', 'GetController@getByRoles');
+        Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
     });
     
     // Pengujian 
@@ -175,6 +176,26 @@ Route::group([
         Route::delete('deletefile/{id}', 'DeleteController@deleteFile');
     });
 
+    // Foto Landing Page
+    Route::group([
+        'namespace' => 'FotoLandingPage',
+        // 'middleware' => 'auth:api',
+        'prefix' => 'fotolandingpage'
+    ], function () {
+        Route::get('index', 'CRUDController@index');
+        Route::get('show/{id}', 'CRUDController@show');
+        Route::post('create', 'CRUDController@store');
+        Route::post('update/{id}', 'CRUDController@update');
+        Route::delete('delete/{id}', 'CRUDController@delete');
+    });
+
+    // Landing Page
+    Route::group([
+        'prefix' => 'landingpage'
+    ], function () {
+        Route::get('get', 'LandingPageController@get');
+        Route::post('edit', 'LandingPageController@edit');
+    });
 });
 
 // get file
