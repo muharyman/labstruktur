@@ -33,17 +33,21 @@ Route::group([
     // User 
     Route::group([
         'namespace' => 'User',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'user'
     ], function () {
-        Route::get('index', 'CRUDController@index');
+        Route::group([
+            'middleware' => 'scope:1,2'
+        ], function(){
+            Route::get('index', 'CRUDController@index');
+            Route::post('create', 'CRUDController@store');
+            Route::delete('delete/{id}', 'CRUDController@delete');
+            Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
+        });
         Route::get('show/{id}', 'CRUDController@show');
-        Route::post('create', 'CRUDController@store');
         Route::put('update/{id}', 'CRUDController@update');
-        Route::delete('delete/{id}', 'CRUDController@delete');
-        Route::get('index/role', 'GetController@getByRoles');
-        Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
     });
+    Route::get('user/index/role', 'User\GetController@getByRoles');
     
     // Pengujian 
     Route::group([
@@ -52,12 +56,12 @@ Route::group([
     ], function () {
         Route::post('create', 'CRUDController@store');
         Route::group([
-            // 'middleware' => 'auth:api',
+            'middleware' => 'auth:api',
         ], function () {
             Route::get('index', 'CRUDController@index');
             Route::get('show/{id}', 'CRUDController@show');
-            Route::post('update/{id}', 'CRUDController@update')->middleware('auth:api');
-            Route::delete('delete/{id}', 'CRUDController@delete');
+            Route::post('update/{id}', 'CRUDController@update');
+            Route::delete('delete/{id}', 'CRUDController@delete')->middleware('scope:1,2,3');
             Route::get('filter', 'GetController@indexWithFilter');
             Route::get('show/relation/{id}', 'GetController@getWithRelation');
             Route::delete('deletelaporan/{id}', "DeleteController@deleteLaporan");
@@ -67,24 +71,28 @@ Route::group([
     // Pembayaran 
     Route::group([
         'namespace' => 'Pembayaran',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'pembayaran',
     ], function () {
-        Route::get('index', 'CRUDController@index');
-        Route::get('show/{id}', 'CRUDController@show');
-        Route::post('create', 'CRUDController@store');
-        Route::put('update/{id}', 'CRUDController@update');
-        Route::delete('delete/{id}', 'CRUDController@delete');
-        Route::get('laporanbulanan', 'LaporanController@laporanBulanan');
-        Route::get('kuitansi/{id}', 'LaporanController@kuitansi');
-        Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
-        Route::get('getbypengujian', 'GetController@getByPengujian');
+        Route::group([
+            'scope:1,2,3,4'
+        ], function(){
+            Route::get('index', 'CRUDController@index');
+            Route::get('show/{id}', 'CRUDController@show');
+            Route::post('create', 'CRUDController@store');
+            Route::put('update/{id}', 'CRUDController@update');
+            Route::delete('delete/{id}', 'CRUDController@delete');
+            Route::post('update/multiple', 'UpdateController@multipleUpdateOrCreate');
+            Route::get('kuitansi/{id}', 'LaporanController@kuitansi');
+            Route::get('getbypengujian', 'GetController@getByPengujian');
+        });
+        Route::get('laporanbulanan', 'LaporanController@laporanBulanan')->middleware('scope:1,2');
     });
 
     // Log
     Route::group([
         'namespace' => 'Log',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'log'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -97,7 +105,7 @@ Route::group([
     // Kategori Pengujian
     Route::group([
         'namespace' => 'KategoriPengujian',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'kategoripengujian'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -110,7 +118,7 @@ Route::group([
     // Jenis Pengujian
     Route::group([
         'namespace' => 'JenisPengujian',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'jenispengujian'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -123,7 +131,7 @@ Route::group([
     // Jabatan
     Route::group([
         'namespace' => 'Jabatan',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'jabatan'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -136,7 +144,7 @@ Route::group([
     // Item Pengujian
     Route::group([
         'namespace' => 'ItemPengujian',
-        // 'middleware' => 'auth:api',
+        'middleware' => ['auth:api','scope:1,2,3,4'],
         'prefix' => 'itempengujian'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -151,7 +159,7 @@ Route::group([
     // Foto Inventaris
     Route::group([
         'namespace' => 'FotoInventaris',
-        // 'middleware' => 'auth:api',
+        'middleware' => ['auth:api', 'scope:1,2,3,4'],
         'prefix' => 'fotoinventaris'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -164,7 +172,7 @@ Route::group([
     // Inventaris
     Route::group([
         'namespace' => 'Inventaris',
-        // 'middleware' => 'auth:api',
+        'middleware' => ['auth:api', 'scope:1,2,3,4'],
         'prefix' => 'inventaris'
     ], function () {
         Route::get('index', 'CRUDController@index');
@@ -179,22 +187,26 @@ Route::group([
     // Foto Landing Page
     Route::group([
         'namespace' => 'FotoLandingPage',
-        // 'middleware' => 'auth:api',
+        'middleware' => 'auth:api',
         'prefix' => 'fotolandingpage'
     ], function () {
         Route::get('index', 'CRUDController@index');
         Route::get('show/{id}', 'CRUDController@show');
-        Route::post('create', 'CRUDController@store');
-        Route::post('update/{id}', 'CRUDController@update');
-        Route::delete('delete/{id}', 'CRUDController@delete');
+        Route::group([
+            'middleware' => 'scope:1,2'
+        ], function (){
+            Route::post('create', 'CRUDController@store');
+            Route::post('update/{id}', 'CRUDController@update');
+            Route::delete('delete/{id}', 'CRUDController@delete');
+        });
     });
 
     // Landing Page
     Route::group([
-        'prefix' => 'landingpage'
+        'prefix' => 'landingpage',
     ], function () {
         Route::get('get', 'LandingPageController@get');
-        Route::post('edit', 'LandingPageController@edit');
+        Route::post('edit', 'LandingPageController@edit')->middleware(['auth:api', 'scope:1,2']);
     });
 });
 
