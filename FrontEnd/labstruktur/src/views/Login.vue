@@ -20,6 +20,7 @@
           v-model="password"
           placeholder="password"
           type="password"
+          @keypress="logIn"
         />
         <b-alert
           variant="danger"
@@ -30,9 +31,9 @@
         >
           Username atau password Anda salah.
         </b-alert>
-        <a href="#none" id="lupapassword">lupa password ?</a>
+        <div id="lupapassword"></div>
         <div class="button-1">
-          <a @click="logIn()">Login</a>
+          <a @click="logIn1()">Login</a>
         </div>
       </div>
     </div>
@@ -108,7 +109,7 @@
 }
 
 #lupapassword {
-  display: block;
+  display:block;
   margin-bottom: 40px;
   font-family: "Montserrat Alternates", sans-serif;
   color: #3366ff;
@@ -160,8 +161,9 @@ export default {
     };
   },
   methods: {
-    logIn() {
-      this.axios
+    logIn(e) {
+      if (e.key == "Enter"){
+        this.axios
         .post("/auth/login/", {
           nama_login: this.username,
           password: this.password
@@ -181,6 +183,29 @@ export default {
         .finally(() => {
           (this.username = ""), (this.password = "");
         });
+      }
+    },
+    logIn1() {
+      this.axios
+      .post("/auth/login/", {
+        nama_login: this.username,
+        password: this.password
+      })
+      .then(respone => {
+        const token = respone.data.success.token;
+        const user = respone.data.success.user;
+        window.localStorage.setItem("token", token);
+        window.localStorage.setItem("user", JSON.stringify(user));
+        window.localStorage.setItem("jabatan", user.idjabatan);
+        window.location.href = "/dashboard";
+      })
+      .catch(e => {
+        this.error = e;
+        this.showAlert = true;
+      })
+      .finally(() => {
+        (this.username = ""), (this.password = "");
+      });
     }
   }
 };
