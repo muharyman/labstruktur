@@ -121,7 +121,7 @@ hr {
   margin-right: 10px;
 }
 .status {
-  margin: 5vh 3vw;
+  margin: 13vh 3vw;
   border: 2px solid #1b3060;
   padding: 14px;
   border-radius: 4px;
@@ -287,20 +287,30 @@ export default {
         {value:0, text:"non rutin"}
       ],
       tanggal:null,
-      rutin_selected:1
+      rutin_selected:1,
+      user_jabatan:''
     };
   },
   methods:{    
     openDownloadDialog(){
-      this.$refs['download-modal'].show();
+      if(this.user_jabatan != 5){
+        this.$refs['download-modal'].show();
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+      
     },
     download(){
       if (this.tanggal !== null){
+        const token = window.localStorage.getItem('token');
         this.axios
           .get("/pembayaran/laporanbulanan/",{
             params:{
               'date':this.tanggal,
               'rutin':this.rutin_selected
+            },
+            headers: { 
+            "Authorization": `Bearer ${token}`
             }
           })
       }else{
@@ -309,9 +319,15 @@ export default {
     }
   },
   mounted() {
+    this.user_jabatan = window.localStorage.getItem('jabatan');
     var dt = new Date().toISOString().slice(0, 10);
+    const token = window.localStorage.getItem('token');
     this.axios
-      .get("/pengujian/index/")
+      .get("/pengujian/index/",{
+        headers: { 
+          "Authorization": `Bearer ${token}`
+        }
+      })
       .then(respone => {
         this.items = respone.data.data;
         for (var i = 0; i < this.items.length; i++) {

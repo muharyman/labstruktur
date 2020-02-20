@@ -10,8 +10,13 @@ export default {
   },
   extends: Line,
   mounted() {
+    const token = window.localStorage.getItem('token');
     this.axios
-      .get("/pengujian/index/")
+      .get("/pengujian/index/",{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
       .then(respone => {
         this.items = respone.data.data;
         for (var i = 0; i < this.items.length; i++) {

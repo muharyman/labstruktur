@@ -171,6 +171,7 @@ export default {
           const user = respone.data.success.user;
           window.localStorage.setItem("token", token);
           window.localStorage.setItem("user", JSON.stringify(user));
+          window.localStorage.setItem("jabatan", user.idjabatan);
           window.location.href = "/dashboard";
         })
         .catch(e => {

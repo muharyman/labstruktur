@@ -1,5 +1,8 @@
 <template>
   <div class="root">
+    <div class="header">
+      <h1>Edit Home</h1>
+    </div>
     <div class="edit-kegiatan">
       <p class="text">Upload foto 1</p>
       <label for="foto-upload-1" class="upload-foto-container" >
@@ -104,8 +107,14 @@
   min-height: 100vh;
   overflow-x: hidden;
 }
+.header{
+  margin-top: 10vh;
+  width: 100%;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+}
 .edit-kegiatan{
-  margin: 5vh 5vw;
+  margin: 10vh 5vw;
   border-radius: 4px;
   background: white;
   padding: 10px 45px;
@@ -358,6 +367,7 @@ export default {
       // visi_misi:"",
       // fungsi:"",
       let formData = new FormData();
+      const token = window.localStorage.getItem('token');
       formData.append('profil', this.profil);
       formData.append('alamat', this.alamat);
       formData.append('email', this.email);
@@ -378,9 +388,10 @@ export default {
       this.axios
         .post("/landingpage/edit",
         formData,{
-            Headers:{
-              'content-type': 'multipart/form-data'
-            }
+          headers: { 
+            "Authorization": `Bearer ${token}`,
+            'content-type': 'multipart/form-data'
+          }
         })
         .then(() => {
           alert('landing page berhasil di edit');
@@ -392,7 +403,12 @@ export default {
     }
   },
   mounted(){
-    this.get();
+    if(window.localStorage.getItem('jabatan') == 5){
+      alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      window.location.href= "/dashboard";
+    }else{
+      this.get();
+    }
   }
 }
 </script>>

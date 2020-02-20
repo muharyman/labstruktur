@@ -35,10 +35,10 @@
                   <p v-bind:style="{color: inventaris_color }" class="hov">Inventaris</p>
                 </div>
               </template>
-              <b-dropdown-item href="/listinventaris">
+              <b-dropdown-item @click="gotoListInventaris()">
                 <p v-bind:style="{color: listinventaris_color }" class="hov">List Inventaris</p>
               </b-dropdown-item>
-              <b-dropdown-item href="/tambahinventaris">
+              <b-dropdown-item @click="gotoTambahInventaris()">
                 <p v-bind:style="{color: tambahinventaris_color }" class="hov">Tambah Inventaris</p>
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -52,10 +52,10 @@
               <b-dropdown-item href="/profil">
                 <p v-bind:style="{color: profil_color }" class="hov">Profile</p>
               </b-dropdown-item>
-              <b-dropdown-item href="/manajemenuser">
+              <b-dropdown-item @click="gotoManajemenUser()">
                 <p v-bind:style="{color: managemen_color }" class="hov">Management User</p>
               </b-dropdown-item>
-              <b-dropdown-item href="/edithome">
+              <b-dropdown-item @click="gotoEditHome()">
                 <p v-bind:style="{color: edithome_color }" class="hov">Edit Home</p>
               </b-dropdown-item>
               <b-dropdown-item @click="logOut()">
@@ -200,6 +200,38 @@ export default {
         .catch(e => {
           alert(JSON.stringify(e.config));
         })
+    },
+    gotoManajemenUser(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan === 1 || user.idjabatan === 2){
+        window.location.href = "/manajemenuser";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+    },
+    gotoListInventaris(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan != 5){
+        window.location.href = "/listinventaris";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+    },
+    gotoTambahInventaris(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan != 5){
+        window.location.href = "/tambahinventaris";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+    },
+    gotoEditHome(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan != 5){
+        window.location.href = "/edithome";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
     }
   },
   created(){

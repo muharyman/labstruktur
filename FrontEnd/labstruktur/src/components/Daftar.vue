@@ -6,7 +6,7 @@
           <p id="pendaftaran">Pendaftaran</p>
           <div id="second-row" class="row">
             <div class="col-sm-7">
-              <p class="text">Pembuka</p>
+              <!-- <p class="text">Pembuka</p>
               <div class="select-style">
                 <select v-model="pembuka_selected" name="pembuka">
                   <option v-for="pembuka in pembukas" v-bind:value="pembuka.value" :key="pembuka">{{ pembuka.text }}</option>
@@ -23,23 +23,23 @@
                 <select v-model="engineer_selected" name="engineer">
                   <option v-for="engineer in engineers" v-bind:value="engineer.value" :key="engineer">{{ engineer.text }}</option>
                 </select>
-              </div>
+              </div> -->
               <p class="text">Pemberi Tugas</p>
-              <input class="input-text" type="text" placeholder="e.g PT.Bumi Perkasa"/>
+              <input class="input-text" type="text" placeholder="e.g PT.Bumi Perkasa" v-model="pemberi_tugas"/>
               <p class="text">NPWP</p>
-              <input class="input-text" type="number" placeholder="677503456445001"/>
+              <input class="input-text" type="number" placeholder="677503456445001" v-model="npwp"/>
             </div>
             <div class="col-sm-5">
               <p class="text">Proyek</p>
-              <input class="input-text" type="text" placeholder="e.g. Toko Buku Jaya"/>
+              <input class="input-text" type="text" placeholder="e.g. Toko Buku Jaya" v-model="proyek"/>
               <p class="text">Nomor Laporan</p>
-              <input class="input-text" type="text" placeholder="108/L.BT/Test/2020"/>
+              <input class="input-text" type="text" placeholder="108/L.BT/Test/2020" v-model="nomor_laporan"/>
               <p class="text">Tanggal Terima</p>
-              <input class="input-text" type="text" placeholder="31-January-2020"/>
+              <input class="input-text" type="text" placeholder="2020-01-31" v-model="tanggal_terima"/>
               <p class="text">Email</p>
-              <input class="input-text" type="text" placeholder="blabla@email.com"/>
+              <input class="input-text" type="text" placeholder="blabla@email.com" v-model="email"/>
               <div class="button">
-                <a href="#none">DAFTAR</a>
+                <a @click="daftarPengujian()">DAFTAR</a>
               </div>
             </div>
           </div>
@@ -173,25 +173,112 @@ export default {
   name: "tambapengujian",
   data(){
     return{
-      teknisi_selected: 0,
-      pembuka_selected: 0,
-      engineer_selected: 0,
+      teknisi_selected: null,
+      pembuka_selected: null,
+      engineer_selected: null,
       teknisis: [
-        {text: "saya", value:0},
-        {text: "sayang", value:1},
-        {text: "kamu", value:2}
       ],
       pembukas:[
-        {text: "saya", value:0},
-        {text: "sayang", value:1},
-        {text: "kamu", value:2}
       ],
       engineers:[
-        {text: "saya", value:0},
-        {text: "sayang", value:1},
-        {text: "kamu", value:2}
-      ]
+      ],
+      data:{},
+      pemberi_tugas:'',
+      npwp:'',
+      proyek:'',
+      nomor_laporan:'',
+      tanggal_terima:'',
+      error: '',
+      email:''
     }
+  },
+  methods:{
+    getPembuka(){
+      let pembuka = {
+        text: "hallo",
+        value: 0
+      }
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      pembuka.text = user.nama_user;
+      pembuka.value = user.iduser;
+      this.pembukas = [];
+      this.pembukas.push(pembuka);
+    },
+    getTeknisi(){
+      this.axios
+        .get("/user/index/role", {
+          params:{
+            roles: 4,
+          }
+        })
+        .then(respone => {
+          if( respone.data.data.length > 0){
+            for(let i = 0; i< respone.data.data.length; i++){
+              let teknisi={
+                text: "",
+                value:i
+              }
+              teknisi.text = respone.data.data[i].nama_user;
+              teknisi.value = respone.data.data[i].iduser;
+              this.teknisis.push(teknisi);
+            }
+          }
+        });
+    },
+    getEngineers(){
+      this.axios
+        .get("/user/index/role",{
+          params:{
+            roles: 3,
+          }
+        })
+        .then(respone => {
+          if( respone.data.data.length > 0){
+            for(let i = 0; i< respone.data.data.length; i++){
+              let engineer={
+                text: "",
+                value:i
+              }
+              engineer.text = respone.data.data[i].nama_user;
+              engineer.value = respone.data.data[i].iduser;
+              this.engineers.push(engineer);
+            }
+          }
+        });
+    },
+    daftarPengujian(){
+      const token = window.localStorage.getItem('token');
+      this.axios
+        .post("/pengujian/create",{
+          // idteknisi: this.teknisi_selected,
+          // idengineer: this.engineer_selected,
+          pemberi_tugas: this.pemberi_tugas,
+          npwp: this.npwp,
+          proyek: this.proyek,
+          nomor_laporan: this.nomor_laporan,
+          tanggal_terima: this.tanggal_terima,
+          email: this.email
+        },{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        .then(() => {
+          alert('berhasil daftar');
+          
+          // alert(id);
+          // window.location.href = "/editpengujian/" + id;
+        })
+        .catch(e =>{
+          this.error = e;
+          alert('gagal mendaftar');
+        });
+    }
+  },
+  created(){
+    // this.getPembuka();
+    // this.getTeknisi();
+    // this.getEngineers();
   }
 }
 </script>

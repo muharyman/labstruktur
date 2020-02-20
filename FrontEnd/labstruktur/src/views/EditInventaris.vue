@@ -26,8 +26,17 @@
       </div>
       <div class="col-sm-6">
         <div class="editinventaris-container">
-          <div id="editinventaris-header">
-            <p>Edit Inventaris</p>
+          <div class="row">
+            <div class="col-sm-6">
+              <div id="editinventaris-header">
+                <p>Edit Inventaris</p>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="button4" @click="deleteinventaris()">
+                <p>Hapus Inventaris</p>
+              </div>
+            </div>
           </div>
           <p class="text">Nama Barang</p>
           <input class="text-input" type="text" v-model="nama_barang" placeholder="nama barang"/>
@@ -36,25 +45,29 @@
           <p class="text">Deskripsi Barang</p>
           <textarea class="text-input-deskripsi" type="text" v-model="deskripsi_barang" placeholder="deskripsi"></textarea>
           <p class="text">Upload File Inventaris</p>
-          <label for="file-upload" class="upload-foto-container" >
-            <div id="row" class="row">
-              <div id="kolom1" class="col-sm-4">
-                <div class="upload-file" >
-                  <p>{{ file_status }}</p>
+          <div class="row">
+            <div class="col-sm-8">
+              <label for="file-upload" class="upload-foto-container" >
+                <div id="row" class="row">
+                  <div id="kolom1" class="col-sm-6">
+                    <div class="upload-file" >
+                      <p>{{ file_status }}</p>
+                    </div>
+                  </div>
+                  <div id="kolom2" class="col-sm-6">
+                    <div class="button" >
+                      <p>Open File</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div id="kolom2" class="col-sm-4">
-                <div class="button" >
-                  <p>Open File</p>
-                </div>
-              </div>
-              <div id="kolom3" class="col-sm-4">
-                <div class="button3" >
-                  <p>Delete File</p>
-                </div>
+              </label>
+            </div> 
+            <div id="kolom3" class="col-sm-4">
+              <div class="button3" @click="deletefileinventaris()">
+                <p>Delete File</p>
               </div>
             </div>
-          </label>
+          </div>
           <input id="file-upload" ref="file_upload" type="file" @change="fileStatus()" />
           <p class="text">Upload foto</p>
           <label for="foto-upload" class="upload-foto-container" >
@@ -92,7 +105,7 @@ export default {
       catatan_barang: "",
       foto_status: "Tidak ada foto yang dipilih",
       file_status: "Tidak ada file yang dipilih",
-      file_url: "ga ada",
+      file_url: null,
       curent_index: 0,
       curent_src: this.axios.defaults.baseURL + "/getfile?filepath=public%2Fnotfound.png",
       photos: [],
@@ -100,7 +113,8 @@ export default {
       files: [],
       dokumen: '',
       r: {},
-      error: {}
+      error: {},
+      user_jabatan:''
     }
   },
   methods:{
@@ -152,6 +166,7 @@ export default {
     },
     kirim() {
       let formData = new FormData();
+      const token = window.localStorage.getItem('token');
       formData.append('nama',this.nama_barang);
       formData.append('jumlah',this.jumlah_barang);
       formData.append('deskripsi',this.deskripsi_barang);
@@ -164,13 +179,16 @@ export default {
       this.axios
         .post("/inventaris/update/"+ this.$route.params.id,
           formData,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+            headers: { 
+             "Authorization": `Bearer ${token}`,
+             'content-type': 'multipart/form-data'
+          }
         })
         .then(respone => {
           this.r = respone.data;
+          this.getDetailInventaris();
           alert("Inventaris berhasil diperbaharui");
+          
         })
         .catch(e => {
           this.error = e;
@@ -178,8 +196,13 @@ export default {
         })
     },
     getDetailInventaris(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .get("/inventaris/show/"+ this.$route.params.id)
+        .get("/inventaris/show/"+ this.$route.params.id,{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
         .then(respone =>{
           this.nama_barang = respone.data.data.nama;
           this.jumlah_barang = respone.data.data.jumlah;
@@ -193,15 +216,24 @@ export default {
             this.id_photos.push(element.idfoto);
           });
           this.file_url = respone.data.data.file_url;
-          if( this.file_url !== "ga ada"){
+          if(this.file_url !== null){
             this.file_status = "sudah ada file di server";
           }
           this.check_photos();
         })
+        .catch(() =>{
+          alert("tidak menemukan inventaris");
+          window.location.href= "/listinventaris";
+        })
     },
     benerHapus(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .delete("/fotoinventaris/delete/"+this.id_photos[this.curent_index])
+        .delete("/fotoinventaris/delete/"+this.id_photos[this.curent_index],{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
         .then(respone =>{
           this.r = respone.data;
           this.getDetailInventaris();
@@ -211,9 +243,44 @@ export default {
           alert(e.response.data);
         })
       this.$bvModal.hide('hapus-modal');
+    },
+    deletefileinventaris(){
+      const token = window.localStorage.getItem('token');
+      this.axios
+        .delete("/inventaris/deletefile/"+this.$route.params.id,{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        .then(respone =>{
+          this.r = respone.data;
+          this.getDetailInventaris();
+          alert("berhasil menghapus file")
+        })
+        .catch(e =>{
+          alert(e.response.data);
+        })
+    },
+    deleteinventaris(){
+      const token = window.localStorage.getItem('token');
+      this.axios
+        .delete("/inventaris/delete/"+this.$route.params.id,{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        .then(respone =>{
+          this.r = respone.data;
+          alert("berhasil menghapus file");
+          window.location.href = "/listinventaris";
+        })
+        .catch(e =>{
+          alert(e.response.data);
+        })
     }
   },
   mounted(){
+    this.user_jabatan = window.localStorage.getItem('jabatan');
     this.check_photos();
     this.getDetailInventaris();
   }
@@ -449,6 +516,26 @@ img {
   color: white;
 }
 .button3:active{
+  border: 2px solid #FF635E;
+  background: #FF635E;
+}
+.button4{
+  border: 2px solid red;
+  padding-top: 5px;
+  padding-bottom: 0;
+  font-size: 17px;
+  color: red;
+  text-align: center;
+  height: fit-content;
+  width:inherit;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.button4:hover{
+  background: red;
+  color: white;
+}
+.button4:active{
   border: 2px solid #FF635E;
   background: #FF635E;
 }

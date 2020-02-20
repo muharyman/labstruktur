@@ -135,13 +135,15 @@ export default {
     },
     upload(){
       let formData = new FormData();
+      const token = window.localStorage.getItem('token');
       formData.append('excel', this.excel);
       this.axios
         .post("/inventaris/import",
           formData,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+          headers: { 
+            "Authorization": `Bearer ${token}`,
+            'content-type': 'multipart/form-data'
+          }
         })
         .then(respone => {
           this.r = respone.data;
@@ -158,6 +160,7 @@ export default {
     },
     kirim() {
       let formData = new FormData();
+      const token = window.localStorage.getItem('token');
       formData.append('nama',this.nama_barang);
       formData.append('jumlah',this.jumlah_barang);
       formData.append('deskripsi',this.deskripsi_barang);
@@ -170,9 +173,10 @@ export default {
       this.axios
         .post("/inventaris/create/",
           formData,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+          headers: { 
+            "Authorization": `Bearer ${token}`,
+            'content-type': 'multipart/form-data'
+          }
         })
         .then(respone => {
           this.r = respone.data;
@@ -192,6 +196,12 @@ export default {
           (this.file_status ="Tidak ada file yang dipilih"),
           (this.foto_status ="Tidak ada foto yang dipilih");
         });
+      }
+    },
+    mounted(){
+      if(window.localStorage.getItem('jabatan') == 5){
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+        window.location.href= "/dashboard";
       }
     }
 }

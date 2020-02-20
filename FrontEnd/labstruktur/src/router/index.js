@@ -7,7 +7,6 @@ import ResetPassword from "../views/ResetPassword.vue";
 import Profil from "../views/Profil.vue";
 import TambahInventaris from "../views/TambahInventaris.vue";
 import TambahPengujian from "../views/TambahPengujian.vue";
-import Daftar from "../views/Daftar.vue";
 import EditPengujian from "../views/EditPengujian.vue";
 import DetailInventaris from "../views/DetailInventaris.vue";
 import EditInventaris from "../views/EditInventaris.vue";
@@ -16,6 +15,7 @@ import ListInventaris from "../views/ListInventaris.vue";
 import Dashboard from "../views/Dashboard.vue";
 import ManajemenUser from "../views/ManajemenUser.vue";
 import EditHome from "../views/EditHome.vue";
+import TambahUser from "../views/TambahUser.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -25,17 +25,6 @@ const routes = [
     component: Home,
     meta:{
       header: 0
-    }
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/About.vue"),
-    meta:{
-      header: 1
     }
   },
   {
@@ -84,14 +73,6 @@ const routes = [
     component: TambahPengujian,
     meta: {
       header: 1
-    }
-  },
-  {
-    path: "/pendaftaran",
-    name: "pendaftaran",
-    component: Daftar,
-    meta: {
-      header: 0
     }
   },
   {
@@ -154,6 +135,14 @@ const routes = [
     path: "/edithome",
     name: "edithome",
     component: EditHome,
+    meta: {
+      header: 1
+    }
+  },
+  {
+    path: "/tambahuser",
+    name: "tambahuser",
+    component: TambahUser,
     meta: {
       header: 1
     }
