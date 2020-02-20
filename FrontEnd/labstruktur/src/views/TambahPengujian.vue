@@ -35,7 +35,7 @@
               <p class="text">Nomor Laporan</p>
               <input class="input-text" type="text" placeholder="108/L.BT/Test/2020" v-model="nomor_laporan"/>
               <p class="text">Tanggal Terima</p>
-              <input class="input-text" type="text" placeholder="31-January-2020" v-model="tanggal_terima"/>
+              <input class="input-text" type="text" placeholder="2020-01-31" v-model="tanggal_terima"/>
               <div class="button">
                 <a @click="tambahPengujian()">TAMBAH</a>
               </div>

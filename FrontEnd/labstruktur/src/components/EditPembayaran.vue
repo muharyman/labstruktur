@@ -2,7 +2,7 @@
   <div class="root">
     <b-table striped hover responsive :items="list_pembayaran" :fields="Koloms" bordered borderless>
       <template v-slot:cell(tanggal_pembayaran)="row">
-        <b-form-input v-model="row.item.tanggal_pembayaran" placeholder="13-january-2020" class="input-border"/>
+        <b-form-input v-model="row.item.tanggal_pembayaran" placeholder="2020-01-31" class="input-border"/>
       </template>
       <template v-slot:cell(jumlah_pembayaran)="row">
         <b-form-input v-model="row.item.jumlah_pembayaran" placeholder="855000" class="input-border"/>
