@@ -35,10 +35,10 @@
                   <p v-bind:style="{color: inventaris_color }" class="hov">Inventaris</p>
                 </div>
               </template>
-              <b-dropdown-item href="/listinventaris">
+              <b-dropdown-item @click="gotoListInventaris()">
                 <p v-bind:style="{color: listinventaris_color }" class="hov">List Inventaris</p>
               </b-dropdown-item>
-              <b-dropdown-item href="/tambahinventaris">
+              <b-dropdown-item @click="gotoTambahInventaris()">
                 <p v-bind:style="{color: tambahinventaris_color }" class="hov">Tambah Inventaris</p>
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -46,11 +46,17 @@
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
                 <div class="navbar-text">
-                  <p v-bind:style="{color: user_color }" class="hov">User</p>
+                  <p v-bind:style="{color: user_color }" class="hov">Setting</p>
                 </div>
               </template>
               <b-dropdown-item href="/profil">
                 <p v-bind:style="{color: profil_color }" class="hov">Profile</p>
+              </b-dropdown-item>
+              <b-dropdown-item @click="gotoManajemenUser()">
+                <p v-bind:style="{color: managemen_color }" class="hov">Management User</p>
+              </b-dropdown-item>
+              <b-dropdown-item @click="gotoEditHome()">
+                <p v-bind:style="{color: edithome_color }" class="hov">Edit Home</p>
               </b-dropdown-item>
               <b-dropdown-item @click="logOut()">
                 <p class="hover">Sign Out</p>
@@ -166,7 +172,9 @@ export default {
       listinventaris_color: '#000000',
       tambahinventaris_color: '#000000',
       user_color: '#000000',
-      profil_color: '#000000'
+      profil_color: '#000000',
+      managemen_color: '#000000',
+      edithome_color: '#000000'
     } 
   },
   computed:{
@@ -192,6 +200,38 @@ export default {
         .catch(e => {
           alert(JSON.stringify(e.config));
         })
+    },
+    gotoManajemenUser(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan === 1 || user.idjabatan === 2){
+        window.location.href = "/manajemenuser";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+    },
+    gotoListInventaris(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan != 5){
+        window.location.href = "/listinventaris";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+    },
+    gotoTambahInventaris(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan != 5){
+        window.location.href = "/tambahinventaris";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
+    },
+    gotoEditHome(){
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if(user.idjabatan != 5){
+        window.location.href = "/edithome";
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      }
     }
   },
   created(){
@@ -204,7 +244,9 @@ export default {
       this.listinventaris_color = '#000000';
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
-      this.profil_color = '#000000';
+      this.profil_color = '#000000'
+      this.managemen_color = '#000000';
+      this.edithome_color= '#000000';
     }else if (this.$route.path == "/listpengujian"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#24D39B';
@@ -215,6 +257,8 @@ export default {
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
+      this.edithome_color= '#000000';
     }else if (this.$route.path == "/tambahpengujian"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#24D39B';
@@ -225,6 +269,8 @@ export default {
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
+      this.edithome_color= '#000000';
     }else if (this.$route.path == "/listinventaris"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#000000';
@@ -235,6 +281,8 @@ export default {
       this.tambahinventaris_color = '#000000';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
+      this.edithome_color= '#000000';
     }else if (this.$route.path == "/tambahinventaris"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#000000';
@@ -245,6 +293,8 @@ export default {
       this.tambahinventaris_color = '#24D39B';
       this.user_color = '#000000';
       this.profil_color = '#000000';
+      this.managemen_color = '#000000';
+      this.edithome_color= '#000000';
     }else if (this.$route.path == "/profil"){
       this.dashboard_color = '#000000';
       this.pengujian_color = '#000000';
@@ -255,6 +305,32 @@ export default {
       this.tambahinventaris_color = '#00000';
       this.user_color = '#24D39B';
       this.profil_color = '#24D39B';
+      this.managemen_color = '#000000';
+      this.edithome_color= '#000000';
+    }else if (this.$route.path == "/manajemenuser"){
+      this.dashboard_color = '#000000';
+      this.pengujian_color = '#000000';
+      this.listpengujian_color = '#000000';
+      this.tambahpengujian_color = '#000000';
+      this.inventaris_color = '#000000';
+      this.listinventaris_color = '#000000';
+      this.tambahinventaris_color = '#00000';
+      this.user_color = '#24D39B';
+      this.profil_color = '#00000';
+      this.managemen_color = '#24D39B';
+      this.edithome_color= '#000000';
+    }else if (this.$route.path == "/edithome"){
+      this.dashboard_color = '#000000';
+      this.pengujian_color = '#000000';
+      this.listpengujian_color = '#000000';
+      this.tambahpengujian_color = '#000000';
+      this.inventaris_color = '#000000';
+      this.listinventaris_color = '#000000';
+      this.tambahinventaris_color = '#00000';
+      this.user_color = '#24D39B';
+      this.profil_color = '#00000';
+      this.managemen_color = '#000000';
+      this.edithome_color= '#24D39B';
     }
   }
 };

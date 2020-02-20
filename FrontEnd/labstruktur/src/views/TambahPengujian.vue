@@ -35,7 +35,7 @@
               <p class="text">Nomor Laporan</p>
               <input class="input-text" type="text" placeholder="108/L.BT/Test/2020" v-model="nomor_laporan"/>
               <p class="text">Tanggal Terima</p>
-              <input class="input-text" type="text" placeholder="31-January-2020" v-model="tanggal_terima"/>
+              <input class="input-text" type="text" placeholder="2020-01-31" v-model="tanggal_terima"/>
               <div class="button">
                 <a @click="tambahPengujian()">TAMBAH</a>
               </div>
@@ -124,6 +124,7 @@ export default {
         });
     },
     tambahPengujian(){
+      const token = window.localStorage.getItem('token');
       this.axios
         .post("/pengujian/create",{
           email: JSON.parse(window.localStorage.getItem('user')).email,
@@ -134,6 +135,10 @@ export default {
           proyek: this.proyek,
           nomor_laporan: this.nomor_laporan,
           tanggal_terima: this.tanggal_terima
+        },{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
         })
         .then(respone => {
           alert('Pengujian berhasil ditambahkan');
@@ -164,7 +169,7 @@ export default {
   overflow-x: hidden;
 }
 .tambah-pengujian{
-  margin-top:3%;
+  margin-top:8%;
   padding: 24px 25px;
 }
 #first-row{

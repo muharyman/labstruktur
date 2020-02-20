@@ -183,10 +183,22 @@ export default {
   },
   mounted() {
     // Set the initial number of items
+    const token = window.localStorage.getItem('token');
     this.axios
-      .get("/pengujian/filter/")
+      .get("/pengujian/filter/",{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
       .then(respone => {
         this.items = respone.data.data;
+        this.items.forEach(e=>{
+          if(e.nama_laporan != null){
+            e.nama_laporan = "ada"
+          }else{
+            e.nama_laporan = "tidak ada"
+          }
+        })
       })
       .catch(e => {
         this.error = e;
