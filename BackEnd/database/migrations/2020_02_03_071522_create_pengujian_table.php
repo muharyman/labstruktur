@@ -20,9 +20,9 @@ class CreatePengujianTable extends Migration
             $table->date('tanggal_buka')->nullable();
             $table->date('tanggal_pengujian')->nullable();
             $table->date('tanggal_tutup')->nullable();
-            $table->bigInteger('iduser_pembuka')->nullable()->unsigned();
-            $table->bigInteger('idteknisi')->nullable()->unsigned();
-            $table->bigInteger('idengineer')->nullable()->unsigned();
+            $table->bigInteger('iduser_pembuka')->nullable()->unsigned()->nullable();
+            $table->bigInteger('idteknisi')->nullable()->unsigned()->nullable();
+            $table->bigInteger('idengineer')->nullable()->unsigned()->nullable();
             $table->bigInteger('iduser_penutup')->nullable()->unsigned()->nullable();
             $table->string('pemberi_tugas', 100)->nullable();
             $table->string('npwp', 20)->nullable();

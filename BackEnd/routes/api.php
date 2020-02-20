@@ -17,7 +17,7 @@ Route::group([
 ], function() {
     // Authentication
     Route::group([    
-        'namespace' => 'Auth',    
+        'namespace' => 'Auth',
         'prefix' => 'auth'
     ], function () {    
         Route::post('login', 'LoginController@login');
@@ -75,9 +75,8 @@ Route::group([
         'prefix' => 'pembayaran',
     ], function () {
         Route::group([
-            'scope:1,2,3,4'
+            'middleware' => 'scope:1,2,3,4'
         ], function(){
-            Route::get('index', 'CRUDController@index');
             Route::get('show/{id}', 'CRUDController@show');
             Route::post('create', 'CRUDController@store');
             Route::put('update/{id}', 'CRUDController@update');
@@ -86,6 +85,7 @@ Route::group([
             Route::get('kuitansi/{id}', 'LaporanController@kuitansi');
             Route::get('getbypengujian', 'GetController@getByPengujian');
         });
+        Route::get('index', 'CRUDController@index');
         Route::get('laporanbulanan', 'LaporanController@laporanBulanan')->middleware('scope:1,2');
     });
 

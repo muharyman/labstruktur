@@ -42,7 +42,7 @@ class RegisterController extends APIController
         $user->notify(new VerifyEmailRequest($user->verification_token));
 
         $success['user'] = $user;
-        $success['token'] = $user->createToken(env('APP_NAME', 'labstruktur'))->accessToken;
+        $success['token'] = $user->createToken(env('APP_NAME', 'labstruktur'), [$user->idjabatan])->accessToken;
         return $this->respondSuccess($success);
 
     }
