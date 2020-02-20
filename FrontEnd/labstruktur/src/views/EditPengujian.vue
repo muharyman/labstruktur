@@ -7,9 +7,9 @@
           <div id="second-row" class="row">
             <div class="col-sm-7">
               <p class="text">Tanggal Terima</p>
-              <input class="input-text" type="text" v-model="tanggal_terima" placeholder="31-January-2020"/>
+              <input class="input-text" type="text" v-model="tanggal_terima" placeholder="2020-01-31"/>
               <p class="text">Tanggal Pengujian</p>
-              <input class="input-text" type="text" v-model="tanggal_pengujian" placeholder="31-January-2020"/>
+              <input class="input-text" type="text" v-model="tanggal_pengujian" placeholder="2020-01-31"/>
               <p class="text">Pembuka</p>
               <div class="select-style">
                 <select v-model="pembuka_selected" name="pembuka">

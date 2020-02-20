@@ -3,32 +3,18 @@
     <div class="content">
       <b-table striped hover responsive :items="list_user" :fields="Koloms" bordered borderless>
         <template v-slot:cell(nama_asli)="row">
-          <!-- <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select> -->
           <b-form-input v-model="row.item.nama_asli" placeholder="nama asli" class="input-border"/>
         </template>
         <template v-slot:cell(username)="row">
-          <!-- <b-form-select v-model="row.item.id_item" :options="list_item" class="input-border"></b-form-select> -->
           <b-form-input v-model="row.item.username" placeholder="username" class="input-border"/>
         </template>
         <template v-slot:cell(jabatan)="row">
           <b-form-select v-model="row.item.jabatan" :options="jabatans" class="input-border"></b-form-select>
-          <!-- <b-form-input v-model="row.nama_asli" placeholder="nama asli" class="input-border"/> -->
         </template>
         <template v-slot:cell(status)="row">
           <button id="status" v-bind:style="{background : row.item.background }" v-on:click="change_status(row.item.no)" > {{ row.item.status_text }} </button>
           <div class="button-1" @click="hapus(row.item.no)"> HAPUS </div>
-          <!-- <b-form-select v-model="row.item.jabatan" :options="list_jabatan" class="input-border"></b-form-select> -->
-          <!-- <b-form-input v-model="row.nama_asli" placeholder="nama asli" class="input-border"/> -->
         </template>
-        <!-- <template v-slot:cell(Jumlah)="row">
-          <b-form-input v-model="row.item.jumlah_item" class="input-border"/>
-        </template>
-        <template v-slot:cell(biaya_per_pengujian)="row">
-          <b-form-input v-model="row.item.biaya" class="input-border"/>
-        </template>
-        <template v-slot:cell(Hapus)="row" class="button-del">
-          <b-button @click="hapus(row.item.id_row)">HAPUS</b-button>
-        </template> -->
       </b-table>
       <!-- {{ list_item_pengujian }} -->
       <!-- {{ length }} -->
@@ -186,7 +172,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .root{
   padding: 0;
   margin: 0;
