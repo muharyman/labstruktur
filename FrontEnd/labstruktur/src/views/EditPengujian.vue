@@ -1,86 +1,113 @@
 <template>
   <div class="root">
-    <div class="edit-pengujian">
-      <div id="first-row" class="row">
-        <div class="col-sm-12">
-          <p id="edit-pengujian">Edit Pengujian</p>
-          <div id="second-row" class="row">
-            <div class="col-sm-7">
-              <p class="text">Tanggal Terima</p>
-              <input class="input-text" type="text" v-model="tanggal_terima" placeholder="2020-01-31"/>
-              <p class="text">Tanggal Pengujian</p>
-              <input class="input-text" type="text" v-model="tanggal_pengujian" placeholder="2020-01-31"/>
-              <p class="text">Pembuka</p>
-              <div class="select-style">
-                <select v-model="pembuka_selected" name="pembuka">
-                  <option v-for="pembuka in pembukas" v-bind:value="pembuka.value" :key="pembuka">{{ pembuka.text }}</option>
-                </select>
-              </div>
-              <p class="text">Teknisi</p>
-              <div class="select-style">
-                <select v-model="teknisi_selected" name="teknisi">
-                  <option v-for="teknisi in teknisis" v-bind:value="teknisi.value" :key="teknisi">{{ teknisi.text }}</option>
-                </select>
-              </div>          
-              <p class="text">Engineer</p>  
-              <div class="select-style">
-                <select v-model="engineer_selected" name="engineer">
-                  <option v-for="engineer in engineers" v-bind:value="engineer.value" :key="engineer">{{ engineer.text }}</option>
-                </select>
-              </div>
-              <p class="text">Pemberi Tugas</p>
-              <input class="input-text" type="text" v-model="pemberi_tugas" placeholder="e.g PT.Bumi Perkasa"/>
-              <p class="text">NPWP</p>
-              <input class="input-text" type="number" v-model="npwp" placeholder="677503456445001"/>
-              <p class="text">Email</p>
-              <input class="input-text" type="text" v-model="email" placeholder="name@email.com"/>
+    <div v-if=" user_jabatan == 5" class="viewer" >
+      <p class="text">Upload Laporan</p>
+      <input class="input-text" type="text" v-model="nama_dokumen" placeholder="nothing selected" readonly/>
+      <div id="third-row" class="row">
+        <div class="col-sm-6">
+          <label for="laporan-upload" class="container">
+            <div class="button">
+              <a>Pilih File</a>
             </div>
-            <div class="col-sm-5">
-              <p class="text">Proyek</p>
-              <input class="input-text" type="text" v-model="proyek" placeholder="e.g. Toko Buku Jaya"/>
-              <p class="text">Status Pembayaran</p>
-              <button id="status_pembayaran" v-bind:style="{background: status_pembayaran_color }" v-on:click="change_status_pembayaran()"> {{ status_pembayaran }} </button>
-              <p class="text">Status Pengujian</p>
-              <button id="status_pengujian" v-bind:style="{background: status_pengujian_color }" v-on:click="change_status_pengujian()" > {{ status_pengujian }} </button>
-              <p class="text">Status Persetujuan</p>
-              <button id="status_persetujuan" v-bind:style="{background: status_persetujuan_color }" v-on:click="change_status_persetujuan()" > {{ status_persetujuan }} </button>
-              <p class="text">Status Pengambilan</p>
-              <button id="status_pengambilan" v-bind:style="{background: status_pengambilan_color }" v-on:click="change_status_pengambilan()" > {{ status_pengambilan }} </button>
-              <!-- <input class="input-text" type="text" v-model="status_pengambilan" placeholder="Belum diambil"/> -->
-              <p class="text">Nomor Laporan</p>
-              <input class="input-text" type="text" v-model="nomor_laporan" placeholder="108/L.BT/Test/2020"/>
-              <p class="text">Upload Laporan</p>
-              <input class="input-text" type="text" v-model="nama_dokumen" placeholder="nothing selected" readonly/>
-              <div id="third-row" class="row">
-                <div class="col-sm-6">
-                  <label for="laporan-upload" class="container">
-                    <div class="button">
-                      <a>Pilih File</a>
-                    </div>
-                  </label>
+          </label>
+        </div>
+        <div class="col-sm-6">
+          <div class="button2" v-on:click="hapus_laporan()">
+            <a>Hapus File</a>
+          </div>
+        </div>
+      </div>
+      <input id="laporan-upload" ref="laporan_upload" type="file" accept="application/pdf" @change="update_laporan()" />
+      <div class="button">
+        <a @click="updatePengujian()">Update</a>
+      </div>
+    </div>
+    <div v-else class="else">
+      <div class="edit-pengujian">
+        <div id="first-row" class="row">
+          <div class="col-sm-12">
+            <p id="edit-pengujian">Edit Pengujian</p>
+            <div id="second-row" class="row">
+              <div class="col-sm-7">
+                <p class="text">Tanggal Terima</p>
+                <input class="input-text" type="text" v-model="tanggal_terima" placeholder="2020-01-31"/>
+                <p class="text">Tanggal Pengujian</p>
+                <input class="input-text" type="text" v-model="tanggal_pengujian" placeholder="2020-01-31"/>
+                <p class="text">Pembuka</p>
+                <div class="select-style">
+                  <select v-model="pembuka_selected" name="pembuka">
+                    <option v-for="pembuka in pembukas" v-bind:value="pembuka.value" :key="pembuka">{{ pembuka.text }}</option>
+                  </select>
                 </div>
-                <div class="col-sm-6">
-                  <div class="button2" v-on:click="hapus_laporan()">
-                    <a>Hapus File</a>
+                <p class="text">Teknisi</p>
+                <div class="select-style">
+                  <select v-model="teknisi_selected" name="teknisi">
+                    <option v-for="teknisi in teknisis" v-bind:value="teknisi.value" :key="teknisi">{{ teknisi.text }}</option>
+                  </select>
+                </div>          
+                <p class="text">Engineer</p>  
+                <div class="select-style">
+                  <select v-model="engineer_selected" name="engineer">
+                    <option v-for="engineer in engineers" v-bind:value="engineer.value" :key="engineer">{{ engineer.text }}</option>
+                  </select>
+                </div>
+                <p class="text">Pemberi Tugas</p>
+                <input class="input-text" type="text" v-model="pemberi_tugas" placeholder="e.g PT.Bumi Perkasa"/>
+                <p class="text">NPWP</p>
+                <input class="input-text" type="number" v-model="npwp" placeholder="677503456445001"/>
+                <p class="text">Email</p>
+                <input class="input-text" type="text" v-model="email" placeholder="name@email.com"/>
+              </div>
+              <div class="col-sm-5">
+                <p class="text">Proyek</p>
+                <input class="input-text" type="text" v-model="proyek" placeholder="e.g. Toko Buku Jaya"/>
+                <p class="text">Status Pembayaran</p>
+                <button id="status_pembayaran" v-bind:style="{background: status_pembayaran_color }" v-on:click="change_status_pembayaran()"> {{ status_pembayaran }} </button>
+                <p class="text">Status Pengujian</p>
+                <button id="status_pengujian" v-bind:style="{background: status_pengujian_color }" v-on:click="change_status_pengujian()" > {{ status_pengujian }} </button>
+                <p class="text">Status Persetujuan</p>
+                <button id="status_persetujuan" v-bind:style="{background: status_persetujuan_color }" v-on:click="change_status_persetujuan()" > {{ status_persetujuan }} </button>
+                <p class="text">Status Pengambilan</p>
+                <button id="status_pengambilan" v-bind:style="{background: status_pengambilan_color }" v-on:click="change_status_pengambilan()" > {{ status_pengambilan }} </button>
+                <!-- <input class="input-text" type="text" v-model="status_pengambilan" placeholder="Belum diambil"/> -->
+                <p class="text">Nomor Laporan</p>
+                <input class="input-text" type="text" v-model="nomor_laporan" placeholder="108/L.BT/Test/2020"/>
+                <p class="text">Upload Laporan</p>
+                <input class="input-text" type="text" v-model="nama_dokumen" placeholder="nothing selected" readonly/>
+                <div id="third-row" class="row">
+                  <div class="col-sm-6">
+                    <label for="laporan-upload" class="container">
+                      <div class="button">
+                        <a>Pilih File</a>
+                      </div>
+                    </label>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="button2" v-on:click="hapus_laporan()">
+                      <a>Hapus File</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <input id="laporan-upload" ref="laporan_upload" type="file" accept="application/pdf" @change="update_laporan()" />
-              <div class="button">
-                <a @click="updatePengujian()">Update</a>
+                <input id="laporan-upload" ref="laporan_upload" type="file" accept="application/pdf" @change="update_laporan()" />
+                <div class="button2">
+                  <a @click="deletePengujian()">Delete Pengujian</a>
+                </div>
+                <div class="button">
+                  <a @click="updatePengujian()">Update</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="edit-item-pengujian">
-      <p id="edit-item-pengujian">Edit Item Pengujian</p>
-      <EditItemPengujian></EditItemPengujian>
-    </div>
-    <div class="edit-pembayaran">
-      <p id="edit-pembayaran">Edit Pembayaran</p>
-      <EditPembayaran></EditPembayaran>
+      <div class="edit-item-pengujian">
+        <p id="edit-item-pengujian">Edit Item Pengujian</p>
+        <EditItemPengujian></EditItemPengujian>
+      </div>
+      <div class="edit-pembayaran">
+        <p id="edit-pembayaran">Edit Pembayaran</p>
+        <EditPembayaran></EditPembayaran>
+      </div>
     </div>
   </div>
 </template>
@@ -127,7 +154,8 @@ export default {
       nomor_laporan: "",
       email:"",
       error:"",
-      res:""
+      res:"",
+      c:"",
     }
   },
   methods: {
@@ -138,8 +166,13 @@ export default {
       }
     },
     hapus_laporan(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .delete("/pengujian/deletelaporan/" + this.$route.params.id)
+        .delete("/pengujian/deletelaporan/" + this.$route.params.id,{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
         .then(respone => {
           this.res = respone;
           alert('laporan dengan nama '+ this.nama_dokumen+ ' berhasil di hapus');
@@ -244,10 +277,6 @@ export default {
       this.getPembuka();
       this.getTeknisi();
       this.getEngineers();
-      this.set_status_pembayaran();
-      this.set_status_pengujian();
-      this.set_status_persetujuan();
-      this.set_status_pengambilan();
     },
     getPembuka(){
       let pembuka = {
@@ -261,50 +290,59 @@ export default {
       this.pembukas.push(pembuka);
     },
     getTeknisi(){
-      this.axios
-        .get("/user/index/role", {
-          params:{
-            roles: 4,
-          }
-        })
-        .then(respone => {
-          if( respone.data.data.length > 0){
-            for(let i = 0; i< respone.data.data.length; i++){
-              let teknisi={
-                text: "",
-                value:i
-              }
-              teknisi.text = respone.data.data[i].nama_user;
-              teknisi.value = respone.data.data[i].iduser;
-              this.teknisis.push(teknisi);
+      if(this.user_jabatan != 5){
+        this.axios
+          .get("/user/index/role", {
+            params:{
+              roles: 4,
             }
-          }
-        });
+          })
+          .then(respone => {
+            if( respone.data.data.length > 0){
+              for(let i = 0; i< respone.data.data.length; i++){
+                let teknisi={
+                  text: "",
+                  value:i
+                }
+                teknisi.text = respone.data.data[i].nama_user;
+                teknisi.value = respone.data.data[i].iduser;
+                this.teknisis.push(teknisi);
+              }
+            }
+          });
+      }
     },
     getEngineers(){
-      this.axios
-        .get("/user/index/role",{
-          params:{
-            roles: 3,
-          }
-        })
-        .then(respone => {
-          if( respone.data.data.length > 0){
-            for(let i = 0; i< respone.data.data.length; i++){
-              let engineer={
-                text: "",
-                value:i
-              }
-              engineer.text = respone.data.data[i].nama_user;
-              engineer.value = respone.data.data[i].iduser;
-              this.engineers.push(engineer);
+      if(this.user_jabatan != 5){
+        this.axios
+          .get("/user/index/role",{
+            params:{
+              roles: 3,
             }
-          }
-        });
+          })
+          .then(respone => {
+            if( respone.data.data.length > 0){
+              for(let i = 0; i< respone.data.data.length; i++){
+                let engineer={
+                  text: "",
+                  value:i
+                }
+                engineer.text = respone.data.data[i].nama_user;
+                engineer.value = respone.data.data[i].iduser;
+                this.engineers.push(engineer);
+              }
+            }
+          });
+      }
     },
     getPengujian(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .get("/pengujian/show/"+this.$route.params.id)
+        .get("/pengujian/show/"+this.$route.params.id,{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
         .then(respone => {
           this.pengujian = respone.data.data;
           this.is_pembayaran = this.pengujian.status_pembayaran;
@@ -322,6 +360,10 @@ export default {
           this.nomor_laporan = this.pengujian.nomor_laporan;
           this.nama_dokumen = this.pengujian.nama_laporan;
           this.email = this.pengujian.email;
+          this.set_status_pembayaran();
+          this.set_status_pengujian();
+          this.set_status_persetujuan();
+          this.set_status_pengambilan();
         });
     },
     updatePengujian(){
@@ -348,11 +390,11 @@ export default {
           headers: { 
             "Authorization": `Bearer ${token}`,
             'content-type': 'multipart/form-data'
-          },
+          }
         }
         )
         .then(respone =>{
-          alert(JSON.stringify(respone.data.success));
+          // alert(JSON.stringify(respone.data.success));
           let obj = respone.data;
           alert("Pengujian berhasil di update dengan id " + obj.idpengujian);
         })
@@ -360,9 +402,33 @@ export default {
           this.error = e,
           alert(e.message);
         });
+    },
+    deletePengujian(){
+      const token = window.localStorage.getItem('token');
+      const user = JSON.parse(window.localStorage.getItem('user'));
+      if( user.idjabatan === 1 || user.idjabatan === 2 || user.idjabatan === 3){
+        this.axios
+        .delete("/pengujian/delete/"+this.$route.params.id,{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        .then(respone =>{
+          this.r = respone.data;
+          alert("berhasil menghapus pengujian")
+            
+        })
+        .catch(e =>{
+          alert(e.response.data);
+        })
+      }else{
+        alert("maaf, anda tidak memiliki wewenang untuk melakukan hal tersebut");
+      }
+      
     }
   },
   mounted() {
+    this.user_jabatan = window.localStorage.getItem('jabatan');
     this.refreshPengujian();
   }
 }
@@ -377,8 +443,16 @@ export default {
   overflow-x: hidden;
 }
 .edit-pengujian{
-  margin-top:3%;
+  margin-top: 8%;
   padding: 24px 25px;
+}
+.viewer{
+  margin: 8% auto;
+  width: 50vw;
+  padding: 25px;
+  height: fit-content;
+  border-radius: 4px;
+  background: white;
 }
 .edit-item-pengujian{
   margin-top:1%;
@@ -435,7 +509,7 @@ export default {
   margin-bottom: 0;
 }
 .input-text{
-  width:inherit;
+  width:100%;
   box-sizing: border-box;
   border:2px solid #24D39B;
   border-radius: 4px;

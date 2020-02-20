@@ -161,17 +161,27 @@ export default {
     }
   },
   mounted() {
-    // Set the initial number of items
-    this.axios
-      .get("/inventaris/index/")
-      .then(respone => {
-        this.items = respone.data.data;
-      })
-      .catch(e => {
-        this.error = e;
-        this.showAlert = true;
-      });
-    this.totalRows = this.items.length;
+    if(window.localStorage.getItem('jabatan') == 5){
+      alert("maaf, anda tidak memiliki wewenang untuk menuju ke tautan tersebut");
+      window.location.href= "/dashboard";
+    }else{
+      // Set the initial number of items
+      const token = window.localStorage.getItem('token');
+      this.axios
+        .get("/inventaris/index/",{
+            headers: { 
+              "Authorization": `Bearer ${token}`
+            }
+          })
+        .then(respone => {
+          this.items = respone.data.data;
+        })
+        .catch(e => {
+          this.error = e;
+          this.showAlert = true;
+        });
+      this.totalRows = this.items.length;
+    }
   },
   methods: {
     onFiltered(filteredItems) {

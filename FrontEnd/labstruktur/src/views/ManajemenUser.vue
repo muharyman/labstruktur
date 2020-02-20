@@ -19,6 +19,9 @@
       <!-- {{ list_item_pengujian }} -->
       <!-- {{ length }} -->
       <div class="button-container">
+        <div class="button" @click="tambahuser()">
+          <p>Tambah User</p>
+        </div>
         <div class="button" @click="save()" >
           <p>Save</p>
         </div>
@@ -41,13 +44,18 @@ export default {
   },
   methods: {
     hapus(no){
+      const token = window.localStorage.getItem('token');
       for( var i = 0; i < this.list_user.length; i++){ 
         if ( this.list_user[i].no === no) {
           if(this.list_user[i].isHapus === true){
             this.list_user.splice(i,1);
           } else {
             this.axios
-              .delete("/user/delete/"+this.list_user[i].id_user)
+              .delete("/user/delete/"+this.list_user[i].id_user,{
+                  headers: { 
+                    "Authorization": `Bearer ${token}`
+                  }
+                })
               .then(() => {
                 alert('delete success');
                 this.list_user.splice(i,1);
@@ -61,8 +69,13 @@ export default {
       }
     },
     getJabatan(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .get("/jabatan/index")
+        .get("/jabatan/index",{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
         .then(respone => {
           this.jabatans = [];
           if( respone.data.data.length > 0){
@@ -80,8 +93,13 @@ export default {
         });
     },
     getTable(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .get("user/index")
+        .get("user/index",{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
         .then(respone => {
           let i = 0;
           this.list_user = [];
@@ -118,8 +136,15 @@ export default {
             alert(e.message);
         });
     },
+    tambahuser(){
+      // alert("TESS")
+      window.location.href = `/tambahuser`;
+      // window.location.href = `/editpengujian/${event.target.parentNode.parentNode.parentNode.firstChild.firstChild.innerHTML}`;
+      // window.location.href= "/listpengujian";
+    },
     save(){
       let formData = new FormData();
+      const token = window.localStorage.getItem('token');
       let i = 0;
       this.list_user.forEach(element => {
         formData.append('data['+i+"][iduser]",element.id_user);
@@ -131,11 +156,11 @@ export default {
       })
       this.axios
         .post("user/update/multiple",
-          formData,
-          {
-            Headers:{
-              'content-type': 'multipart/form-data'
-            }
+          formData,{
+          headers: { 
+            "Authorization": `Bearer ${token}`,
+            'content-type': 'multipart/form-data'
+          }
         })
         .then(respone => {
           if (respone.data.length === i){

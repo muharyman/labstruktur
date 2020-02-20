@@ -1,67 +1,36 @@
 <template>
   <div class="root">
-    <b-alert
-      variant="danger"
-      dismissible
-      fade
-      :show="showAlert"
-      @dismissed="showAlert = false"
-    >
-      {{error}}
-    </b-alert>
-    <b-alert
-      variant="success"
-      dismissible
-      fade
-      :show="showSuccess"
-      @dismissed="showSuccess = false"
-    >
-      profil berhasil di update
-    </b-alert>
-    <div class="header">
-      <h1>Profil User</h1>
-    </div>
-    <div class="row" id="container">
-      <div class="col-sm-5">
-        <div class="profile">
-          <p id="profile-1">Profil</p>
-          <p id="namaasli">{{nama_user_fix}}</p>
-          <p id="pangkat">{{jabatan_text_fix}}</p>
-          <p id="username">{{nama_login_fix}}</p>
+    <div class="tambahuser">
+      <p id="ubah-profile-1">Tambah User</p>
+      <div class="row">
+        <div class="col">
+          <p class="text-4">nama asli</p>
+          <input v-model="nama_user" class="input-text" type="text" placeholder="nama asli"/>
+          <p class="text-4">username</p>
+          <input v-model="nama_login" class="input-text" type="text" placeholder="user name"/>
+          <p class="text-4">jabatan</p>              
+          <div class="select-style">
+            <select v-model="jabatan_selected" name="teknisi">
+              <option v-for="jabatan in jabatans" v-bind:value="jabatan.value" :key="jabatan">{{ jabatan.text }}</option>
+            </select>
+          </div>
+          <p class="text-4">Email</p>
+          <input v-model="email" class="input-text" type="text" placeholder="email@email.com"/>
         </div>
-      </div>
-      <div class="col-sm-7">
-        <div class="ubah-profile">
-          <p id="ubah-profile-1">Ubah Profil</p>
-          <div class="row">
-            <div class="col">
-              <p class="text-4">nama asli</p>
-              <input v-model="nama_user" class="input-text" type="text" placeholder="nama asli"/>
-              <p class="text-4">username</p>
-              <input v-model="nama_login" class="input-text" type="text" placeholder="user name"/>
-              <p class="text-4">jabatan</p>              
-              <div class="select-style">
-                <select v-model="jabatan_selected" name="teknisi">
-                  <option v-for="jabatan in jabatans" v-bind:value="jabatan.value" :key="jabatan">{{ jabatan.text }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="garis-batas-vertical"></div>
-            <div class="col">
-              <p class="text-4">password</p>
-              <input v-model="password" class="input-text" type="password" placeholder=""/>
-              <p class="text-4">re-password</p>
-              <input v-model="password_confirmation" class="input-text" type="password" placeholder=""/>
-              <p class="text-4">status</p>
-              <button id="status" v-bind:style="{background: status_color }" v-on:click="change_status()" > {{ status }} </button>
-              <div class="button-4">
-                <a @click="save()">UPDATE PROFILE</a>
-              </div>
-            </div>
+        <div class="garis-batas-vertical"></div>
+        <div class="col">
+          <p class="text-4">password</p>
+          <input v-model="password" class="input-text" type="password" placeholder=""/>
+          <p class="text-4">re-password</p>
+          <input v-model="password_confirmation" class="input-text" type="password" placeholder=""/>
+          <p class="text-4">status</p>
+          <button id="status" v-bind:style="{background: status_color }" v-on:click="change_status()" > {{ status }} </button>
+          <div class="button-4">
+            <a @click="save()">TAMBAH USER</a>
           </div>
         </div>
       </div>
-    </div>
+    </div>  
   </div>
 </template>
 <style scoped>
@@ -73,11 +42,12 @@
   height: 100vh;
   overflow: hidden;
 }
-.header{
-  margin-top: 10vh;
-  width: 100%;
-  text-align: center;
-  font-family: 'Raleway', sans-serif;
+.tambahuser{
+  margin: 15vh 45px;
+  padding: 25px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px #878788;
 }
 #container{
   margin-top:8%;
@@ -261,7 +231,7 @@
 </style>
 <script>
 export default {
-  name:'profile',
+  name:'tambahuser',
   data(){
     return{
       id_user : 0,
@@ -282,6 +252,7 @@ export default {
       error : '',
       jabatans: [
       ],
+      email: ''
     }
   },
   computed:{
@@ -332,20 +303,7 @@ export default {
               this.jabatans.push(jabatan);
             }
           }
-          this.getProfil();
         });
-    },
-    getProfil(){
-      const user = JSON.parse(window.localStorage.getItem('user'));
-      this.id_user = user.iduser;
-      this.nama_user = user.nama_user;
-      this.nama_login = user.nama_login;
-      this.jabatan_selected = user.idjabatan;
-      this.setJabatanText();
-      this.nama_user_fix = this.nama_user,
-      this.nama_login_fix = this.nama_login,
-      this.jabatan_text_fix = this.jabatan_text,
-      this.set_status(user.status_user);
     },
     setJabatanText(){
       for(let i=0; i < this.jabatans.length; i++){
@@ -362,27 +320,22 @@ export default {
           'nama_login' : this.nama_login,
           'idjabatan' : this.jabatan_selected,
           'status_user': this.status_user,
+          'email': this.email
         };
-      if (this.password){
         body['password'] = this.password;
         body['password_confirmation'] = this.password_confirmation;
-      }
       this.axios
-        .put("/user/update/" + this.id_user,body,{
+        .post("/user/create/",body,{
           headers: { 
             "Authorization": `Bearer ${token}`
           }
         })
-        .then(respone => {
-          this.showSuccess = true;
-          window.localStorage.setItem('user', JSON.stringify(respone.data));
-          this.getProfil();
-          this.password = "";
-          this.password_confirmation = "";
+        .then(() => {
+          window.location.href = "/manajemenuser";
         })
         .catch(e => {
           this.error = e.response.data;
-          this.showAlert = true;
+          alert("gagal menambah user, periksa form kembali atau jaringan");
         });
       }
   },

@@ -1,5 +1,8 @@
 <template>
   <div class="root">  
+    <div class="header">
+      <h1>Detail Inventaris</h1>
+    </div>
     <div id="content" class="row">
       <div class="col-sm-6">
         <div class="photo-container">
@@ -83,8 +86,15 @@ export default {
       }
     },
     getDetailInventaris(){
+      const token = window.localStorage.getItem('token');
       this.axios
-        .get("/inventaris/show/"+ this.$route.params.id)
+        .get("/inventaris/show/"+ this.$route.params.id,
+        {
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        }
+        )
         .then(respone =>{
           this.nama_barang = respone.data.data.nama;
           this.jumlah = respone.data.data.jumlah;
@@ -117,7 +127,13 @@ export default {
 
 <style scoped>
 #content{
-  margin-top: 18vh;
+  margin-top: 15vh;
+}
+.header{
+  margin-top: 10vh;
+  width: 100%;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
 }
 
 .photo-container{

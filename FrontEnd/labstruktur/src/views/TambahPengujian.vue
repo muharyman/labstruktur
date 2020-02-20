@@ -124,6 +124,7 @@ export default {
         });
     },
     tambahPengujian(){
+      const token = window.localStorage.getItem('token');
       this.axios
         .post("/pengujian/create",{
           email: JSON.parse(window.localStorage.getItem('user')).email,
@@ -134,6 +135,10 @@ export default {
           proyek: this.proyek,
           nomor_laporan: this.nomor_laporan,
           tanggal_terima: this.tanggal_terima
+        },{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
         })
         .then(respone => {
           alert('Pengujian berhasil ditambahkan');
@@ -164,7 +169,7 @@ export default {
   overflow-x: hidden;
 }
 .tambah-pengujian{
-  margin-top:3%;
+  margin-top:8%;
   padding: 24px 25px;
 }
 #first-row{

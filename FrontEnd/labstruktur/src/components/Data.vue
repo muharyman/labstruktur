@@ -7,8 +7,13 @@ export default {
     };
   },
   mounted() {
+    const token = window.localStorage.getItem('token');
     this.axios
-      .get("/pengujian/filter/")
+      .get("/pengujian/filter/",{
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          }
+        })
       .then(respone => {
         this.rows = respone.data.data;
         // eslint-disable-next-line no-console
