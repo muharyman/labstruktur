@@ -18,7 +18,7 @@ import "jquery";
 
 Vue.config.productionTip = false;
 
-axios.defaults.baseURL = "http://192.168.1.12:8000/api";
+axios.defaults.baseURL = "http://localhost:8000/api";
 // VueAxios.defaults.header.common= {
 //   "Access-Control-Allow-Origin": "*"
 // };
